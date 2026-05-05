@@ -222,6 +222,11 @@
       min-width: 130px;
       cursor: pointer;
       overflow: visible;
+      height: 34px;
+      vertical-align: middle;
+    }
+    tbody td:has(select) {
+      vertical-align: middle;
     }
     tbody td:last-child input,
     tbody td:last-child select,
@@ -243,7 +248,11 @@
       width: 32px !important;
       text-align: center;
     }
-    .remove-col { width: 32px; }
+    tbody td.remove-col {
+      width: 32px !important;
+      max-width: 32px !important;
+      min-width: 32px !important;
+    }
     .remove-row-btn {
       display: flex;
       align-items: center;
@@ -564,7 +573,7 @@
         ${opt('native','Native')}
       </select></td>
       <td><textarea placeholder="Observations..." oninput="autoGrow(this)"></textarea></td>
-      <td><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')" title="Remove row">×</button></td>
+      <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')" title="Remove row">×</button></td>
     </tr>`;
   }
 
@@ -606,7 +615,7 @@
       <td><textarea placeholder="Describe the hook or messaging angle" oninput="autoGrow(this)"></textarea></td>
       <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
       <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
-      <td><button class="remove-row-btn" onclick="removeRow(this,'ads-body')" title="Remove row">×</button></td>
+      <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'ads-body')" title="Remove row">×</button></td>
     </tr>`;
   }
 
@@ -627,7 +636,7 @@
       </select></td>
       <td><textarea placeholder="Ad, email, organic..." oninput="autoGrow(this)"></textarea></td>
       <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this)"></textarea></td>
-      <td><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')" title="Remove row">×</button></td>
+      <td class="remove-col"><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')" title="Remove row">×</button></td>
     </tr>`;
   }
 
@@ -722,42 +731,35 @@
     if (!tbody) return;
     const colIdx = Array.from(td.parentElement.children).indexOf(td);
 
-    // Measure this textarea's natural single-line width
-    el.style.whiteSpace = 'nowrap';
-    el.style.width = 'auto';
-    el.style.height = 'auto';
-
-    // Find the max natural width across all textareas in this column
+    // Measure max natural width across all textareas in this column
     let maxNatural = 60;
     tbody.querySelectorAll('tr').forEach(row => {
       const cell = row.children[colIdx];
       if (!cell) return;
       const ta = cell.querySelector('textarea');
       if (!ta) return;
-      const prev = { whiteSpace: ta.style.whiteSpace, width: ta.style.width, height: ta.style.height };
-      ta.style.whiteSpace = 'nowrap';
-      ta.style.width = 'auto';
-      ta.style.height = 'auto';
+      const saved = { ws: ta.style.whiteSpace, w: ta.style.width, h: ta.style.height };
+      ta.style.cssText += ';white-space:nowrap!important;width:auto!important;height:auto!important';
       maxNatural = Math.max(maxNatural, ta.scrollWidth + 1);
-      ta.style.whiteSpace = prev.whiteSpace;
-      ta.style.width = prev.width;
-      ta.style.height = prev.height;
+      ta.style.whiteSpace = saved.ws;
+      ta.style.width = saved.w;
+      ta.style.height = saved.h;
     });
 
     const colW = Math.min(MAX_W, maxNatural);
     const shouldWrap = colW >= MAX_W;
 
-    // Apply uniform width to all textareas in this column
+    // Apply uniform width + correct height to all textareas in this column
     tbody.querySelectorAll('tr').forEach(row => {
       const cell = row.children[colIdx];
       if (!cell) return;
       const ta = cell.querySelector('textarea');
       if (!ta) return;
-      ta.style.width = colW + 'px';
       ta.style.whiteSpace = shouldWrap ? 'pre-wrap' : 'nowrap';
-      ta.style.wordBreak = shouldWrap ? 'break-word' : '';
-      ta.style.height = 'auto';
-      ta.style.height = ta.scrollHeight + 'px';
+      ta.style.wordBreak = shouldWrap ? 'break-word' : 'normal';
+      ta.style.width = colW + 'px';
+      ta.style.height = '0';
+      ta.style.height = Math.max(ta.scrollHeight, 34) + 'px';
     });
   }
 
