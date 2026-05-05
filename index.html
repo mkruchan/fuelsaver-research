@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eCoverage / eFinancial Analysis Multi-Platform Research</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -60,7 +60,7 @@
     }
 
     .container {
-      max-width: 960px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -163,6 +163,7 @@
       border-collapse: collapse;
       font-size: 13px;
       min-width: 560px;
+      table-layout: auto;
     }
     thead th {
       text-align: left;
@@ -176,15 +177,10 @@
       background: var(--bg-secondary);
       white-space: nowrap;
     }
-    tbody td {
-      border-bottom: 1px solid var(--border-light);
-      padding: 0;
-      vertical-align: middle;
-    }
     tbody tr:last-child td { border-bottom: none; }
     tbody td input,
-    tbody td select {
-      width: 100%;
+    tbody td select,
+    tbody td textarea {
       padding: 8px 12px;
       font-size: 13px;
       border: none;
@@ -193,17 +189,59 @@
       color: var(--text-primary);
       outline: none;
       font-family: inherit;
+      box-sizing: border-box;
+      resize: none;
+      overflow: hidden;
+      line-height: 1.5;
+      display: block;
+      width: 100%;
+    }
+    tbody td {
+      border-bottom: 1px solid var(--border-light);
+      padding: 0;
+      vertical-align: top;
+      min-width: 60px;
+      max-width: 260px;
+      width: 1px;
+    }
+    tbody td textarea {
+      min-height: 34px;
+      min-width: 60px;
+      white-space: nowrap;
+      overflow: hidden;
+      width: auto;
+      max-width: 260px;
+    }
+    tbody td textarea.at-max {
+      white-space: pre-wrap;
+      word-break: break-word;
+      width: 260px;
+    }
+    tbody td select {
+      width: auto;
+      min-width: 130px;
+      cursor: pointer;
+      overflow: visible;
     }
     tbody td:last-child input,
-    tbody td:last-child select { border-right: none; }
+    tbody td:last-child select,
+    tbody td:last-child textarea { border-right: none; }
     tbody td input:focus,
-    tbody td select:focus { background: var(--bg-secondary); }
-    tbody td select { cursor: pointer; }
+    tbody td select:focus,
+    tbody td textarea:focus { background: var(--bg-secondary); }
 
     .row-num {
-      width: 36px;
+      width: 32px;
+      max-width: 32px;
       text-align: center;
       color: var(--text-secondary);
+    }
+    .row-num input {
+      padding: 2px 4px !important;
+      min-width: 20px !important;
+      max-width: 32px !important;
+      width: 32px !important;
+      text-align: center;
     }
     .remove-col { width: 32px; }
     .remove-row-btn {
@@ -511,8 +549,8 @@
   function trafficRow(n) {
     return `<tr>
       <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
-      <td><input type="text" placeholder="e.g. Google Organic, Meta Paid"></td>
-      <td><input type="text" placeholder="e.g. 120"></td>
+      <td><textarea placeholder="e.g. Google Organic, Meta Paid" oninput="autoGrow(this)"></textarea></td>
+      <td><textarea placeholder="e.g. 120" oninput="autoGrow(this)"></textarea></td>
       <td><select>
         ${opt('','— select —')}
         ${opt('paid-search','Paid Search')}
@@ -525,7 +563,7 @@
         ${opt('display','Display')}
         ${opt('native','Native')}
       </select></td>
-      <td><input type="text" placeholder="Observations..."></td>
+      <td><textarea placeholder="Observations..." oninput="autoGrow(this)"></textarea></td>
       <td><button class="remove-row-btn" onclick="removeRow(this,'traffic-body')" title="Remove row">×</button></td>
     </tr>`;
   }
@@ -550,9 +588,9 @@
         ${opt('native-article','Native Article')}
         ${opt('email','Email')}
       </select></td>
-      <td><input type="text" placeholder="Ad headline text"></td>
-      <td><input type="text" placeholder="e.g. Get a Free Quote"></td>
-      <td><input type="text" placeholder="e.g. 500K"></td>
+      <td><textarea placeholder="Ad headline text" oninput="autoGrow(this)"></textarea></td>
+      <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this)"></textarea></td>
+      <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this)"></textarea></td>
       <td class="media-cell">
         <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this, '${uid}-preview')">
         <div id="${uid}-preview">
@@ -565,9 +603,9 @@
           </button>
         </div>
       </td>
-      <td><input type="text" placeholder="Describe the hook or messaging angle"></td>
-      <td><input type="url" placeholder="https://..."></td>
-      <td><input type="url" placeholder="https://..."></td>
+      <td><textarea placeholder="Describe the hook or messaging angle" oninput="autoGrow(this)"></textarea></td>
+      <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
+      <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
       <td><button class="remove-row-btn" onclick="removeRow(this,'ads-body')" title="Remove row">×</button></td>
     </tr>`;
   }
@@ -575,8 +613,8 @@
   function funnelRow(n) {
     return `<tr>
       <td class="row-num"><input type="text" value="${n}" style="text-align:center"></td>
-      <td><input type="url" placeholder="https://..."></td>
-      <td><input type="text" placeholder="Advertiser name"></td>
+      <td><textarea placeholder="https://..." oninput="autoGrow(this)"></textarea></td>
+      <td><textarea placeholder="Advertiser name" oninput="autoGrow(this)"></textarea></td>
       <td><select>
         ${opt('','— select —')}
         ${opt('quiz','Quiz / Survey')}
@@ -587,8 +625,8 @@
         ${opt('advertorial','Advertorial')}
         ${opt('comparison','Comparison Page')}
       </select></td>
-      <td><input type="text" placeholder="Ad, email, organic..."></td>
-      <td><input type="text" placeholder="Structure, copy, offer details..."></td>
+      <td><textarea placeholder="Ad, email, organic..." oninput="autoGrow(this)"></textarea></td>
+      <td><textarea placeholder="Structure, copy, offer details..." oninput="autoGrow(this)"></textarea></td>
       <td><button class="remove-row-btn" onclick="removeRow(this,'funnels-body')" title="Remove row">×</button></td>
     </tr>`;
   }
@@ -600,30 +638,40 @@
     const isVideo = file.type.startsWith('video/');
     const uid = input.id;
     const shortName = file.name.length > 16 ? file.name.slice(0, 14) + '…' : file.name;
-
-    if (isVideo) {
-      preview.innerHTML = `
-        <div class="media-preview">
-          <div class="media-video-thumb">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-              <polygon points="5,3 13,8 5,13" fill="var(--text-secondary)"/>
-            </svg>
-          </div>
-          <span class="media-filename" title="${file.name}">${shortName}</span>
-          <button class="media-remove" title="Remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
-        </div>`;
-    } else {
-      const reader = new FileReader();
-      reader.onload = function(e) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const dataUrl = e.target.result;
+      if (isVideo) {
         preview.innerHTML = `
           <div class="media-preview">
-            <img class="media-thumb" src="${e.target.result}" alt="${file.name}">
+            <div class="media-video-thumb" onclick="openMedia('${dataUrl}','${file.type}')" style="cursor:pointer" title="Click to open">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <polygon points="5,3 13,8 5,13" fill="var(--text-secondary)"/>
+              </svg>
+            </div>
             <span class="media-filename" title="${file.name}">${shortName}</span>
             <button class="media-remove" title="Remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
           </div>`;
-      };
-      reader.readAsDataURL(file);
-    }
+      } else {
+        preview.innerHTML = `
+          <div class="media-preview">
+            <img class="media-thumb" src="${dataUrl}" alt="${file.name}" onclick="openMedia('${dataUrl}','${file.type}')" style="cursor:pointer" title="Click to open">
+            <span class="media-filename" title="${file.name}">${shortName}</span>
+            <button class="media-remove" title="Remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
+          </div>`;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function openMedia(dataUrl, mimeType) {
+    const byteString = atob(dataUrl.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+    const blob = new Blob([ab], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
   }
 
   function removeMedia(uid, previewId) {
@@ -662,15 +710,73 @@
     const tmp = document.createElement('tbody');
     tmp.innerHTML = templateFn(count);
     tbody.appendChild(tmp.firstChild);
+    setTimeout(resizeAllInputs, 0);
   }
 
-  // Seed 3 starter rows in each table
+  const MAX_W = 260;
+
+  function autoGrow(el) {
+    const td = el.closest('td');
+    if (!td) return;
+    const tbody = td.closest('tbody');
+    if (!tbody) return;
+    const colIdx = Array.from(td.parentElement.children).indexOf(td);
+
+    // Measure this textarea's natural single-line width
+    el.style.whiteSpace = 'nowrap';
+    el.style.width = 'auto';
+    el.style.height = 'auto';
+
+    // Find the max natural width across all textareas in this column
+    let maxNatural = 60;
+    tbody.querySelectorAll('tr').forEach(row => {
+      const cell = row.children[colIdx];
+      if (!cell) return;
+      const ta = cell.querySelector('textarea');
+      if (!ta) return;
+      const prev = { whiteSpace: ta.style.whiteSpace, width: ta.style.width, height: ta.style.height };
+      ta.style.whiteSpace = 'nowrap';
+      ta.style.width = 'auto';
+      ta.style.height = 'auto';
+      maxNatural = Math.max(maxNatural, ta.scrollWidth + 1);
+      ta.style.whiteSpace = prev.whiteSpace;
+      ta.style.width = prev.width;
+      ta.style.height = prev.height;
+    });
+
+    const colW = Math.min(MAX_W, maxNatural);
+    const shouldWrap = colW >= MAX_W;
+
+    // Apply uniform width to all textareas in this column
+    tbody.querySelectorAll('tr').forEach(row => {
+      const cell = row.children[colIdx];
+      if (!cell) return;
+      const ta = cell.querySelector('textarea');
+      if (!ta) return;
+      ta.style.width = colW + 'px';
+      ta.style.whiteSpace = shouldWrap ? 'pre-wrap' : 'nowrap';
+      ta.style.wordBreak = shouldWrap ? 'break-word' : '';
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+    });
+  }
+
+  function resizeAllInputs() {
+    document.querySelectorAll('tbody td textarea').forEach(autoGrow);
+  }
+
+
+  document.addEventListener('input', function(e) {
+    if (e.target.matches('tbody td textarea')) autoGrow(e.target);
+  });
+
   for (let i = 0; i < 3; i++) {
     trafficCount++; adsCount++; funnelCount++;
     document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(trafficCount));
     document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(adsCount));
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(funnelCount));
   }
+  setTimeout(resizeAllInputs, 0);
 </script>
 </body>
 </html>
