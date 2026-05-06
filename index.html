@@ -6,17 +6,11 @@
   <title>eCoverage / eFinancial Analysis Multi-Platform Research</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f7f7f5;
-      --bg-tertiary: #f0eeea;
-      --text-primary: #1a1a18;
-      --text-secondary: #6b6b67;
-      --border-light: rgba(0,0,0,0.12);
-      --border-mid: rgba(0,0,0,0.22);
-      --radius-md: 8px;
-      --radius-lg: 12px;
+      --bg-primary: #ffffff; --bg-secondary: #f7f7f5; --bg-tertiary: #f0eeea;
+      --text-primary: #1a1a18; --text-secondary: #6b6b67;
+      --border-light: rgba(0,0,0,0.12); --border-mid: rgba(0,0,0,0.22);
+      --radius-md: 8px; --radius-lg: 12px;
       --blue-bg: #E6F1FB; --blue-text: #0C447C;
       --teal-bg: #E1F5EE; --teal-text: #085041;
       --amber-bg: #FAEEDA; --amber-text: #633806;
@@ -35,69 +29,50 @@
         --coral-bg: #4A1B0C; --coral-text: #F5C4B3;
       }
     }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg-tertiary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      padding: 2rem 1rem;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg-tertiary); color: var(--text-primary); min-height: 100vh; padding: 2rem 1rem; }
     .container { max-width: 1400px; margin: 0 auto; }
-
-    /* Header */
     .header { margin-bottom: 2rem; }
     .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .header-left { flex: 1; min-width: 0; }
-    .badge {
-      display: inline-block; font-size: 11px; font-weight: 500;
-      padding: 3px 10px; border-radius: 20px;
-      background: var(--blue-bg); color: var(--blue-text);
-      letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px;
-    }
+    .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--blue-bg); color: var(--blue-text); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
     .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; }
     .header p { font-size: 14px; color: var(--text-secondary); }
-
-    /* Save bar */
     .save-bar { display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
     .autosave-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-secondary); white-space: nowrap; }
-    .autosave-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--text-secondary); flex-shrink: 0;
-      transition: background 0.4s, box-shadow 0.4s;
-    }
+    .autosave-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-secondary); flex-shrink: 0; transition: background 0.4s, box-shadow 0.4s; }
     .autosave-dot.saving { background: #e8a020; box-shadow: 0 0 0 3px rgba(232,160,32,0.2); }
     .autosave-dot.saved { background: #22a05a; box-shadow: 0 0 0 3px rgba(34,160,90,0.15); }
-
-    .toolbar-btn {
-      display: flex; align-items: center; gap: 5px;
-      padding: 7px 12px; font-size: 12px; font-family: inherit; font-weight: 500;
-      border-radius: var(--radius-md); cursor: pointer;
-      border: 1px solid var(--border-light);
-      background: var(--bg-primary); color: var(--text-primary);
-      transition: background 0.15s; white-space: nowrap;
-    }
+    .autosave-dot.error { background: #cc3333; }
+    .toolbar-btn { display: flex; align-items: center; gap: 5px; padding: 7px 12px; font-size: 12px; font-family: inherit; font-weight: 500; border-radius: var(--radius-md); cursor: pointer; border: 1px solid var(--border-light); background: var(--bg-primary); color: var(--text-primary); transition: background 0.15s; white-space: nowrap; }
     .toolbar-btn:hover { background: var(--bg-secondary); }
+    .toolbar-btn.primary { background: #185FA5; color: #fff; border-color: transparent; }
+    .toolbar-btn.primary:hover { background: #0f4880; }
 
-    /* Toast */
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 9000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.hidden { display: none; }
+    .modal { background: var(--bg-primary); border-radius: var(--radius-lg); padding: 2rem; max-width: 500px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+    .modal p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 12px; }
+    .modal ol { font-size: 13px; color: var(--text-secondary); line-height: 2; padding-left: 1.2rem; margin-bottom: 16px; }
+    .modal ol a { color: var(--blue-text); }
+    .modal ol code { background: var(--bg-secondary); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+    .modal label { display: block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 5px; margin-top: 10px; }
+    .modal input[type="text"] { width: 100%; padding: 8px 12px; font-size: 13px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-secondary); color: var(--text-primary); outline: none; font-family: inherit; }
+    .modal input[type="text"]:focus { border-color: var(--border-mid); }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
     .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-    .toast {
-      padding: 10px 16px; border-radius: var(--radius-md); font-size: 13px; font-family: inherit;
-      background: var(--text-primary); color: var(--bg-primary);
-      opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s;
-      max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    }
+    .toast { padding: 10px 16px; border-radius: var(--radius-md); font-size: 13px; font-family: inherit; background: var(--text-primary); color: var(--bg-primary); opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s; max-width: 320px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast.success { background: #1a5c2a; color: #e3f5e8; }
     .toast.error { background: #5c1a1a; color: #f5e3e3; }
 
-    /* Meta fields */
     .meta-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.75rem; }
     .meta-field label { display: block; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 5px; }
-    .meta-field input { width: 100%; padding: 8px 12px; font-size: 13px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-primary); color: var(--text-primary); outline: none; transition: border-color 0.15s; }
+    .meta-field input { width: 100%; padding: 8px 12px; font-size: 13px; border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-primary); color: var(--text-primary); outline: none; }
     .meta-field input:focus { border-color: var(--border-mid); }
 
-    /* Sections */
     .section { margin-bottom: 1.25rem; border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-primary); }
     .section-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-light); }
     .section-icon { width: 30px; height: 30px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -105,17 +80,15 @@
     .icon-amber { background: var(--amber-bg); } .icon-purple { background: var(--purple-bg); }
     .icon-coral { background: var(--coral-bg); }
     .section-title { font-size: 14px; font-weight: 500; }
-    .section-body { padding: 0; }
 
-    /* Tables */
     .table-scroll { overflow-x: auto; }
     table { border-collapse: collapse; font-size: 13px; table-layout: fixed; }
-    thead th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; }
+    thead th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; }
     th.remove-col, th.num-col { width: 36px; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
     tbody td input, tbody td select, tbody td textarea { padding: 8px 12px; font-size: 13px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; }
-    tbody td textarea { min-height: 34px; white-space: pre-wrap; word-break: break-word; width: 100%; }
+    tbody td textarea { min-height: 34px; white-space: pre-wrap; word-break: break-word; width: 100%; overflow: hidden; }
     tbody td select { width: 100%; cursor: pointer; height: 34px; }
     tbody td:has(select) { vertical-align: middle; }
     tbody td:last-child input, tbody td:last-child select, tbody td:last-child textarea { border-right: none; }
@@ -123,38 +96,54 @@
     .row-num { width: 36px; text-align: center; color: var(--text-secondary); vertical-align: middle !important; }
     .row-num input { padding: 2px 4px !important; width: 100% !important; text-align: center; border-right: 1px solid var(--border-light) !important; }
     tbody td.remove-col { width: 36px; vertical-align: middle !important; }
-    .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: auto; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 16px; line-height: 1; transition: background 0.15s, color 0.15s; }
+    .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: auto; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 16px; line-height: 1; }
     .remove-row-btn:hover { background: var(--bg-secondary); color: #A32D2D; }
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
-    .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; transition: background 0.15s, color 0.15s; }
+    .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; }
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
     .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; }
     .notes-body textarea:focus { background: var(--bg-secondary); }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
-    /* Media */
     .media-cell { padding: 6px 10px !important; border-right: 1px solid var(--border-light); }
-    .media-cell:last-child { border-right: none; }
-    .media-upload-btn { display: flex; align-items: center; gap: 6px; padding: 5px 10px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; white-space: nowrap; transition: background 0.15s, color 0.15s; }
+    .media-upload-btn { display: flex; align-items: center; gap: 6px; padding: 5px 10px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; white-space: nowrap; }
     .media-upload-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
     .media-preview { display: flex; align-items: center; gap: 8px; }
-    .media-thumb { width: 48px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-light); flex-shrink: 0; }
-    .media-video-thumb { width: 48px; height: 36px; border-radius: 4px; border: 1px solid var(--border-light); background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .media-thumb { width: 48px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-light); flex-shrink: 0; cursor: pointer; }
+    .media-video-thumb { width: 48px; height: 36px; border-radius: 4px; border: 1px solid var(--border-light); background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
     .media-filename { font-size: 11px; color: var(--text-secondary); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .media-remove { background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 2px; line-height: 1; font-size: 14px; flex-shrink: 0; }
-    .media-remove:hover { color: var(--text-primary); }
+    .media-remove { background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 2px; line-height: 1; font-size: 14px; }
     .hidden-input { display: none; }
-
-    @media print {
-      body { background: white; padding: 0; }
-      .add-row, .save-bar { display: none; }
-    }
+    @media print { body { background: white; padding: 0; } .add-row, .save-bar, .modal-overlay { display: none; } }
   </style>
 </head>
 <body>
-<div class="container">
 
+<!-- Setup Modal -->
+<div class="modal-overlay hidden" id="setupModal">
+  <div class="modal">
+    <h2>☁️ Connect shared cloud save</h2>
+    <p>To sync data across all team members, connect a free <strong>JSONBin.io</strong> bin. Anyone who opens the page will see the latest saved data.</p>
+    <ol>
+      <li>Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> → create a free account</li>
+      <li>Click <strong>Create Bin</strong>, paste <code>{}</code>, click Save</li>
+      <li>Copy the <strong>BIN ID</strong> from the URL bar</li>
+      <li>Go to <strong>API Keys</strong> in the sidebar → create a key → copy it</li>
+      <li>Paste both below and click Connect</li>
+    </ol>
+    <label>Bin ID</label>
+    <input type="text" id="setup-bin-id" placeholder="e.g. 6639abc1234567890abcdef">
+    <label>API Key</label>
+    <input type="text" id="setup-api-key" placeholder="$2a$10$...">
+    <div class="modal-actions">
+      <button class="toolbar-btn" onclick="skipSetup()">Skip — local only</button>
+      <button class="toolbar-btn primary" onclick="saveSetup()">Connect</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
   <div class="header">
     <div class="header-top">
       <div class="header-left">
@@ -167,6 +156,10 @@
           <div class="autosave-dot" id="autosaveDot"></div>
           <span id="autosaveText">Loading…</span>
         </div>
+        <button class="toolbar-btn" onclick="manualSave()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13 13H3a1 1 0 0 1-1-1V4l3-3h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1z" stroke="currentColor" stroke-width="1.4"/><path d="M5 13V9h6v4M5 1v4h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          Save
+        </button>
         <button class="toolbar-btn" onclick="exportJSON()">
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Export
@@ -175,6 +168,7 @@
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 13V4M4 8l4-4 4 4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Import
         </button>
+        <button class="toolbar-btn" onclick="showSetupModal()" title="Cloud sync settings">☁️</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
       </div>
     </div>
@@ -271,15 +265,36 @@
       <div class="notes-body"><textarea id="notes-actions" placeholder="List specific actions to test, replicate, or counter based on these findings..."></textarea></div>
     </div>
   </div>
-
 </div>
+
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-/* ── Helpers ── */
+const LS_SETTINGS = 'ecoverage_settings_v1';
+const LS_LOCAL    = 'ecoverage_local_v2';
+let BIN_ID = '', API_KEY = '';
+
+function loadSettings() {
+  try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||''; API_KEY = s.apiKey||''; } catch(e){}
+}
+function saveSettings() { localStorage.setItem(LS_SETTINGS, JSON.stringify({ binId: BIN_ID, apiKey: API_KEY })); }
+
+function showSetupModal() {
+  document.getElementById('setup-bin-id').value = BIN_ID;
+  document.getElementById('setup-api-key').value = API_KEY;
+  document.getElementById('setupModal').classList.remove('hidden');
+}
+function saveSetup() {
+  BIN_ID  = document.getElementById('setup-bin-id').value.trim();
+  API_KEY = document.getElementById('setup-api-key').value.trim();
+  saveSettings();
+  document.getElementById('setupModal').classList.add('hidden');
+  if (BIN_ID && API_KEY) { showToast('Cloud sync connected! Loading data…', 'success'); cloudLoad().then(d => { if(d && d.v) { restoreData(d); setStatus('saved','☁️ Synced'); } }); }
+}
+function skipSetup() { document.getElementById('setupModal').classList.add('hidden'); }
+
 function opt(v, l) { return `<option value="${v}">${l}</option>`; }
 
-/* ── Row templates ── */
 function trafficRow(n) {
   return `<tr>
     <td class="row-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
@@ -345,21 +360,18 @@ function funnelRow(n) {
   </tr>`;
 }
 
-/* ── Media ── */
 function handleMediaUpload(input, previewId) {
-  const file = input.files[0];
-  if (!file) return;
+  const file = input.files[0]; if (!file) return;
   const isVideo = file.type.startsWith('video/');
   const uid = input.id;
   const shortName = file.name.length > 16 ? file.name.slice(0,14)+'…' : file.name;
   const reader = new FileReader();
   reader.onload = function(e) {
     const src = e.target.result;
-    const preview = document.getElementById(previewId);
-    if (!preview) return;
+    const preview = document.getElementById(previewId); if (!preview) return;
     if (isVideo) {
       preview.innerHTML = `<div class="media-preview">
-        <div class="media-video-thumb" onclick="openMedia('${src}','${file.type}')" style="cursor:pointer">
+        <div class="media-video-thumb" onclick="openMedia('${src}','${file.type}')">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><polygon points="5,3 13,8 5,13" fill="var(--text-secondary)"/></svg>
         </div>
         <span class="media-filename" title="${file.name}">${shortName}</span>
@@ -367,7 +379,7 @@ function handleMediaUpload(input, previewId) {
       </div>`;
     } else {
       preview.innerHTML = `<div class="media-preview">
-        <img class="media-thumb" src="${src}" onclick="openMedia('${src}','image/jpeg')" style="cursor:pointer">
+        <img class="media-thumb" src="${src}" onclick="openMedia('${src}','image/jpeg')">
         <span class="media-filename" title="${file.name}">${shortName}</span>
         <button class="media-remove" onclick="removeMedia('${uid}','${previewId}')">×</button>
       </div>`;
@@ -391,18 +403,16 @@ function removeMedia(uid, previewId) {
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
         <path d="M8 2v9M4 6l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>Upload
-    </button>`;
+      </svg>Upload</button>`;
     scheduleSave();
   }
 }
 
-/* ── Table utils ── */
 function autoGrow(el) { el.style.height = '0'; el.style.height = Math.max(el.scrollHeight, 34) + 'px'; }
 function resizeAllInputs() { document.querySelectorAll('tbody td textarea').forEach(autoGrow); }
 function renumberTable(id) {
-  document.getElementById(id).querySelectorAll('tr').forEach((r, i) => {
-    const inp = r.querySelector('.row-num input'); if (inp) inp.value = i + 1;
+  document.getElementById(id).querySelectorAll('tr').forEach((r,i) => {
+    const inp = r.querySelector('.row-num input'); if (inp) inp.value = i+1;
   });
 }
 function removeRow(btn, id) { btn.closest('tr').remove(); renumberTable(id); scheduleSave(); }
@@ -420,44 +430,11 @@ document.addEventListener('input', function(e) {
   if (e.target.matches('#meta-analyst,#meta-date,#meta-period,#notes-takeaways,#notes-actions')) scheduleSave();
 });
 
-/* ── Auto-save ── */
-const STORAGE_KEY = 'ecoverage_autosave_v2';
-let saveTimer = null;
-
-function setStatus(state, text) {
-  document.getElementById('autosaveDot').className = 'autosave-dot ' + (state || '');
-  document.getElementById('autosaveText').textContent = text;
-}
-
-function scheduleSave() {
-  setStatus('saving', 'Saving…');
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(doSave, 800);
-}
-
-function doSave() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(collectData()));
-    const t = new Date().toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
-    setStatus('saved', 'Saved at ' + t);
-  } catch(e) {
-    setStatus('', 'Save failed — try exporting');
-  }
-}
-
-/* ── Collect / Restore ── */
 function collectData() {
   return {
     v: 2, savedAt: new Date().toISOString(),
-    meta: {
-      analyst: document.getElementById('meta-analyst').value,
-      date: document.getElementById('meta-date').value,
-      period: document.getElementById('meta-period').value,
-    },
-    notes: {
-      takeaways: document.getElementById('notes-takeaways').value,
-      actions: document.getElementById('notes-actions').value,
-    },
+    meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
+    notes: { takeaways: document.getElementById('notes-takeaways').value, actions: document.getElementById('notes-actions').value },
     traffic: collectTable('traffic-body', ['num','source','qty','type','notes']),
     ads: collectTable('ads-body', ['num','channel','format','headline','cta','imp','creative','creativeLink','angle','spyLink','fanPage']),
     funnels: collectTable('funnels-body', ['num','link','advertiser','type','entry','obs']),
@@ -469,18 +446,14 @@ function collectTable(id, keys) {
     const cells = row.querySelectorAll('td:not(.remove-col)');
     const obj = {};
     cells.forEach((cell, i) => {
-      const k = keys[i] || 'c' + i;
+      const k = keys[i]||'c'+i;
       if (k === 'creative') {
-        const img = cell.querySelector('.media-preview img');
-        const vid = cell.querySelector('.media-video-thumb');
-        const fname = cell.querySelector('.media-filename');
-        if (img) obj[k] = { t: 'img', src: img.src, name: fname?.title || '' };
-        else if (vid) obj[k] = { t: 'vid', name: fname?.title || '' };
+        const img = cell.querySelector('.media-preview img'), vid = cell.querySelector('.media-video-thumb'), fname = cell.querySelector('.media-filename');
+        if (img) obj[k] = { t:'img', src: img.src, name: fname?.title||'' };
+        else if (vid) obj[k] = { t:'vid', name: fname?.title||'' };
         else obj[k] = null;
       } else {
-        const s = cell.querySelector('select');
-        const ta = cell.querySelector('textarea');
-        const inp = cell.querySelector('input:not([type="file"])');
+        const s = cell.querySelector('select'), ta = cell.querySelector('textarea'), inp = cell.querySelector('input:not([type="file"])');
         obj[k] = s ? s.value : ta ? ta.value : inp ? inp.value : '';
       }
     });
@@ -490,14 +463,14 @@ function collectTable(id, keys) {
 
 function restoreData(data) {
   if (!data) return false;
-  document.getElementById('meta-analyst').value = data.meta?.analyst || '';
-  document.getElementById('meta-date').value = data.meta?.date || '';
-  document.getElementById('meta-period').value = data.meta?.period || '';
-  document.getElementById('notes-takeaways').value = data.notes?.takeaways || '';
-  document.getElementById('notes-actions').value = data.notes?.actions || '';
-  restoreTable('traffic-body', data.traffic || [], trafficRow, ['num','source','qty','type','notes']);
-  restoreTable('ads-body', data.ads || [], adsRow, ['num','channel','format','headline','cta','imp','creative','creativeLink','angle','spyLink','fanPage']);
-  restoreTable('funnels-body', data.funnels || [], funnelRow, ['num','link','advertiser','type','entry','obs']);
+  document.getElementById('meta-analyst').value = data.meta?.analyst||'';
+  document.getElementById('meta-date').value = data.meta?.date||'';
+  document.getElementById('meta-period').value = data.meta?.period||'';
+  document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
+  document.getElementById('notes-actions').value = data.notes?.actions||'';
+  restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','qty','type','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','channel','format','headline','cta','imp','creative','creativeLink','angle','spyLink','fanPage']);
+  restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','type','entry','obs']);
   setTimeout(resizeAllInputs, 0);
   return true;
 }
@@ -505,94 +478,131 @@ function restoreData(data) {
 function restoreTable(id, rows, fn, keys) {
   const tbody = document.getElementById(id);
   tbody.innerHTML = '';
-  if (!rows.length) { for (let i = 1; i <= 3; i++) tbody.insertAdjacentHTML('beforeend', fn(i)); return; }
+  if (!rows.length) { for (let i=1;i<=3;i++) tbody.insertAdjacentHTML('beforeend', fn(i)); return; }
   rows.forEach((rd, idx) => {
-    tbody.insertAdjacentHTML('beforeend', fn(idx + 1));
+    tbody.insertAdjacentHTML('beforeend', fn(idx+1));
     const tr = tbody.querySelectorAll('tr')[idx];
     const cells = tr.querySelectorAll('td:not(.remove-col)');
     cells.forEach((cell, i) => {
-      const k = keys[i] || 'c' + i;
-      const v = rd[k];
+      const k = keys[i]||'c'+i, v = rd[k];
       if (k === 'creative' && v) {
         if (v.t === 'img' && v.src) {
-          const fi = cell.querySelector('input[type="file"]');
-          const pd = cell.querySelector('[id$="-preview"]');
+          const fi = cell.querySelector('input[type="file"]'), pd = cell.querySelector('[id$="-preview"]');
           if (pd && fi) {
-            const uid = fi.id, pid = pd.id;
             const sn = (v.name||'').length > 16 ? (v.name||'').slice(0,14)+'…' : (v.name||'');
             pd.innerHTML = `<div class="media-preview">
-              <img class="media-thumb" src="${v.src}" onclick="openMedia('${v.src}','image/jpeg')" style="cursor:pointer">
+              <img class="media-thumb" src="${v.src}" onclick="openMedia('${v.src}','image/jpeg')">
               <span class="media-filename" title="${v.name||''}">${sn}</span>
-              <button class="media-remove" onclick="removeMedia('${uid}','${pid}')">×</button>
+              <button class="media-remove" onclick="removeMedia('${fi.id}','${pd.id}')">×</button>
             </div>`;
           }
         }
       } else if (v !== undefined && v !== null) {
-        const s = cell.querySelector('select');
-        const ta = cell.querySelector('textarea');
-        const inp = cell.querySelector('input:not([type="file"])');
+        const s = cell.querySelector('select'), ta = cell.querySelector('textarea'), inp = cell.querySelector('input:not([type="file"])');
         if (s) s.value = v;
-        else if (ta) ta.value = v;
+        else if (ta) { ta.value = v; autoGrow(ta); }
         else if (inp) inp.value = v;
       }
     });
   });
 }
 
-/* ── Export / Import ── */
+async function cloudSave(data) {
+  if (!BIN_ID || !API_KEY) return false;
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
+      body: JSON.stringify(data)
+    });
+    return res.ok;
+  } catch(e) { return false; }
+}
+
+async function cloudLoad() {
+  if (!BIN_ID || !API_KEY) return null;
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return json.record || null;
+  } catch(e) { return null; }
+}
+
+let saveTimer = null;
+function setStatus(state, text) {
+  document.getElementById('autosaveDot').className = 'autosave-dot '+(state||'');
+  document.getElementById('autosaveText').textContent = text;
+}
+function scheduleSave() {
+  setStatus('saving','Saving…');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 1200);
+}
+async function doSave() {
+  const data = collectData();
+  try { localStorage.setItem(LS_LOCAL, JSON.stringify(data)); } catch(e){}
+  if (BIN_ID && API_KEY) {
+    const ok = await cloudSave(data);
+    const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+    setStatus(ok ? 'saved' : 'error', ok ? '☁️ Saved · '+t : '⚠️ Cloud failed — saved locally');
+  } else {
+    const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
+    setStatus('saved','Saved locally · '+t);
+  }
+}
+async function manualSave() { clearTimeout(saveTimer); await doSave(); showToast('Saved!','success'); }
+
 function exportJSON() {
   const data = collectData();
-  const name = ('ecoverage-' + (document.getElementById('meta-period').value || 'report')).replace(/[^a-z0-9\-]/gi,'-').toLowerCase();
+  const name = ('ecoverage-'+(document.getElementById('meta-period').value||'report')).replace(/[^a-z0-9\-]/gi,'-').toLowerCase();
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)], {type:'application/json'}));
-  a.download = name + '.json';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  showToast('Exported as ' + name + '.json', 'success');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download = name+'.json'; a.click(); URL.revokeObjectURL(a.href);
+  showToast('Exported as '+name+'.json','success');
 }
 function triggerImport() { document.getElementById('importInput').value=''; document.getElementById('importInput').click(); }
 function importJSON(input) {
   const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    try {
-      restoreData(JSON.parse(e.target.result));
-      scheduleSave();
-      showToast('Imported "' + file.name + '"', 'success');
-    } catch { showToast('Could not parse file.', 'error'); }
+    try { restoreData(JSON.parse(e.target.result)); scheduleSave(); showToast('Imported "'+file.name+'"','success'); }
+    catch { showToast('Could not parse file.','error'); }
   };
   reader.readAsText(file);
 }
 
-/* ── Toast ── */
 function showToast(msg, type) {
   const t = document.createElement('div');
-  t.className = 'toast ' + (type||'');
-  t.textContent = msg;
+  t.className = 'toast '+(type||''); t.textContent = msg;
   document.getElementById('toastContainer').appendChild(t);
-  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
-  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 250); }, 3000);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),250); },3000);
 }
 
-/* ── Init ── */
-(function() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      restoreData(JSON.parse(raw));
-      const dt = new Date(JSON.parse(raw).savedAt);
-      const ts = dt.toLocaleString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
-      setStatus('saved', 'Restored · ' + ts);
+(async function init() {
+  loadSettings();
+  if (BIN_ID && API_KEY) {
+    setStatus('saving','☁️ Loading…');
+    const cloudData = await cloudLoad();
+    if (cloudData && cloudData.v) {
+      restoreData(cloudData);
+      const ts = new Date(cloudData.savedAt).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      setStatus('saved','☁️ Synced · '+ts);
       return;
     }
-  } catch(e) {}
-  // fresh
-  for (let i = 1; i <= 3; i++) {
+  }
+  try {
+    const raw = localStorage.getItem(LS_LOCAL);
+    if (raw) { restoreData(JSON.parse(raw)); setStatus('saved','Restored locally'); return; }
+  } catch(e){}
+  for (let i=1;i<=3;i++) {
     document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(i));
     document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(i));
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
-  setStatus('', 'Auto-save on');
+  setStatus('', 'Not connected to cloud');
+  setTimeout(()=>document.getElementById('setupModal').classList.remove('hidden'), 600);
   setTimeout(resizeAllInputs, 0);
 })();
 </script>
