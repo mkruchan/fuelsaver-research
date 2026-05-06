@@ -515,18 +515,27 @@ async function cloudSave(data) {
       headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
       body: JSON.stringify(data)
     });
+    if (!res.ok) {
+      const txt = await res.text();
+      console.error('JSONBin save error:', res.status, txt);
+      showToast('Cloud error ' + res.status + ': ' + txt.slice(0,80), 'error');
+    }
     return res.ok;
-  } catch(e) { return false; }
+  } catch(e) { console.error('Cloud save fetch error:', e); showToast('Network error: ' + e.message, 'error'); return false; }
 }
 
 async function cloudLoad() {
   if (!BIN_ID || !API_KEY) return null;
   try {
     const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      const txt = await res.text();
+      console.error('JSONBin load error:', res.status, txt);
+      return null;
+    }
     const json = await res.json();
     return json.record || null;
-  } catch(e) { return null; }
+  } catch(e) { console.error('Cloud load fetch error:', e); return null; }
 }
 
 let saveTimer = null;
