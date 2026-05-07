@@ -272,10 +272,11 @@
 <script>
 const LS_SETTINGS = 'ecoverage_settings_v1';
 const LS_LOCAL    = 'ecoverage_local_v2';
-let BIN_ID = '', API_KEY = '';
+let BIN_ID  = '69fb9158adc21f119a6273c4';
+let API_KEY = '$2a$10$IecvGoWgfhfhPACcMbpQ1ePIEi423.hKIhOwKhAlyX3ARia6WvXt6';
 
 function loadSettings() {
-  try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||''; API_KEY = s.apiKey||''; } catch(e){}
+  try { const s = JSON.parse(localStorage.getItem(LS_SETTINGS)||'{}'); BIN_ID = s.binId||BIN_ID; API_KEY = s.apiKey||API_KEY; } catch(e){}
 }
 function saveSettings() { localStorage.setItem(LS_SETTINGS, JSON.stringify({ binId: BIN_ID, apiKey: API_KEY })); }
 
@@ -610,8 +611,7 @@ function showToast(msg, type) {
     document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(i));
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
-  setStatus('', 'Not connected to cloud');
-  setTimeout(()=>document.getElementById('setupModal').classList.remove('hidden'), 600);
+  setStatus('', 'Auto-save on');
   setTimeout(resizeAllInputs, 0);
 })();
 </script>
