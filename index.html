@@ -154,8 +154,8 @@
     .link-chip-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
     .link-chip-empty { font-size: 12px; color: var(--text-secondary); font-style: italic; cursor: pointer; padding: 4px 2px; flex: 1; }
     .link-chip-empty:hover { color: var(--text-primary); }
-    .link-chip-edit-btn { flex-shrink: 0; background: none; border: 1px solid var(--border-light); border-radius: 4px; cursor: pointer; color: var(--text-secondary); font-size: 10px; padding: 2px 6px; transition: background 0.15s; white-space: nowrap; display: none; }
-    .link-chip-edit-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .link-chip-edit-btn { flex-shrink: 0; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; cursor: pointer; color: var(--text-secondary); font-size: 11px; font-weight: 500; padding: 4px 10px; transition: background 0.15s, color 0.15s; white-space: nowrap; display: none; font-family: inherit; }
+    .link-chip-edit-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
     .link-chip-wrap-display:has(.link-chip[style*="flex"]) .link-chip-edit-btn { display: inline-block; }
     .link-chip-wrap-display { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
     .link-input-wrap { display: none; align-items: center; gap: 4px; flex: 1; }
@@ -192,6 +192,10 @@
     .badge-in-app-dsp { background: #FDF4FF; color: #7E22CE; } /* In-App violet */
     .badge-native-dsp { background: #DCFCE7; color: #166534; } /* Native DSP mint */
     .badge-programmatic { background: #F0F9FF; color: #0C4A6E; } /* Programmatic sky */
+    .badge-outbrain  { background: #FEF3C7; color: #92400E; } /* Outbrain amber */
+    .badge-mgid      { background: #D1FAE5; color: #065F46; } /* MGID green */
+    .badge-taboola   { background: #DBEAFE; color: #1E40AF; } /* Taboola blue */
+    .badge-revcontent { background: #EDE9FE; color: #6D28D9; } /* RevContent purple */
 
     /* Format — visual/content type logic */
     .badge-static        { background: #E0F2FE; color: #0369A1; } /* Static = calm blue */
@@ -235,8 +239,9 @@
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
     .add-btn { width: 100%; padding: 6px 12px; font-size: 12px; font-family: inherit; color: var(--text-secondary); background: none; border: 1px dashed var(--border-light); border-radius: var(--radius-md); cursor: pointer; }
     .add-btn:hover { background: var(--bg-secondary); color: var(--text-primary); }
-    .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; box-sizing: border-box; }
+    .notes-body textarea { width: 100%; min-height: 90px; padding: 12px 16px; font-size: 13px; font-family: inherit; color: var(--text-primary); background: transparent; border: none; resize: vertical; outline: none; line-height: 1.6; box-sizing: border-box; overflow-y: auto; display: block; }
     .notes-body textarea:focus { background: var(--bg-secondary); }
+    .notes-body { overflow: visible; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
 
@@ -420,7 +425,6 @@
           <th class="num-col frozen-num">#</th>
           <th style="width:150px">Traffic Source</th>
           <th style="width:90px">Geo</th>
-          <th style="width:110px">Lifecycle</th>
           <th style="width:100px">Est. Ads Quantity</th>
           <th style="width:120px">Traffic Type</th>
           <th style="width:150px">Notes</th>
@@ -703,7 +707,7 @@ function trafficRow(n) {
     <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
-        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}
+        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}${opt('outbrain','Outbrain')}${opt('mgid','MGID')}${opt('taboola','Taboola')}${opt('revcontent','RevContent')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
@@ -711,13 +715,6 @@ function trafficRow(n) {
       <span class="text-badge-empty">e.g. US, UK</span>
       <span class="text-badge" style="display:none"></span>
       <input class="text-badge-input" type="text" placeholder="e.g. US, UK" data-badge-type="geo"
-        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
-    </div>
-    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
-    <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
-      <span class="text-badge-empty">e.g. Prospecting</span>
-      <span class="text-badge" style="display:none"></span>
-      <input class="text-badge-input" type="text" placeholder="e.g. Prospecting" data-badge-type="lifecycle"
         onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
     </div>
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
@@ -749,7 +746,7 @@ function adsRow(n) {
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
-        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}
+        ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}${opt('outbrain','Outbrain')}${opt('mgid','MGID')}${opt('taboola','Taboola')}${opt('revcontent','RevContent')}
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
@@ -768,9 +765,9 @@ function adsRow(n) {
     </div>
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
-      <span class="text-badge-empty">e.g. Prospecting</span>
+      <span class="text-badge-empty">e.g. 16 days</span>
       <span class="text-badge" style="display:none"></span>
-      <input class="text-badge-input" type="text" placeholder="e.g. Prospecting" data-badge-type="lifecycle"
+      <input class="text-badge-input" type="text" placeholder="e.g. 16 days" data-badge-type="lifecycle"
         onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
     </div>
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
@@ -780,7 +777,7 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -795,7 +792,7 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -810,7 +807,7 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -836,7 +833,7 @@ function adsRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -864,7 +861,7 @@ function funnelRow(n) {
           <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9M9 1h6m0 0v6m0-6L7 9" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="link-chip-text"></span>
         </a>
-        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">✎</button>
+        <button class="link-chip-edit-btn" onclick="startLinkEdit(this)" title="Edit link">Edit</button>
         <span class="link-chip-empty" onclick="startLinkEdit(this)">+ Add link</span>
       </div>
       <div class="link-input-wrap">
@@ -888,9 +885,9 @@ function funnelRow(n) {
     </div>
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
     <td class="offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
-      <span class="text-badge-empty">e.g. Prospecting</span>
+      <span class="text-badge-empty">e.g. 16 days</span>
       <span class="text-badge" style="display:none"></span>
-      <input class="text-badge-input" type="text" placeholder="e.g. Prospecting" data-badge-type="lifecycle"
+      <input class="text-badge-input" type="text" placeholder="e.g. 16 days" data-badge-type="lifecycle"
         onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
     </div>
     <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
@@ -1338,7 +1335,7 @@ function collectData() {
       takeawaysH: document.getElementById('notes-takeaways').style.height || '',
       actionsH: document.getElementById('notes-actions').style.height || '',
     },
-    traffic: collectTable('traffic-body', ['num','source','geo','lifecycle','qty','type','notes']),
+    traffic: collectTable('traffic-body', ['num','source','geo','qty','type','notes']),
     ads: collectTable('ads-body', ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']),
     funnels: collectTable('funnels-body', ['num','link','advertiser','geo','lifecycle','type','obs']),
   };
@@ -1379,7 +1376,7 @@ function restoreData(data) {
   document.getElementById('notes-actions').value = data.notes?.actions||'';
   if (data.notes?.takeawaysH) document.getElementById('notes-takeaways').style.height = data.notes.takeawaysH;
   if (data.notes?.actionsH) document.getElementById('notes-actions').style.height = data.notes.actionsH;
-  restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','lifecycle','qty','type','notes']);
+  restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','lifecycle','type','obs']);
   setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); }, 0);
