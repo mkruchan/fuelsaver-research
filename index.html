@@ -82,29 +82,29 @@
     .section-title { font-size: 14px; font-weight: 500; }
 
     .table-scroll { overflow-x: auto; }
-    table { border-collapse: collapse; font-size: 13px; table-layout: fixed; width: max-content; min-width: 100%; }
-    thead th { position: relative; text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; }
-    th.remove-col, th.num-col { width: 36px; }
+    table { border-collapse: collapse; font-size: 12px; table-layout: fixed; width: max-content; min-width: 100%; }
+    thead th { position: relative; text-align: left; padding: 5px 8px; font-size: 10px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 110px; }
+    .row-num { width: 30px !important; min-width: 30px !important; max-width: 30px !important; text-align: center; color: var(--text-secondary); vertical-align: middle !important; }
     .col-resizer { position: absolute; right: 0; top: 0; bottom: 0; width: 6px; cursor: col-resize; z-index: 10; display: flex; align-items: center; justify-content: center; }
     .col-resizer::after { content: ''; display: block; width: 2px; height: 60%; background: var(--border-light); border-radius: 2px; transition: background 0.15s; }
     .col-resizer:hover::after, .col-resizer.dragging::after { background: var(--border-mid); }
-    th.remove-col, th.num-col { width: 36px; }
+    th.remove-col { width: 30px !important; } th.num-col { width: 30px !important; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: top; overflow: hidden; }
-    tbody td input, tbody td select, tbody td textarea { padding: 8px 12px; font-size: 13px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; width: 100%; }
-    tbody td textarea { min-height: 34px; white-space: pre-wrap; word-break: break-word; }
+    tbody td input, tbody td select, tbody td textarea { padding: 6px 8px; font-size: 12px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.5; display: block; width: 100%; }
+    tbody td textarea { min-height: 30px; white-space: pre-wrap; word-break: break-word; }
     tbody td textarea.link-field { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #4A90D9; text-decoration: underline; cursor: pointer; }
     tbody td textarea.link-field:focus { white-space: nowrap; }
     .link-open-btn { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #4A90D9; font-size: 12px; padding: 2px 4px; opacity: 0; transition: opacity 0.15s; z-index: 3; text-decoration: none; }
     .link-cell { position: relative; }
     .link-cell:hover .link-open-btn { opacity: 1; }
-    tbody td select { cursor: pointer; height: 34px; }
+    tbody td select { cursor: pointer; height: 30px; }
     tbody td:has(select) { vertical-align: middle; }
 
     /* Custom colored select */
-    .sel-wrap { position: relative; width: 100%; height: 34px; overflow: hidden; }
+    .sel-wrap { position: relative; width: 100%; height: 30px; overflow: hidden; }
     .sel-wrap select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
-    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 34px; font-size: 13px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; }
+    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 30px; font-size: 12px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; }
     .sel-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
     .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
     tbody td:has(.sel-wrap) { vertical-align: middle; overflow: hidden; }
@@ -145,8 +145,8 @@
     tbody td:last-child input, tbody td:last-child select, tbody td:last-child textarea { border-right: none; }
     tbody td input:focus, tbody td select:focus, tbody td textarea:focus { background: var(--bg-secondary); }
     .row-num { width: 36px !important; min-width: 36px !important; max-width: 36px !important; text-align: center; color: var(--text-secondary); vertical-align: middle !important; }
-    .row-num input { padding: 2px 4px !important; width: 36px !important; text-align: center; border-right: 1px solid var(--border-light) !important; }
-    tbody td.remove-col { width: 36px !important; min-width: 36px !important; max-width: 36px !important; vertical-align: middle !important; }
+    .row-num input { padding: 2px 4px !important; width: 30px !important; text-align: center; border-right: 1px solid var(--border-light) !important; }
+    tbody td.remove-col { width: 30px !important; min-width: 30px !important; max-width: 30px !important; vertical-align: middle !important; }
     .remove-row-btn { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin: auto; background: none; border: none; cursor: pointer; color: var(--text-secondary); border-radius: 4px; font-size: 16px; line-height: 1; }
     .remove-row-btn:hover { background: var(--bg-secondary); color: #A32D2D; }
     .add-row { padding: 8px 12px; border-top: 1px solid var(--border-light); }
@@ -290,9 +290,10 @@
         <table><thead><tr>
           <th class="num-col">#</th>
           <th>Offer</th><th>Traffic Channel</th><th>Format</th>
+          <th>Creative</th><th>Creative Link</th>
           <th>Angle / Hook</th><th>Headline</th><th>CTA</th><th>Title</th>
-          <th>Imp. Estimate</th><th>Creative</th>
-          <th>Creative Link</th><th>Landing Page Link</th>
+          <th>Imp. Estimate</th>
+          <th>Landing Page Link</th>
           <th>Spy Tool Link</th><th>Fan Page Link</th><th>Notes</th>
           <th class="remove-col"></th>
         </tr></thead><tbody id="ads-body"></tbody></table>
@@ -415,11 +416,6 @@ function adsRow(n) {
       </select>
       <div class="sel-display"><span class="sel-badge">— select —</span><span class="sel-arrow">▾</span></div>
     </div></td>
-    <td><textarea placeholder="Angle / hook description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
-    <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td class="media-cell">
       <input type="file" id="${uid}" class="hidden-input" accept="image/*,video/*" onchange="handleMediaUpload(this,'${uid}-preview')">
       <div id="${uid}-preview">
@@ -431,6 +427,12 @@ function adsRow(n) {
         </button>
       </div>
     </td>
+    <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
+    <td><textarea placeholder="Angle / hook description" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Ad headline text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="e.g. Get a Free Quote" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Ad title text" oninput="autoGrow(this);scheduleSave()"></textarea></td>
+    <td><textarea placeholder="e.g. 500K" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
     <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
     <td class="link-cell"><textarea class="link-field" placeholder="https://..." oninput="autoGrow(this);scheduleSave()" onfocus="this.select()"></textarea><a class="link-open-btn" target="_blank" title="Open link">↗</a></td>
@@ -623,7 +625,7 @@ function collectData() {
     meta: { analyst: document.getElementById('meta-analyst').value, date: document.getElementById('meta-date').value, period: document.getElementById('meta-period').value },
     notes: { takeaways: document.getElementById('notes-takeaways').value, actions: document.getElementById('notes-actions').value },
     traffic: collectTable('traffic-body', ['num','source','qty','type','notes']),
-    ads: collectTable('ads-body', ['num','offer','channel','format','angle','headline','cta','title','imp','creative','creativeLink','landingPage','spyLink','fanPage','notes']),
+    ads: collectTable('ads-body', ['num','offer','channel','format','creative','creativeLink','angle','headline','cta','title','imp','landingPage','spyLink','fanPage','notes']),
     funnels: collectTable('funnels-body', ['num','link','advertiser','type','obs']),
   };
 }
@@ -656,7 +658,7 @@ function restoreData(data) {
   document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
   document.getElementById('notes-actions').value = data.notes?.actions||'';
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','qty','type','notes']);
-  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','angle','headline','cta','title','imp','creative','creativeLink','landingPage','spyLink','fanPage','notes']);
+  restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','creative','creativeLink','angle','headline','cta','title','imp','landingPage','spyLink','fanPage','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','type','obs']);
   setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); }, 0);
   return true;
