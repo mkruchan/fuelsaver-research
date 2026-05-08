@@ -743,13 +743,7 @@ function adsRow(n) {
   const uid = 'media-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
   return `<tr>
     <td class="row-num frozen-num"><input type="text" value="${n}" style="text-align:center" oninput="scheduleSave()"></td>
-    <td class="frozen-offer offer-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
-      <span class="text-badge-empty">Offer name</span>
-      <span class="text-badge" style="display:none"></span>
-      <input class="text-badge-input" type="text" placeholder="Offer name" data-badge-type="offer"
-        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
-    </div>
-    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
+    <td class="frozen-offer"><textarea placeholder="Offer name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
         ${opt('','— select —')}${opt('meta','Meta')}${opt('tiktok','TikTok')}${opt('google','Google')}${opt('native','Native')}${opt('youtube','YouTube')}${opt('pinterest','Pinterest')}${opt('snapchat','Snapchat')}${opt('twitter','Twitter/X')}${opt('linkedin','LinkedIn')}${opt('reddit','Reddit')}${opt('email','Email')}${opt('sms','SMS')}${opt('push','Push Notifications')}${opt('in-app-dsp','In-App DSP')}${opt('programmatic','Programmatic/DSP')}${opt('outbrain','Outbrain')}${opt('mgid','MGID')}${opt('taboola','Taboola')}${opt('revcontent','RevContent')}
@@ -874,13 +868,7 @@ function funnelRow(n) {
         <button class="link-cancel-btn" onclick="cancelLinkEdit(this)">✕</button>
       </div>
     </div></td>
-    <td class="advertiser-col"><div class="text-badge-wrap" onclick="startBadgeEdit(this)">
-      <span class="text-badge-empty">Advertiser name</span>
-      <span class="text-badge" style="display:none"></span>
-      <input class="text-badge-input" type="text" placeholder="Advertiser name" data-badge-type="advertiser"
-        onblur="saveBadge(this)" onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()} if(event.key==='Escape')this.blur()">
-    </div>
-    <textarea style="position:absolute;opacity:0;pointer-events:none;width:1px;height:1px" oninput="scheduleSave()"></textarea></td>
+    <td><textarea placeholder="Advertiser name" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><textarea placeholder="e.g. US, UK" oninput="autoGrow(this);scheduleSave()"></textarea></td>
     <td><div class="sel-wrap">
       <select onchange="updateBadge(this);scheduleSave()">
