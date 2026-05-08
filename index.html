@@ -129,8 +129,8 @@
     tbody tr:hover td.frozen-num { background: var(--bg-secondary); }
 
     .table-scroll { overflow-x: auto; border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
-    table { border-collapse: collapse; font-size: 12px; table-layout: fixed; width: max-content; min-width: 100%; }
-    thead th { position: relative; text-align: left; padding: 5px 8px; font-size: 10px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 90px; }
+    table { border-collapse: collapse; font-size: 10px; table-layout: fixed; width: max-content; min-width: 100%; }
+    thead th { position: relative; text-align: left; padding: 3px 6px; font-size: 9px; font-weight: 500; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-light); background: var(--bg-secondary); white-space: nowrap; overflow: hidden; user-select: none; width: 90px; }
     .row-num { width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; color: var(--text-secondary); vertical-align: middle !important; padding: 0 !important; }
     .row-num input { padding: 2px 0 !important; width: 28px !important; min-width: 28px !important; max-width: 28px !important; text-align: center; border-right: none !important; }
     #ads-table td.frozen-num .row-num input, #ads-table td.row-num input,
@@ -147,16 +147,16 @@
     #ads-table thead th:last-child, #ads-table tbody td:last-child,
     #traffic-table thead th:last-child, #traffic-table tbody td:last-child,
     #funnels-table thead th:last-child, #funnels-table tbody td:last-child { border-right: none !important; }
-    table { border-collapse: separate; border-spacing: 0; font-size: 12px; table-layout: fixed; width: 100%; min-width: max-content; }
+    table { border-collapse: separate; border-spacing: 0; font-size: 10px; table-layout: fixed; width: 100%; min-width: max-content; }
     tbody tr:last-child td { border-bottom: none; }
     tbody td { border-bottom: 1px solid var(--border-light); padding: 0; vertical-align: middle; overflow: hidden; }
-    tbody td input, tbody td select, tbody td textarea { padding: 5px 7px; font-size: 12px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; }
+    tbody td input, tbody td select, tbody td textarea { padding: 3px 5px; font-size: 10px; border: none; border-right: 1px solid var(--border-light); background: transparent; color: var(--text-primary); outline: none; font-family: inherit; box-sizing: border-box; resize: none; overflow: hidden; line-height: 1.4; display: block; width: 100%; }
     tbody td textarea { white-space: pre-wrap; word-break: break-word; }
     tbody td textarea:focus { position: relative; z-index: 10; }
     /* ── Link chips ── */
     .link-cell { position: relative; padding: 4px 6px !important; vertical-align: middle !important; }
     .link-chip-wrap { display: flex; align-items: center; gap: 6px; min-height: 28px; width: 100%; }
-    .link-chip { display: flex; align-items: center; gap: 6px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 4px 10px 4px 8px; font-size: 12px; color: #4A90D9; max-width: calc(100% - 28px); overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
+    .link-chip { display: flex; align-items: center; gap: 4px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 20px; padding: 2px 8px 2px 6px; font-size: 10px; color: #4A90D9; max-width: calc(100% - 28px); overflow: hidden; white-space: nowrap; flex: 1; min-width: 0; cursor: pointer; transition: background 0.15s, border-color 0.15s; text-decoration: none; }
     .link-chip:hover { background: var(--blue-bg); border-color: #4A90D9; }
     .link-chip svg { flex-shrink: 0; }
     .link-chip-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
@@ -177,10 +177,10 @@
     tbody td:has(select) { vertical-align: middle; }
 
     /* Custom colored select */
-    .sel-wrap { position: relative; width: 100%; height: 28px; overflow: hidden; display: flex; align-items: center; }
+    .sel-wrap { position: relative; width: 100%; height: 22px; overflow: hidden; display: flex; align-items: center; }
     .sel-wrap select { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; z-index: 2; }
-    .sel-display { display: flex; align-items: center; gap: 7px; padding: 0 10px; height: 28px; font-size: 12px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
-    .sel-badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
+    .sel-display { display: flex; align-items: center; gap: 5px; padding: 0 7px; height: 22px; font-size: 10px; font-family: inherit; color: var(--text-primary); pointer-events: none; overflow: hidden; white-space: nowrap; width: 100%; }
+    .sel-badge { display: inline-block; padding: 1px 6px; border-radius: 20px; font-size: 9px; font-weight: 500; white-space: nowrap; flex-shrink: 0; max-width: calc(100% - 20px); overflow: hidden; text-overflow: ellipsis; }
     .sel-arrow { margin-left: 4px; color: var(--text-secondary); font-size: 10px; flex-shrink: 0; }
     tbody td:has(.sel-wrap) { vertical-align: middle !important; overflow: hidden; padding: 0 !important; }
 
@@ -1207,6 +1207,7 @@ function restoreRowHeights(cloudData) {
       table.querySelectorAll('tbody tr').forEach((tr, i) => {
         if (data[id][i]) {
           tr.style.height = data[id][i];
+          
         }
       });
     });
@@ -1254,6 +1255,7 @@ function initColResize(table) {
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onUp);
         saveColWidths();
+        doSave();
       };
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
@@ -1279,11 +1281,9 @@ function initRowResize(table) {
       document.body.style.userSelect = 'none';
 
       const onMove = e => {
-        const newH = Math.max(1, startH + (e.clientY - startY));
+        const newH = Math.max(28, startH + (e.clientY - startY));
         tr.style.height = newH + 'px';
-        tr.querySelectorAll('textarea').forEach(ta => {
-          ta.style.height = newH + 'px';
-        });
+        tr.style.minHeight = newH + 'px';
       };
       const onUp = () => {
         document.body.style.cursor = '';
@@ -1695,6 +1695,7 @@ function showToast(msg, type) {
     const cloudData = await cloudLoad();
     if (cloudData && cloudData.v) {
       restoreData(cloudData);
+      setTimeout(() => restoreColWidths(), 50);
       const ts = new Date(cloudData.savedAt).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
       setStatus('saved','☁️ Synced · '+ts);
       return;
@@ -1702,7 +1703,7 @@ function showToast(msg, type) {
   }
   try {
     const raw = localStorage.getItem(LS_LOCAL);
-    if (raw) { restoreData(JSON.parse(raw)); setStatus('saved','Restored locally'); return; }
+    if (raw) { restoreData(JSON.parse(raw)); setTimeout(() => restoreColWidths(), 50); setStatus('saved','Restored locally'); return; }
   } catch(e){}
   for (let i=1;i<=3;i++) {
     document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(i));
