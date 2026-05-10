@@ -54,10 +54,11 @@
       }
     }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; background: var(--bg-tertiary); color: var(--text-primary); min-height: 100vh; padding: 2rem 1rem; }
-    .container { max-width: 1400px; margin: 0 auto; }
+    .container { max-width: 1400px; margin: 0 auto; overflow-x: hidden; }
     .header { margin-bottom: 2rem; }
     .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-    .header-left { flex: 1; min-width: 0; display: flex; align-items: center; gap: 24px; }
+    .header-left { flex: 1; min-width: 0; display: flex; align-items: center; gap: 24px; overflow: hidden; }
+    h1#main-title { word-break: break-word; overflow-wrap: break-word; min-width: 0; }
     .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--blue-bg); color: var(--blue-text); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
     .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
     .header p { font-size: 14px; color: var(--text-secondary); }
@@ -294,6 +295,30 @@
 
     @media print { body { background: white; padding: 0; } .add-row, .save-bar, .modal-overlay { display: none; } }
 
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .header-top { flex-direction: column; gap: 8px; }
+      .save-bar { flex-wrap: wrap; gap: 6px; }
+      .toolbar-btn { font-size: 10px; padding: 4px 8px; }
+      h1#main-title { font-size: 20px !important; }
+      .header-left > div { gap: 12px !important; }
+    }
+    @media (max-width: 700px) {
+      body { padding: 8px; }
+      .container { padding: 0; }
+      .header { padding: 12px; }
+      .save-bar .toolbar-btn span, .save-bar .toolbar-btn #themeLabel, .save-bar .toolbar-btn #autosaveLabel { display: none; }
+      .two-col { grid-template-columns: 1fr; }
+      .ads-grid-inner { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important; }
+      h1#main-title { font-size: 18px !important; }
+      .section-header { flex-wrap: wrap; gap: 6px; }
+    }
+    @media (max-width: 480px) {
+      .ads-grid-inner { grid-template-columns: 1fr 1fr !important; }
+      .header-left { flex-direction: column !important; align-items: flex-start !important; }
+      .save-bar { gap: 4px; }
+    }
+
     /* ── Column grouping ── */
     thead th.col-group-creative { background: color-mix(in srgb, var(--amber-bg) 50%, var(--bg-secondary)) !important; }
     thead th.col-group-links { background: color-mix(in srgb, var(--blue-bg) 50%, var(--bg-secondary)) !important; }
@@ -423,11 +448,6 @@
             </div>
           </div>
         </div>
-        <div id="header-img-box" onclick="document.getElementById('header-img-input').click()" title="Click to upload image" style="width:160px;height:80px;border:2px dashed var(--border-mid);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;overflow:hidden;background:var(--bg-secondary);align-self:flex-start;margin-top:38px;position:relative;">
-          <span id="header-img-label" style="color:var(--text-secondary);font-size:11px;pointer-events:none;">+ Add image</span>
-          <img id="header-img-bg" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(8px) brightness(0.7);transform:scale(1.1);">
-          <img id="header-img-preview" style="display:none;position:relative;max-width:100%;max-height:100%;object-fit:contain;z-index:1;">
-        </div>
         <input type="file" id="header-img-input" accept="image/*" style="display:none;" onchange="loadHeaderImg(this)">
       </div>
       <div class="save-bar">
@@ -455,6 +475,10 @@
           </div>
         </div>
         <button class="toolbar-btn" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">🌙 <span id="themeLabel">Dark mode</span></button>
+        <button class="toolbar-btn" onclick="showHistory()" title="Version history">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2.5 1.5" stroke-linecap="round"/></svg>
+          History
+        </button>
         <button class="toolbar-btn" onclick="showSetupModal()" title="Cloud sync settings">☁️</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
       </div>
@@ -495,8 +519,8 @@
       </div>
       <span class="section-title">Top traffic sources</span>
       <div style="display:flex;gap:6px;margin-left:12px;">
-        <button id="traffic-view-grid" onclick="setTrafficView('grid')" title="Grid view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid</button>
-        <button id="traffic-view-table" onclick="setTrafficView('table')" title="Table view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table</button>
+        <button id="traffic-view-grid" onclick="setTrafficView('grid')" title="Grid view" style="background:transparent;border:1px solid var(--border-mid);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--text-secondary);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Grid</button>
+        <button id="traffic-view-table" onclick="setTrafficView('table')" title="Table view" style="background:var(--accent-muted,rgba(74,144,217,0.2));border:1px solid var(--accent,#4A90D9);border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--accent,#4A90D9);font-size:11px;display:flex;align-items:center;gap:5px;"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M1 9h14M5 5v9"/></svg>Table</button>
       </div>
     </div>
     <div class="section-body">
@@ -577,6 +601,19 @@
 
 </div>
 
+<!-- History Panel -->
+<div id="history-panel" style="display:none;position:fixed;top:0;right:0;width:320px;height:100vh;background:var(--bg-secondary);border-left:1px solid var(--border-light);z-index:1001;display:none;flex-direction:column;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border-light);">
+    <span style="font-size:13px;font-weight:600;color:var(--text-primary);">Version history</span>
+    <button onclick="hideHistory()" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:20px;line-height:1;">×</button>
+  </div>
+  <div style="padding:10px 12px;border-bottom:1px solid var(--border-light);font-size:11px;color:var(--text-secondary);">
+    Showing last <strong id="history-count">0</strong> versions from this session
+  </div>
+  <div id="history-list" style="flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;"></div>
+</div>
+<div id="history-overlay" onclick="hideHistory()" style="display:none;position:fixed;inset:0;z-index:1000;"></div>
+
 <div id="lightbox" onclick="closeLightbox()"><span id="lightbox-close" onclick="closeLightbox()">×</span><img id="lightbox-img" src="" alt=""></div>
 
 
@@ -636,35 +673,6 @@ function editTitle() {
   urlIn.addEventListener('blur', () => { setTimeout(guardedSave, 100); });
   textIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); urlIn.focus(); } if (e.key === 'Escape') { wrap.replaceWith(document.getElementById('main-title') || wrap); } });
   urlIn.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); urlIn.blur(); } if (e.key === 'Escape') { urlIn.blur(); } });
-}
-
-async function loadHeaderImg(input) {
-  const file = input.files[0]; if (!file) return;
-  const box = document.getElementById('header-img-box');
-  const label = document.getElementById('header-img-label');
-  const preview = document.getElementById('header-img-preview');
-  const bg = document.getElementById('header-img-bg');
-  if (label) label.textContent = 'Uploading…';
-
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('upload_preset', CLOUDINARY_PRESET);
-  try {
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body: formData });
-    if (!res.ok) throw new Error('Upload failed');
-    const data = await res.json();
-    const url = data.secure_url;
-    preview.src = bg.src = url;
-    preview.style.display = 'block';
-    bg.style.display = 'block';
-    if (label) label.style.display = 'none';
-    if (box) box.style.border = 'none';
-    localStorage.setItem('ecoverage_header_img', url);
-    doSave();
-  } catch(e) {
-    if (label) label.textContent = '+ Add image';
-    console.error('Header img upload error:', e);
-  }
 }
 
 function setViewMode(tableId, gridId, tableBtnId, gridBtnId, buildFn, storageKey, mode) {
@@ -1040,6 +1048,11 @@ function buildAdsGrid() {
       </div>
     </div>`;
 
+    const linkBlockTop = `<div style="display:flex;gap:8px;justify-content:space-between;margin-bottom:6px;padding:6px 0;border-bottom:1px solid var(--border-light);">
+        <div style="display:flex;flex-direction:column;gap:2px;flex:1;">${mkEditableLink(landingUrl,'Landing',7)}${mkEditableLink(creativeUrl,'Creative',11)}</div>
+        <div style="display:flex;flex-direction:column;gap:2px;flex:1;align-items:flex-end;">${mkEditableLink(spyUrl,'Spy tool',8)}${mkEditableLink(fanUrl,'Fan page',9)}</div>
+      </div>`;
+
     return `<div class="grid-card" >
       <div style="position:relative;overflow:hidden;border-radius:8px 8px 0 0;">${imgHtml}
         <div style="position:absolute;top:4px;left:4px;right:4px;display:flex;justify-content:space-between;align-items:center;">
@@ -1052,6 +1065,7 @@ function buildAdsGrid() {
       </div>
       <div class="grid-card-body">
         <div class="grid-card-offer">${offer || '<span style="opacity:0.4">No offer</span>'}</div>
+        ${linkBlockTop}
         ${renderChip(tds[2], 'Traffic source', idx, 'ads-body')}
         ${renderChip(tds[3], 'Format', idx, 'ads-body')}
         ${field('Geo', geo, 'td:nth-child(5)', idx)}
@@ -1062,7 +1076,6 @@ function buildAdsGrid() {
         ${field('Title', title, 'td:nth-child(15)', idx)}
         ${field('Imp. Estimate', imp, 'td:nth-child(16)', idx)}
         ${field('Notes', notes, 'td:nth-child(17)', idx)}
-        ${linkBlock}
       </div>
     </div>`;
   }).join('');
@@ -2455,7 +2468,6 @@ document.addEventListener('input', function(e) {
 
 function collectData() {
   const h1 = document.getElementById('main-title');
-  const headerImg = document.getElementById('header-img-preview');
   return {
     v: 2, savedAt: new Date().toISOString(),
     header: {
@@ -2472,8 +2484,8 @@ function collectData() {
     notes: {
       takeaways: document.getElementById('notes-takeaways').value,
       actions: document.getElementById('notes-actions').value,
-      takeawaysH: document.getElementById('notes-takeaways').style.height || '',
-      actionsH: document.getElementById('notes-actions').style.height || '',
+      takeawaysH: document.getElementById('notes-takeaways')?.closest('.notes-body')?.style.height || '',
+      actionsH: document.getElementById('notes-actions')?.closest('.notes-body')?.style.height || '',
     },
     colWidths: (function() { const d={}; document.querySelectorAll('table').forEach(t => { const id=t.id||'table'; d[id]={}; t.querySelectorAll('thead th').forEach((th,i)=>{ if(th.style.width) d[id][i]=th.style.width; }); if(t.style.width) d[id]['_tableW']=t.style.width; }); return d; })(),
     rowHeights: (function() { const d={}; document.querySelectorAll('table').forEach(t => { const id=t.id||'table'; d[id]={}; t.querySelectorAll('tbody tr').forEach((tr,i)=>{ if(tr.style.height) d[id][i]=tr.style.height; }); }); return d; })(),
@@ -2519,25 +2531,21 @@ function restoreData(data) {
       if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h1.innerHTML = ''; h1.appendChild(a); } else { h1.textContent = t; }
       updateTitleLinkBtn(tu);
     }
-    if (data.header.img) {
-      const p = document.getElementById('header-img-preview'); const bg = document.getElementById('header-img-bg');
-      const l = document.getElementById('header-img-label'); const box = document.getElementById('header-img-box');
-      if (p) { p.src = data.header.img; p.style.display = 'block'; if(bg){bg.src=data.header.img;bg.style.display='block';} if(l)l.style.display='none'; if(box)box.style.border='none'; }
-    }
+
   }
   document.getElementById('meta-analyst').value = data.meta?.analyst||'';
   document.getElementById('meta-date').value = data.meta?.date||'';
   document.getElementById('meta-period').value = data.meta?.period||'';
   document.getElementById('notes-takeaways').value = data.notes?.takeaways||'';
   document.getElementById('notes-actions').value = data.notes?.actions||'';
-  if (data.notes?.takeawaysH) document.getElementById('notes-takeaways').style.height = data.notes.takeawaysH;
-  if (data.notes?.actionsH) document.getElementById('notes-actions').style.height = data.notes.actionsH;
+  if (data.notes?.takeawaysH) { const b = document.getElementById('notes-takeaways')?.closest('.notes-body'); if(b) b.style.height = data.notes.takeawaysH; }
+  if (data.notes?.actionsH) { const b = document.getElementById('notes-actions')?.closest('.notes-body'); if(b) b.style.height = data.notes.actionsH; }
   restoreTable('traffic-body', data.traffic||[], trafficRow, ['num','source','geo','qty','type','notes']);
   restoreTable('ads-body', data.ads||[], adsRow, ['num','offer','channel','format','geo','lifecycle','landingPage','spyLink','fanPage','creative','creativeLink','angle','headline','cta','title','imp','notes']);
   restoreTable('funnels-body', data.funnels||[], funnelRow, ['num','link','advertiser','geo','type','obs']);
   setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); restoreColWidths(data.colWidths); restoreRowHeights(data.rowHeights); centerTextareas(); initAllDragReorder();
     const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid');
-    const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'table' ? 'table' : 'grid');
+    const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table');
     const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table');
   }, 0);
   return true;
@@ -2670,7 +2678,9 @@ let undoSnapTimer = null;
 let lastSnap = null;
 
 function snapForUndo() {
-  const snap = JSON.stringify(collectData());
+  const data = collectData();
+  data.savedAt = new Date().toISOString();
+  const snap = JSON.stringify(data);
   if (snap === lastSnap) return;
   undoStack.push(snap);
   if (undoStack.length > 50) undoStack.shift();
@@ -2785,6 +2795,55 @@ function importJSON(input) {
   reader.readAsText(file);
 }
 
+function showHistory() {
+  const panel = document.getElementById('history-panel');
+  const overlay = document.getElementById('history-overlay');
+  const list = document.getElementById('history-list');
+  const count = document.getElementById('history-count');
+
+  // Build list from undoStack (most recent first)
+  const allSnaps = [...undoStack].reverse();
+  count.textContent = allSnaps.length;
+
+  if (!allSnaps.length) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);font-size:12px;">No history yet — make some edits first.</div>';
+  } else {
+    list.innerHTML = allSnaps.map((snap, i) => {
+      const data = JSON.parse(snap);
+      const title = data.header?.title || data.meta?.analyst || 'Version';
+      const time = data.savedAt ? new Date(data.savedAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : 'Unknown time';
+      const date = data.savedAt ? new Date(data.savedAt).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
+      const rowCount = (data.ads?.length||0) + (data.traffic?.length||0) + (data.funnels?.length||0);
+      return `<div style="background:var(--bg-primary);border:1px solid var(--border-light);border-radius:8px;padding:10px 12px;cursor:pointer;" onmouseover="this.style.borderColor='var(--accent,#4A90D9)'" onmouseout="this.style.borderColor='var(--border-light)'" onclick="restoreVersion(${undoStack.length - 1 - i})">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:500;color:var(--text-primary);">${i === 0 ? '⭐ Latest' : `Version ${allSnaps.length - i}`}</span>
+          <span style="font-size:10px;color:var(--text-secondary);">${date} ${time}</span>
+        </div>
+        <div style="font-size:11px;color:var(--text-secondary);">${rowCount} rows · ${title}</div>
+      </div>`;
+    }).join('');
+  }
+
+  panel.style.display = 'flex';
+  overlay.style.display = 'block';
+}
+
+function hideHistory() {
+  document.getElementById('history-panel').style.display = 'none';
+  document.getElementById('history-overlay').style.display = 'none';
+}
+
+function restoreVersion(stackIdx) {
+  const snap = undoStack[stackIdx];
+  if (!snap) return;
+  if (!confirm('Restore this version? Current state will be added to history.')) return;
+  snapForUndo(); // save current state first
+  lastSnap = snap;
+  restoreData(JSON.parse(snap));
+  hideHistory();
+  showToast('Version restored', 'success');
+}
+
 function showToast(msg, type) {
   const t = document.createElement('div');
   t.className = 'toast '+(type||''); t.textContent = msg;
@@ -2816,7 +2875,7 @@ function showToast(msg, type) {
     document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
   }
   setStatus('', 'Auto-save on');
-  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid'); const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'table' ? 'table' : 'grid'); const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table'); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); const img = localStorage.getItem('ecoverage_header_img'); if (img) { const p = document.getElementById('header-img-preview'); const l = document.getElementById('header-img-label'); const bg = document.getElementById('header-img-bg'); const box = document.getElementById('header-img-box'); if (p) { p.src = img; p.style.display = 'block'; if(bg){bg.src=img;bg.style.display='block';} if(l) l.style.display = 'none'; if(box) box.style.border='none'; } } }, 0);
+  setTimeout(() => { resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder(); setTimeout(snapForUndo, 500); setTimeout(centerTextareas, 300); const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid'); const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table'); const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table'); const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || ''; if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } } updateTitleLinkBtn(tu); }, 0);
 })();
 </script>
 </body>
