@@ -763,7 +763,7 @@ function buildTrafficGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
       <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
@@ -776,7 +776,7 @@ function buildTrafficGrid() {
   };
 
   const getText = td => td?.querySelector('textarea')?.value || '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
     <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -785,7 +785,7 @@ function buildTrafficGrid() {
       onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
     <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -838,7 +838,7 @@ function buildFunnelsGrid() {
   const getText = td => td?.querySelector('textarea')?.value || '';
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+  const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
     <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -847,7 +847,7 @@ function buildFunnelsGrid() {
       onblur="this.style.background='';this.style.padding='';gcCollapse(this)"
     >${val||''}</div>
   </div>`;
-  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+  const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
     <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -875,7 +875,7 @@ function buildFunnelsGrid() {
     const ft = fv ? (funnelSel.options[funnelSel.selectedIndex]?.text || fv) : '';
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:1px 8px;font-size:11px;font-weight:500;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
-    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+    const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
       <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
@@ -924,7 +924,7 @@ function buildAdsGrid() {
 
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
-  const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:${h}px;overflow:hidden;">
+  const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:${h}px;min-height:${h}px;max-height:${h}px;overflow:hidden;flex-shrink:0;">
     <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
@@ -990,7 +990,7 @@ function buildAdsGrid() {
     const opts = Array.from(sel.options).map(o =>
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
-    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;overflow:hidden;">
+    return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
       <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
@@ -1209,20 +1209,52 @@ function initGridDrag(gridId, tableId) {
   });
 }
 
+function gcSelectAll(el) {
+  gcExpand(el);
+  setTimeout(() => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }, 10);
+}
+
+// Double-click any grid card field to select all text
+document.addEventListener('dblclick', (e) => {
+  const el = e.target.closest('.gce');
+  if (!el) return;
+  e.preventDefault();
+  gcExpand(el);
+  setTimeout(() => {
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }, 10);
+});
+
 function gcExpand(el) {
-  // Expand the parent wrapper to auto height so content is visible
-  const wrapper = el.closest('div[style*="height:"]');
-  if (wrapper) { wrapper.style.height = 'auto'; wrapper.style.overflow = 'visible'; }
+  const wrapper = el.closest('[style*="max-height"]');
+  if (wrapper) {
+    wrapper._origMaxH = wrapper.style.maxHeight;
+    wrapper._origH = wrapper.style.height;
+    wrapper._origOF = wrapper.style.overflow;
+    wrapper.style.maxHeight = 'none';
+    wrapper.style.height = 'auto';
+    wrapper.style.overflow = 'visible';
+    wrapper.style.zIndex = '10';
+    wrapper.style.position = 'relative';
+  }
   el.style.display = 'block';
   el.style.webkitLineClamp = '';
   el.style.overflow = 'visible';
   el.style.cursor = 'text';
   el.style.color = 'var(--text-primary)';
   el.style.opacity = '1';
-  el.style.background = 'var(--bg-primary)';
-  el.style.borderRadius = '3px';
-  el.style.padding = '1px 3px';
   el.focus();
+  // Place cursor at end
   const range = document.createRange();
   const sel = window.getSelection();
   range.selectNodeContents(el);
@@ -1232,11 +1264,19 @@ function gcExpand(el) {
 }
 
 function gcCollapse(el) {
-  // Restore fixed height on parent
-  const wrapper = el.closest('div[style*="overflow:"]');
-  if (wrapper) { 
-    const origH = wrapper.dataset.origH;
-    if (origH) { wrapper.style.height = origH + 'px'; wrapper.style.overflow = 'hidden'; }
+  const wrapper = el.closest('[style*="max-height"]');
+  if (wrapper) {
+    if (wrapper._origMaxH !== undefined) {
+      wrapper.style.maxHeight = wrapper._origMaxH;
+      wrapper.style.height = wrapper._origH;
+      wrapper.style.overflow = wrapper._origOF || 'hidden';
+    }
+    wrapper.style.zIndex = '';
+    wrapper.style.position = '';
+    wrapper.style.background = '';
+    wrapper.style.borderRadius = '';
+    wrapper.style.boxShadow = '';
+    wrapper.style.padding = '';
   }
   el.style.display = '-webkit-box';
   el.style.webkitLineClamp = '2';
@@ -1244,6 +1284,7 @@ function gcCollapse(el) {
   el.style.cursor = 'pointer';
   el.style.background = '';
   el.style.padding = '';
+  el.style.color = '';
 }
 
 function gcCollapse(el) {
@@ -2491,7 +2532,7 @@ document.addEventListener('input', function(e) {
 function collectData() {
   const h1 = document.getElementById('main-title');
   return {
-    v: 2, savedAt: new Date().toISOString(),
+    v: 2,
     header: {
       title: h1 ? (h1.dataset.text || h1.textContent) : '',
       titleUrl: h1 ? (h1.dataset.url || '') : '',
@@ -2704,8 +2745,7 @@ function snapForUndo() {
   const data = collectData();
   const snap = JSON.stringify(data);
   if (snap === lastSnap) return;
-  const entry = JSON.stringify({ ...data, _snapAt: new Date().toISOString() });
-  undoStack.push(entry);
+  undoStack.push(JSON.stringify({ ...data, _snapAt: new Date().toISOString() }));
   if (undoStack.length > 100) undoStack.shift();
   redoStack.length = 0;
   lastSnap = snap;
@@ -2747,16 +2787,18 @@ function scheduleSave() {
 async function doSave() {
   updateLastEdited();
   const data = collectData();
-  // Add to history on every save
-  const entry = JSON.stringify({ ...data, _snapAt: new Date().toISOString() });
-  if (entry !== lastSnap) {
-    undoStack.push(entry);
+  const snap = JSON.stringify(data);
+  // Add to history on every save (if data changed)
+  if (snap !== lastSnap) {
+    undoStack.push(JSON.stringify({ ...data, _snapAt: new Date().toISOString() }));
     if (undoStack.length > 100) undoStack.shift();
-    lastSnap = JSON.stringify(data);
+    lastSnap = snap;
   }
-  try { localStorage.setItem(LS_LOCAL, JSON.stringify(data)); } catch(e){}
+  // Add savedAt only for the cloud payload
+  const cloudData = { ...data, savedAt: new Date().toISOString() };
+  try { localStorage.setItem(LS_LOCAL, JSON.stringify(cloudData)); } catch(e){}
   if (BIN_ID && API_KEY) {
-    const ok = await cloudSave(data);
+    const ok = await cloudSave(cloudData);
     const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
     setStatus(ok ? 'saved' : 'error', ok ? '☁️ Saved · '+t : '⚠️ Cloud failed — saved locally');
   } else {
