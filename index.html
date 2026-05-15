@@ -567,10 +567,19 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     /* ── Offer picker (inline header) ── */
-    /* offer picker — native select, no custom dropdown needed */
+    /* offer picker */
     #offer-select option { font-size:14px; font-weight:500; }
-    .offer-bar-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; font-size:12px; font-weight:500; font-family:inherit; border-radius:8px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; }
+    .offer-pill-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; font-size:12px; font-weight:500; font-family:inherit; border-radius:20px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; white-space:nowrap; transition:all 0.13s; }
+    .offer-pill-btn:hover { color:var(--text-primary); border-color:var(--border-mid); }
+    .offer-pill-btn--accent { background:var(--blue-bg,#dbeafe); color:var(--blue-text,#1d4ed8); border-color:currentColor; }
+    .offer-pill-btn--accent:hover { opacity:0.85; }
+    .offer-icon-btn { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:8px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; transition:all 0.13s; padding:0; flex-shrink:0; }
+    .offer-icon-btn:hover { color:var(--text-primary); border-color:var(--border-mid); }
+    .offer-icon-btn--db { color:#3ECF8E; border-color:#3ECF8E44; background:#3ECF8E11; }
+    .offer-icon-btn--db:hover { background:#3ECF8E22; }
+    .offer-bar-btn { display:inline-flex; align-items:center; gap:5px; padding:7px 14px; font-size:12px; font-weight:500; font-family:inherit; border-radius:8px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; }
     .offer-bar-btn.primary { background:#185FA5; color:#fff; border-color:transparent; }
+    .offer-bar-btn.primary:hover { background:#0f4880; }
     /* Supabase modal */
     #sb-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9500; display:flex; align-items:center; justify-content:center; padding:1rem; }
     #sb-modal-overlay.hidden { display:none; }
@@ -582,9 +591,6 @@
     .sb-field input { width:100%; padding:8px 12px; font-size:13px; font-family:inherit; border:1px solid var(--border-light); border-radius:8px; background:var(--bg-secondary); color:var(--text-primary); outline:none; }
     .sb-field input:focus { border-color:var(--border-mid); }
     .sb-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
-    .offer-bar-btn { display:inline-flex; align-items:center; gap:5px; padding:7px 14px; font-size:12px; font-weight:500; font-family:inherit; border-radius:8px; border:1px solid var(--border-light); background:var(--bg-primary); color:var(--text-primary); cursor:pointer; }
-    .offer-bar-btn.primary { background:#185FA5; color:#fff; border-color:transparent; }
-    .offer-bar-btn.primary:hover { background:#0f4880; }
   </style>
 </head>
 <body>
@@ -678,60 +684,47 @@
             <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">
               <h1 id="main-title" style="color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;" data-text="" data-url=""></h1>
               <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-                <button onclick="editTitle()" title="Edit title" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.7;padding:2px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+                <button onclick="editTitle()" title="Edit title & link" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.6;padding:2px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
                 </button>
-                <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open link" onclick="return openTitleLink(event)" style="display:none;color:var(--text-secondary);opacity:0.7;flex-shrink:0;line-height:1;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+                <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open link" onclick="return openTitleLink(event)" style="display:none;color:var(--text-secondary);opacity:0.6;flex-shrink:0;line-height:1;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </a>
               </div>
             </div>
 
             <!-- Offer picker row -->
-            <div id="offer-picker" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div id="offer-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
 
               <!-- Native select -->
               <select id="offer-select" onchange="offerLoadFromSelect(this.value)"
                 style="font-size:13px;font-weight:500;font-family:inherit;color:var(--text-primary);
                        background:var(--bg-secondary);border:1px solid var(--border-light);
-                       border-radius:8px;outline:none;cursor:pointer;padding:5px 10px;max-width:400px;">
+                       border-radius:8px;outline:none;cursor:pointer;padding:5px 10px;
+                       max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                 <option value="">— select offer —</option>
               </select>
 
-              <!-- Search button -->
-              <button onclick="offerSearchPrompt()" title="Search offers"
-                style="background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:7px;
-                       padding:5px 10px;font-size:12px;font-family:inherit;font-weight:500;
-                       color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;"
-                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
+              <!-- Search -->
+              <button onclick="offerSearchPrompt()" title="Search offers" class="offer-pill-btn">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
                 Search
               </button>
 
-              <!-- New offer button -->
-              <button onclick="offerNew()" title="New offer"
-                style="background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:7px;
-                       padding:5px 10px;font-size:12px;font-family:inherit;font-weight:500;
-                       color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;"
-                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
-                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
-                New
+              <!-- New -->
+              <button onclick="offerNew()" title="New offer" class="offer-pill-btn offer-pill-btn--accent">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
+                New offer
               </button>
 
-              <!-- Edit/rename button -->
-              <button onclick="offerRename()" title="Rename offer"
-                style="background:none;border:none;cursor:pointer;color:var(--text-secondary);
-                       padding:5px;display:flex;align-items:center;"
-                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
+              <!-- Rename -->
+              <button onclick="offerRename()" title="Rename offer" class="offer-icon-btn">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
               </button>
 
-              <!-- DB settings button -->
-              <button onclick="document.getElementById('sb-modal-overlay').classList.remove('hidden')" title="Supabase settings"
-                style="background:none;border:none;cursor:pointer;color:var(--text-secondary);
-                       padding:5px;display:flex;align-items:center;"
-                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="5" rx="6" ry="2.5"/><path d="M2 5v6c0 1.38 2.69 2.5 6 2.5s6-1.12 6-2.5V5"/><path d="M2 8c0 1.38 2.69 2.5 6 2.5s6-1.12 6-2.5"/></svg>
+              <!-- Supabase -->
+              <button onclick="document.getElementById('sb-modal-overlay').classList.remove('hidden')" title="Supabase database" class="offer-icon-btn offer-icon-btn--db" id="sb-status-btn">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="4.5" rx="6" ry="2"/><path d="M2 4.5v7c0 1.1 2.69 2 6 2s6-.9 6-2v-7"/><path d="M2 8c0 1.1 2.69 2 6 2s6-.9 6-2"/></svg>
               </button>
 
             </div>
@@ -767,7 +760,7 @@
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2.5 1.5" stroke-linecap="round"/></svg>
           History
         </button>
-        <button class="toolbar-btn" onclick="showSetupModal()" title="Cloud sync settings">☁️</button>
+        <button class="toolbar-btn" onclick="document.getElementById('sb-modal-overlay').classList.remove('hidden')" title="Supabase database" id="sb-toolbar-btn">🗄️ DB</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(this)">
       </div>
     </div>
@@ -2065,7 +2058,7 @@ function openAdDetail(rowIdx) {
           ${copyFields.map(([l,v,ti]) => `<div class="adp-copy-item" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
             <div class="adp-copy-label">${l}</div>
             <div class="adp-copy-block" data-field="${l}" data-td="${ti}" contenteditable="false"
-                 style="flex:1;overflow-y:auto;min-height:0;">${v || '<span class=\"adp-copy-placeholder\">—</span>'}</div>
+                 style="flex:1;overflow-y:auto;min-height:0;">${v || `<span class="adp-copy-placeholder">${l}…</span>`}</div>
           </div>`).join('')}
         </div>
       </div>
@@ -4165,17 +4158,17 @@ async function sbSaveConfig() {
 function offerRebuildSelect() {
   const sel = document.getElementById('offer-select');
   if (!sel) return;
+  const truncate = name => name.length > 28 ? name.slice(0, 26) + '…' : name;
   if (!_allOffers.length) {
-    // No Supabase — show current title as the only "local" option
     const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
     sel.innerHTML = title
-      ? `<option value="__local__" selected>${title} (local)</option>`
+      ? `<option value="__local__" selected>${truncate(title)} (local)</option>`
       : '<option value="">— select offer —</option>';
     return;
   }
   sel.innerHTML = '<option value="">— select offer —</option>'
     + _allOffers.map(o =>
-        `<option value="${o.id}"${o.id === _currentOfferId ? ' selected' : ''}>${o.name}</option>`
+        `<option value="${o.id}"${o.id === _currentOfferId ? ' selected' : ''}>${truncate(o.name)}</option>`
       ).join('');
 }
 
