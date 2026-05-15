@@ -58,7 +58,7 @@
     .header { margin-bottom: 2rem; }
     .header-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
     .header-left { flex: 1; min-width: 0; display: flex; align-items: center; gap: 24px; overflow: hidden; }
-    h1#main-title { word-break: break-word; overflow-wrap: break-word; min-width: 0; }
+    h1#main-title { word-break: break-word; overflow-wrap: break-word; min-width: 0; background:none !important; border:none !important; padding:0 !important; box-shadow:none !important; }
     .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; background: var(--blue-bg); color: var(--blue-text); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px; }
     .header h1 { font-size: 24px; font-weight: 600; margin-bottom: 4px; color: var(--text-primary); }
     .header p { font-size: 14px; color: var(--text-secondary); }
@@ -460,8 +460,7 @@
 
     /* Image */
     .adp-img-wrap { position:relative; border-radius:10px; overflow:hidden; border:1px solid var(--border-light); margin-bottom:16px; background:var(--bg-secondary); }
-    .adp-img-wrap::after { content:''; position:absolute; inset:0; border-radius:10px; pointer-events:none; box-shadow:inset 0 0 24px 10px var(--bg-primary); }
-    .adp-img { width:100%; display:block; cursor:zoom-in; object-fit:contain; max-height:160px; background:var(--bg-secondary); }
+    .adp-img { width:100%; display:block; cursor:zoom-in; object-fit:cover; max-height:160px; background:var(--bg-secondary); }
     .adp-img-empty {
       width:100%; display:flex; align-items:center; justify-content:center;
       height:100px; color:var(--text-secondary); font-size:12px;
@@ -713,9 +712,7 @@
           <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px;">
             <!-- h1 shown normally -->
             <div style="display:flex;align-items:center;gap:5px;flex-wrap:nowrap;">
-              <h1 id="main-title" style="color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;
-                background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;
-                padding:4px 14px;font-size:inherit;" data-text="" data-url=""></h1>
+              <h1 id="main-title" style="color:var(--text-primary);margin:0;font-weight:700;background:none;border:none;padding:0;" data-text="" data-url=""></h1>
               <button onclick="editTitle()" title="Edit title & link" class="title-icon-btn">
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
               </button>
@@ -730,13 +727,13 @@
               <select id="offer-select" onchange="offerLoadFromSelect(this.value)" style="display:none;"></select>
 
               <!-- Select offer -->
-              <button onclick="offerSearchToggle()" id="offer-search-trigger" class="offer-pill-btn">
+              <button onmousedown="event.stopPropagation();offerSearchToggle()" id="offer-search-trigger" class="offer-pill-btn" style="background:#fff;color:#374151;border-color:#d1d5db;">
                 <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
                 Select offer
               </button>
 
               <!-- New offer -->
-              <button onclick="offerNewToggle()" id="offer-new-trigger" class="offer-pill-btn offer-pill-btn--accent">
+              <button onmousedown="event.stopPropagation();offerNewToggle()" id="offer-new-trigger" class="offer-pill-btn offer-pill-btn--accent">
                 <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
                 New offer
               </button>
@@ -3642,7 +3639,7 @@ function restoreData(data) {
     if (h1 && t) {
       h1.dataset.text = t; h1.dataset.url = tu;
       h1.style.cssText = 'color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;padding:4px 14px;font-size:inherit;';
-      if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h1.innerHTML = ''; h1.appendChild(a); } else { h1.textContent = t; }
+      if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:none;'; h1.innerHTML = ''; h1.appendChild(a); } else { h1.textContent = t; }
       updateTitleLinkBtn(tu);
       // Persist to localStorage so runPostInit doesn't overwrite with stale value
       if (t) { localStorage.setItem('ecoverage_title', t); localStorage.setItem('ecoverage_title_url', tu || ''); document.title = t + ' — Multi-Platform Research'; }
@@ -4349,7 +4346,7 @@ function clearPageData(title) {
 }
 
 /* ── Close panels on outside click ── */
-document.addEventListener('click', function(e) {
+document.addEventListener('mousedown', function(e) {
   if (!e.target.closest('#offer-search-panel') && !e.target.closest('#offer-search-trigger')) {
     const p = document.getElementById('offer-search-panel');
     if (p) p.style.display = 'none';
@@ -4360,7 +4357,109 @@ document.addEventListener('click', function(e) {
   }
 });
 
-function offerSearchPrompt() { offerSearchToggle(); } // compat
+function _offerPanelPosition(panelId, triggerId) {
+  const panel = document.getElementById(panelId);
+  const btn = document.getElementById(triggerId);
+  if (!panel || !btn) return;
+  const r = btn.getBoundingClientRect();
+  panel.style.top = (r.bottom + 6) + 'px';
+  panel.style.left = r.left + 'px';
+  const pw = 320;
+  const maxLeft = window.innerWidth - pw - 8;
+  if (r.left > maxLeft) panel.style.left = maxLeft + 'px';
+}
+
+function offerSearchToggle() {
+  const panel = document.getElementById('offer-search-panel');
+  const newPanel = document.getElementById('offer-new-panel');
+  const isOpen = panel.style.display === 'block';
+  newPanel.style.display = 'none';
+  if (isOpen) { panel.style.display = 'none'; return; }
+  _offerPanelPosition('offer-search-panel', 'offer-search-trigger');
+  panel.style.display = 'block';
+  const inp = document.getElementById('offer-search-input');
+  inp.value = '';
+  offerSearchFilter('');
+  setTimeout(() => inp.focus(), 50);
+}
+
+function offerSearchFilter(q) {
+  const results = document.getElementById('offer-search-results');
+  if (!results) return;
+  const filtered = q.trim()
+    ? _allOffers.filter(o => o.name.toLowerCase().includes(q.toLowerCase()))
+    : _allOffers;
+  if (!filtered.length) {
+    results.innerHTML = `<div style="padding:12px 14px;font-size:13px;color:var(--text-secondary);font-style:italic;">${q ? 'No matches for "' + q + '"' : 'No offers yet'}</div>`;
+    return;
+  }
+  results.innerHTML = filtered.map(o => {
+    const active = o.id === _currentOfferId;
+    const metaDate = o.data?.meta?.date;
+    const date = metaDate
+      ? new Date(metaDate).toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'})
+      : new Date(o.updated_at).toLocaleDateString(undefined, {month:'short', day:'numeric'});
+    return `<div onclick="offerLoadFromSearch('${o.id}')"
+      style="display:flex;align-items:center;justify-content:space-between;gap:10px;
+             padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border-light);
+             ${active ? 'background:var(--blue-bg,#dbeafe);' : ''}
+             transition:background 0.1s;"
+      onmouseover="if(!${active})this.style.background='var(--bg-secondary)'"
+      onmouseout="this.style.background='${active ? 'var(--blue-bg,#dbeafe)' : 'transparent'}'">
+      <span style="font-size:13px;font-weight:${active?'600':'400'};color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.name}</span>
+      <span style="font-size:11px;color:var(--text-secondary);flex-shrink:0;">${date}</span>
+    </div>`;
+  }).join('');
+}
+
+function offerLoadFromSearch(id) {
+  document.getElementById('offer-search-panel').style.display = 'none';
+  document.getElementById('offer-search-input').value = '';
+  offerLoad(id, true);
+}
+
+function offerNewToggle() {
+  const panel = document.getElementById('offer-new-panel');
+  const searchPanel = document.getElementById('offer-search-panel');
+  const isOpen = panel.style.display === 'block';
+  searchPanel.style.display = 'none';
+  if (isOpen) { panel.style.display = 'none'; return; }
+  _offerPanelPosition('offer-new-panel', 'offer-new-trigger');
+  panel.style.display = 'block';
+  const inp = document.getElementById('offer-new-name');
+  const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
+  inp.value = title || '';
+  setTimeout(() => { inp.focus(); inp.select(); }, 50);
+}
+
+function offerNewCancel() {
+  document.getElementById('offer-new-panel').style.display = 'none';
+  document.getElementById('offer-new-name').value = '';
+}
+
+function offerSearchPrompt() { offerSearchToggle(); }
+
+async function offerNewConfirm() {
+  const name = document.getElementById('offer-new-name').value.trim();
+  if (!name) { document.getElementById('offer-new-name').focus(); return; }
+  offerNewCancel();
+  const sb = sbGetClient();
+  if (!sb) {
+    clearPageData(name);
+    showToast('New offer started: "' + name + '"', 'success');
+    return;
+  }
+  const emptyData = { v: 2, header: { title: name, titleUrl: '' }, meta: {}, notes: {}, traffic: [], ads: [], funnels: [] };
+  const { data: row, error } = await sb.from('offers').insert({ name, data: emptyData }).select().single();
+  if (error) { showToast('Create failed: ' + error.message, 'error'); return; }
+  _currentOfferId = row.id;
+  localStorage.setItem(SB_OFFER_KEY, row.id);
+  clearPageData(name);
+  showToast('✅ New offer: ' + name, 'success');
+  await offerLoadAll();
+  const sel = document.getElementById('offer-select');
+  if (sel) sel.value = row.id;
+}
 
 async function offerNew() { offerNewToggle(); }
 async function offerSaveCurrent() {
