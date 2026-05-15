@@ -399,9 +399,218 @@
     #lightbox-close:hover { opacity:1; }
     /* Grid loading */
     .grid-loading { display:flex; align-items:center; justify-content:center; padding:40px; color:var(--text-secondary); font-size:12px; gap:8px; }
+
+    /* ── Ad Detail Panel ── */
+    #ad-detail-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:8000; display:none; backdrop-filter:blur(2px); }
+    #ad-detail-overlay.open { display:block; }
+    #ad-detail-panel {
+      position:fixed; top:0; right:0; bottom:0; width:min(1100px,92vw); max-width:100vw;
+      background:var(--bg-primary); z-index:8001; overflow:hidden;
+      box-shadow:-12px 0 48px rgba(0,0,0,0.22); display:flex; flex-direction:column;
+      transform:translateX(100%); transition:transform 0.28s cubic-bezier(.4,0,.2,1);
+    }
+    #ad-detail-panel.open { transform:translateX(0); }
+
+    /* Header */
+    .adp-header {
+      padding:0; border-bottom:1px solid var(--border-light);
+      position:sticky; top:0; background:var(--bg-primary); z-index:10; flex-shrink:0;
+    }
+    .adp-header-top {
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:12px; padding:14px 16px 10px;
+    }
+    .adp-header-left { flex:1; min-width:0; }
+    .adp-title {
+      font-size:18px; font-weight:700; color:var(--text-primary);
+      margin-bottom:4px; line-height:1.3; word-break:break-word;
+    }
+    .adp-subtitle { font-size:12px; color:var(--text-secondary); display:flex; flex-wrap:wrap; gap:5px; align-items:center; }
+    .adp-header-actions { display:flex; gap:6px; flex-shrink:0; padding-top:2px; }
+    .adp-close {
+      display:flex; align-items:center; justify-content:center;
+      width:30px; height:30px; background:none; border:1px solid var(--border-light);
+      cursor:pointer; color:var(--text-secondary); font-size:18px; line-height:1;
+      z-index:2; border-radius:8px; transition:all 0.15s; flex-shrink:0;
+    }
+    .adp-close:hover { color:var(--text-primary); background:var(--bg-secondary); border-color:var(--border-mid); }
+    .adp-edit-btn {
+      display:flex; align-items:center; gap:5px;
+      padding:5px 10px; background:var(--bg-secondary); border:1px solid var(--border-light);
+      cursor:pointer; color:var(--text-secondary); font-size:11px; font-weight:500;
+      border-radius:8px; font-family:inherit; transition:all 0.15s; white-space:nowrap;
+    }
+    .adp-edit-btn:hover { background:var(--bg-tertiary); color:var(--text-primary); border-color:var(--border-mid); }
+    .adp-edit-btn.active { background:var(--blue-bg); color:var(--blue-text); border-color:var(--blue-text); }
+
+    /* Tab bar */
+    .adp-tabs { display:flex; gap:0; border-top:1px solid var(--border-light); overflow:hidden; }
+    .adp-tab {
+      flex:1; padding:9px 4px; font-size:11px; font-weight:500; font-family:inherit;
+      background:none; border:none; cursor:pointer; color:var(--text-secondary);
+      border-bottom:2px solid transparent; transition:all 0.15s; letter-spacing:0.03em;
+    }
+    .adp-tab:hover { color:var(--text-primary); background:var(--bg-secondary); }
+    .adp-tab.active { color:var(--blue-text,#185FA5); border-bottom-color:var(--blue-text,#185FA5); background:var(--blue-bg); }
+
+    /* Body */
+    .adp-body { padding:14px 16px; flex:1; overflow:hidden; min-height:0; }
+    .adp-tab-panel { display:none; }
+    .adp-tab-panel.active { display:block; }
+
+    /* Image */
+    .adp-img-wrap { position:relative; border-radius:10px; overflow:hidden; border:1px solid var(--border-light); margin-bottom:16px; background:var(--bg-secondary); }
+    .adp-img { width:100%; display:block; cursor:zoom-in; object-fit:contain; max-height:160px; background:var(--bg-secondary); }
+    .adp-img-empty {
+      width:100%; display:flex; align-items:center; justify-content:center;
+      height:100px; color:var(--text-secondary); font-size:12px;
+      flex-direction:column; gap:8px;
+    }
+    .adp-img-upload-overlay {
+      position:absolute; inset:0; background:rgba(0,0,0,0.5);
+      display:none; align-items:center; justify-content:center;
+      cursor:pointer; border-radius:10px;
+    }
+    .adp-img-wrap:hover .adp-img-upload-overlay { display:flex; }
+    .adp-img-upload-overlay span { color:#fff; font-size:12px; font-weight:500; display:flex; align-items:center; gap:6px; }
+
+    /* Section */
+    .adp-section { margin-bottom:12px; }
+    .adp-section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .adp-section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-secondary); }
+
+    /* Info card */
+    .adp-card { background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:10px; overflow:hidden; }
+
+    /* Detail rows */
+    .adp-row { display:flex; align-items:center; gap:12px; padding:7px 12px; border-bottom:1px solid var(--border-light); }
+    .adp-row:last-child { border-bottom:none; }
+    .adp-row-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-secondary); width:90px; flex-shrink:0; }
+    .adp-row-val { flex:1; min-width:0; font-size:13px; color:var(--text-primary); }
+    .adp-row-edit { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
+    .adp-row-input {
+      flex:1; font-size:13px; font-family:inherit; border:1px solid var(--border-mid);
+      border-radius:6px; padding:5px 8px; background:var(--bg-primary); color:var(--text-primary);
+      outline:none; min-width:0;
+    }
+    .adp-row-input:focus { border-color:#4A90D9; box-shadow:0 0 0 2px rgba(74,144,217,0.15); }
+    .adp-row-ta {
+      flex:1; font-size:13px; font-family:inherit; border:1px solid var(--border-mid);
+      border-radius:6px; padding:6px 8px; background:var(--bg-primary); color:var(--text-primary);
+      outline:none; resize:vertical; min-height:60px; width:100%;
+    }
+    .adp-row-ta:focus { border-color:#4A90D9; box-shadow:0 0 0 2px rgba(74,144,217,0.15); }
+    .adp-row-select {
+      flex:1; font-size:13px; font-family:inherit; border:1px solid var(--border-mid);
+      border-radius:6px; padding:5px 8px; background:var(--bg-primary); color:var(--text-primary);
+      outline:none; cursor:pointer;
+    }
+
+    /* LP table */
+    .adp-lp-card { background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:10px; overflow:hidden; }
+    .adp-lp-row { display:flex; align-items:center; gap:10px; padding:7px 12px; border-bottom:1px solid var(--border-light); }
+    .adp-lp-row:last-child { border-bottom:none; }
+    .adp-lp-icon { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .adp-lp-info { flex:1; min-width:0; }
+    .adp-lp-type { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-secondary); margin-bottom:2px; }
+    .adp-lp-url { font-size:12px; color:var(--blue-text,#185FA5); text-decoration:none; display:flex; align-items:center; gap:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .adp-lp-url:hover { text-decoration:underline; }
+    .adp-lp-url-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0; }
+    .adp-lp-empty { font-size:12px; color:var(--text-secondary); font-style:italic; opacity:0.6; }
+    .adp-lp-edit-input {
+      flex:1; font-size:12px; font-family:inherit; border:1px solid var(--border-mid);
+      border-radius:6px; padding:4px 8px; background:var(--bg-primary); color:var(--text-primary);
+      outline:none; min-width:0;
+    }
+    .adp-lp-edit-input:focus { border-color:#4A90D9; }
+
+    /* Copy fields */
+    .adp-copy-item { margin-bottom:8px; }
+    .adp-copy-item:last-child { margin-bottom:0; }
+    .adp-copy-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-secondary); margin-bottom:6px; }
+    .adp-copy-block {
+      background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:8px;
+      padding:8px 12px; font-size:12px; color:var(--text-primary); line-height:1.5;
+      white-space:pre-wrap; word-break:break-word;
+    }
+    .adp-copy-block[contenteditable="true"] { cursor:text; outline:none; }
+    .adp-copy-block[contenteditable="true"]:focus { border-color:var(--border-mid); box-shadow:0 0 0 2px rgba(74,144,217,0.12); }
+    .adp-copy-placeholder { color:var(--text-secondary); opacity:0.45; font-style:italic; }
+
+    /* Chip */
+    .adp-badge-pill { display:inline-block; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:600; letter-spacing:0.02em; }
+    .adp-chip-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+
+    /* Save bar */
+    .adp-save-bar {
+      position:sticky; bottom:0; background:var(--bg-primary); border-top:1px solid var(--border-light);
+      padding:12px 20px; display:none; align-items:center; justify-content:flex-end; gap:8px; z-index:5;
+    }
+    .adp-save-bar.visible { display:flex; }
+    .adp-save-btn {
+      padding:7px 16px; font-size:12px; font-weight:600; font-family:inherit;
+      background:#185FA5; color:#fff; border:none; border-radius:8px; cursor:pointer; transition:background 0.15s;
+    }
+    .adp-save-btn:hover { background:#0f4880; }
+    .adp-cancel-btn {
+      padding:7px 12px; font-size:12px; font-family:inherit;
+      background:none; color:var(--text-secondary); border:1px solid var(--border-light);
+      border-radius:8px; cursor:pointer; transition:all 0.15s;
+    }
+    .adp-cancel-btn:hover { background:var(--bg-secondary); }
+    .adp-empty-state { text-align:center; padding:32px 20px; color:var(--text-secondary); font-size:13px; }
+    .adp-empty-state svg { margin-bottom:8px; opacity:0.3; }
+
+    @media (max-width:700px) { #ad-detail-panel { width:100%; } }
+  </style>
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    /* ── Offer picker (inline header) ── */
+    /* offer picker — native select, no custom dropdown needed */
+    #offer-select option { font-size:14px; font-weight:500; }
+    .offer-bar-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; font-size:12px; font-weight:500; font-family:inherit; border-radius:8px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; }
+    .offer-bar-btn.primary { background:#185FA5; color:#fff; border-color:transparent; }
+    /* Supabase modal */
+    #sb-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9500; display:flex; align-items:center; justify-content:center; padding:1rem; }
+    #sb-modal-overlay.hidden { display:none; }
+    #sb-modal { background:var(--bg-primary); border-radius:12px; padding:24px; width:100%; max-width:460px; box-shadow:0 20px 60px rgba(0,0,0,0.25); }
+    #sb-modal h2 { font-size:17px; font-weight:700; margin-bottom:6px; }
+    #sb-modal p { font-size:13px; color:var(--text-secondary); margin-bottom:16px; line-height:1.5; }
+    .sb-field { margin-bottom:12px; }
+    .sb-field label { display:block; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-secondary); margin-bottom:5px; }
+    .sb-field input { width:100%; padding:8px 12px; font-size:13px; font-family:inherit; border:1px solid var(--border-light); border-radius:8px; background:var(--bg-secondary); color:var(--text-primary); outline:none; }
+    .sb-field input:focus { border-color:var(--border-mid); }
+    .sb-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
+    .offer-bar-btn { display:inline-flex; align-items:center; gap:5px; padding:7px 14px; font-size:12px; font-weight:500; font-family:inherit; border-radius:8px; border:1px solid var(--border-light); background:var(--bg-primary); color:var(--text-primary); cursor:pointer; }
+    .offer-bar-btn.primary { background:#185FA5; color:#fff; border-color:transparent; }
+    .offer-bar-btn.primary:hover { background:#0f4880; }
   </style>
 </head>
 <body>
+
+<!-- Supabase Setup Modal -->
+<div id="sb-modal-overlay" class="hidden">
+  <div id="sb-modal">
+    <h2>🗄️ Supabase Setup</h2>
+    <p>Connect your Supabase project to store and manage all your offers. You only need to do this once.</p>
+    <div class="sb-field">
+      <label>Supabase Project URL</label>
+      <input type="text" id="sb-url-input" placeholder="https://xxxx.supabase.co">
+    </div>
+    <div class="sb-field">
+      <label>Publishable Key (API Keys → Publishable key)</label>
+      <input type="text" id="sb-key-input" placeholder="sb_publishable_...">
+    </div>
+    <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Find Project URL under Settings → General. Find the key under Settings → API Keys → Publishable key.</div>
+    <div class="sb-actions">
+      <button class="offer-bar-btn" onclick="document.getElementById('sb-modal-overlay').classList.add('hidden')">Cancel</button>
+      <button class="offer-bar-btn primary" onclick="sbSaveConfig()">Connect & Save</button>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="modal-overlay hidden" id="setupModal" onclick="handleModalClick(event)">
   <div class="modal">
@@ -463,15 +672,68 @@
         <div style="flex:1;min-width:0;">
           <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTc4IiBoZWlnaHQ9IjI2MiIgdmlld0JveD0iMCAwIDk3OCAyNjIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAuMDA4IDIxNi4yMkwxMTguODk5IDBWMTM3LjMzOEMxMTguODk5IDE4MC45MDMgMTU0LjYwMyAyMTYuMjIgMTk4LjY0NyAyMTYuMjJIMjIwLjAwOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTAgMjE2LjIyTDEwMS4xMDkgMFYxMzcuMzM4QzEwMS4xMDkgMTgwLjkwMyA2NS40MDQyIDIxNi4yMiAyMS4zNjEgMjE2LjIySDBaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0xMDguOTQgMTgxLjcxTDExNi4xNjYgMTk0LjM4MUMxMjEuMDE0IDIwMi44ODQgMTI4LjEyIDIwOS45MTIgMTM2LjcxNSAyMTQuNzA4TDE0OS41MjYgMjIxLjg1NUwxMzYuNzE1IDIyOS4wMDJDMTI4LjEyIDIzMy43OTggMTIxLjAxNCAyNDAuODI2IDExNi4xNjYgMjQ5LjMyOEwxMDguOTQgMjYyTDEwMS43MTUgMjQ5LjMyOEM5Ni44NjY0IDI0MC44MjYgODkuNzYwNyAyMzMuNzk4IDgxLjE2NTMgMjI5LjAwMkw2OC4zNTQyIDIyMS44NTVMODEuMTY1MyAyMTQuNzA4Qzg5Ljc2MDcgMjA5LjkxMiA5Ni44NjY0IDIwMi44ODQgMTAxLjcxNSAxOTQuMzgxTDEwOC45NCAxODEuNzFaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0zMDUuNDg0IDE5My4xNzRIMzcwLjkwMVYyMjQuNDAySDI2NS42NjVWMjguMDMyN0gzMDUuNDg0VjE5My4xNzRaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik00MTYuNDAyIDQ5Ljk3NjRDNDA5LjM4NSA0OS45NzY0IDQwMy41MDcgNDcuODE5MyAzOTguNzY2IDQzLjUwNTVDMzk0LjIxOCAzOS4wMDQ1IDM5MS45NDIgMzMuNDcxNiAzOTEuOTQyIDI2LjkwNzJDMzkxLjk0MiAyMC4zNDI4IDM5NC4yMTggMTQuOTAzNyAzOTguNzY2IDEwLjU5QzQwMy41MDcgNi4wODg2NyA0MDkuMzg1IDMuODM4MDQgNDE2LjQwMiAzLjgzODA0QzQyMy40MTggMy44MzgwNCA0MjkuMiA2LjA4ODY3IDQzMy43NTIgMTAuNTlDNDM4LjQ5MyAxNC45MDM3IDQ0MC44NjEgMjAuMzQyOCA0NDAuODYxIDI2LjkwNzJDNDQwLjg2MSAzMy40NzE2IDQzOC40OTMgMzkuMDA0NSA0MzMuNzUyIDQzLjUwNTVDNDI5LjIgNDcuODE5MyA0MjMuNDE4IDQ5Ljk3NjQgNDE2LjQwMiA0OS45NzY0Wk00MzYuMDI4IDY4LjU0NDRWMjI0LjQwMkgzOTYuMjA5VjY4LjU0NDRINDM2LjAyOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTU0Ny42MTMgMTAwLjg5OEg1MjAuMDI0VjIyNC40MDJINDc5LjYzNlYxMDAuODk4SDQ2MS43MTZWNjguNTQ0Nkg0NzkuNjM2VjYwLjY2NzNDNDc5LjYzNiA0MS41MzY2IDQ4NS4xMzcgMjcuNDcwMSA0OTYuMTMzIDE4LjQ2NzVDNTA3LjEyOSA5LjQ2NDkgNTIzLjcxOSA1LjI0NDkyIDU0NS45MDYgNS44MDc1OFYzOS4wMDQ3QzUzNi4yMzMgMzguODE3MSA1MjkuNTA0IDQwLjQxMTQgNTI1LjcxIDQzLjc4NzNDNTIxLjkxOSA0Ny4xNjM1IDUyMC4wMjQgNTMuMjU4OCA1MjAuMDI0IDYyLjA3NFY2OC41NDQ2SDU0Ny42MTNWMTAwLjg5OFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTYxOS43NzUgMTAwLjg5N1YxNzYuMjk0QzYxOS43NzUgMTgxLjU0NiA2MjEuMDA5IDE4NS4zOSA2MjMuNDczIDE4Ny44MjhDNjI2LjEyNiAxOTAuMDc5IDYzMC40OSAxOTEuMjA0IDYzNi41NTcgMTkxLjIwNEg2NTUuMDQ1VjIyNC40MDJINjMwLjAxM0M1OTYuNDU2IDIyNC40MDIgNTc5LjY3MSAyMDguMjcyIDU3OS42NzEgMTc2LjAxM1YxMDAuODk3SDU2MC45MDFWNjguNTQ0Mkg1NzkuNjcxVjMwLjAwMTdINjE5Ljc3NVY2OC41NDQySDY1NS4wNDVWMTAwLjg5N0g2MTkuNzc1WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNNzQxLjY3IDI2LjkwNzNWMjI0LjQwMkg2OTMuMDMyVjI2LjkwNzNINzQxLjY3WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNOTE5LjEyMyAyNTguMTYxTDg5My41MjYgMjI0LjEyQzg4NS45NDQgMjI1LjYyIDg3OC41NDcgMjI2LjM3MSA4NzEuMzQyIDIyNi4zNzFDODUyLjU3MiAyMjYuMzcxIDgzNS4zMTQgMjIyLjA1NyA4MTkuNTc3IDIxMy40M0M4MDQuMDMgMjA0LjgwMiA3OTEuNjA4IDE5Mi43OTkgNzgyLjMxOSAxNzcuNDJDNzczLjIxNSAxNjEuODUyIDc2OC42NjcgMTQ0LjQxIDc2OC42NjcgMTI1LjA5MkM3NjguNjY3IDEwNS43NzQgNzczLjIxNSA4OC40MjQ4IDc4Mi4zMTkgNzMuMDQ1OEM3OTEuNjA4IDU3LjY2NjEgODA0LjAzIDQ1LjY2MjcgODE5LjU3NyAzNy4wMzUxQzgzNS4zMTQgMjguNDA3NiA4NTIuNTcyIDI0LjA5MzkgODcxLjM0MiAyNC4wOTM5Qzg5MC4xMTIgMjQuMDkzOSA5MDcuMjc0IDI4LjQwNzYgOTIyLjgyNSAzNy4wMzUxQzkzOC41NTggNDUuNjYyNyA5NTAuODg3IDU3LjY2NjEgOTU5Ljc5NiA3My4wNDU4Qzk2OC44OTYgODguNDI0OCA5NzMuNDQ4IDEwNS43NzQgOTczLjQ0OCAxMjUuMDkyQzk3My40NDggMTQxLjk3MiA5NjkuOTM4IDE1Ny40NDUgOTYyLjkyNSAxNzEuNTEyQzk1Ni4xMDEgMTg1LjM5IDk0Ni41MjQgMTk2LjkyNSA5MzQuMTk4IDIwNi4xMTVMOTc4IDI1OC4xNjFIOTE5LjEyM1pNODE4LjQzOSAxMjUuMDkyQzgxOC40MzkgMTQyLjUzNCA4MjMuMTc3IDE1Ni41MDcgODMyLjY2MSAxNjcuMDFDODQyLjMzIDE3Ny4zMjYgODU1LjIyNSAxODIuNDgzIDg3MS4zNDIgMTgyLjQ4M0M4ODcuMjcgMTgyLjQ4MyA4OTkuOTczIDE3Ny4yMzIgOTA5LjQ1NCAxNjYuNzI5QzkxOS4xMjMgMTU2LjIyNiA5MjMuOTYgMTQyLjM0NyA5MjMuOTYgMTI1LjA5MkM5MjMuOTYgMTA3LjY0OSA5MTkuMTIzIDkzLjc3MDIgOTA5LjQ1NCA4My40NTQ3Qzg5OS45NzMgNzIuOTUxOSA4ODcuMjcgNjcuNzAwMSA4NzEuMzQyIDY3LjcwMDFDODU1LjIyNSA2Ny43MDAxIDg0Mi4zMyA3Mi44NTc5IDgzMi42NjEgODMuMTczNEM4MjMuMTc3IDkzLjQ4OSA4MTguNDM5IDEwNy40NjIgODE4LjQzOSAxMjUuMDkyWiIgZmlsbD0iIzAxNkFDOSIvPgo8L3N2Zz4K" style="height:32px;object-fit:contain;margin-bottom:6px;display:block;">
           <div style="font-size:24px;color:var(--text-primary);font-weight:600;margin-bottom:4px;">Multi-Platform Creative Research</div>
-          <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">
-            <h1 id="main-title" style="color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;" data-text="" data-url=""></h1>
-            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-              <button onclick="editTitle()" title="Edit title" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.7;padding:2px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+          <!-- Title + Offer picker -->
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px;">
+            <!-- h1 shown normally -->
+            <div style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">
+              <h1 id="main-title" style="color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;" data-text="" data-url=""></h1>
+              <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+                <button onclick="editTitle()" title="Edit title" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);opacity:0.7;padding:2px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
+                </button>
+                <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open link" onclick="return openTitleLink(event)" style="display:none;color:var(--text-secondary);opacity:0.7;flex-shrink:0;line-height:1;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Offer picker row -->
+            <div id="offer-picker" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+
+              <!-- Native select -->
+              <select id="offer-select" onchange="offerLoadFromSelect(this.value)"
+                style="font-size:13px;font-weight:500;font-family:inherit;color:var(--text-primary);
+                       background:var(--bg-secondary);border:1px solid var(--border-light);
+                       border-radius:8px;outline:none;cursor:pointer;padding:5px 10px;max-width:400px;">
+                <option value="">— select offer —</option>
+              </select>
+
+              <!-- Search button -->
+              <button onclick="offerSearchPrompt()" title="Search offers"
+                style="background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:7px;
+                       padding:5px 10px;font-size:12px;font-family:inherit;font-weight:500;
+                       color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;"
+                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
+                Search
+              </button>
+
+              <!-- New offer button -->
+              <button onclick="offerNew()" title="New offer"
+                style="background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:7px;
+                       padding:5px 10px;font-size:12px;font-family:inherit;font-weight:500;
+                       color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;"
+                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
+                New
+              </button>
+
+              <!-- Edit/rename button -->
+              <button onclick="offerRename()" title="Rename offer"
+                style="background:none;border:none;cursor:pointer;color:var(--text-secondary);
+                       padding:5px;display:flex;align-items:center;"
+                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
               </button>
-              <a id="title-link-btn" href="#" target="_blank" rel="noopener" title="Open link" onclick="return openTitleLink(event)" style="display:none;color:var(--text-secondary);opacity:0.7;flex-shrink:0;line-height:1;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </a>
+
+              <!-- DB settings button -->
+              <button onclick="document.getElementById('sb-modal-overlay').classList.remove('hidden')" title="Supabase settings"
+                style="background:none;border:none;cursor:pointer;color:var(--text-secondary);
+                       padding:5px;display:flex;align-items:center;"
+                onmouseover="this.style.color='var(--text-primary)'" onmouseout="this.style.color='var(--text-secondary)'">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="8" cy="5" rx="6" ry="2.5"/><path d="M2 5v6c0 1.38 2.69 2.5 6 2.5s6-1.12 6-2.5V5"/><path d="M2 8c0 1.38 2.69 2.5 6 2.5s6-1.12 6-2.5"/></svg>
+              </button>
+
             </div>
           </div>
         </div>
@@ -641,6 +903,38 @@
   <div id="history-list" style="flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;"></div>
 </div>
 <div id="history-overlay" onclick="hideHistory()" style="display:none;position:fixed;inset:0;z-index:1000;"></div>
+
+<!-- Ad Detail Panel -->
+<div id="ad-detail-overlay" onclick="closeAdDetail()"></div>
+<div id="ad-detail-panel">
+  <div class="adp-header">
+    <div class="adp-header-top">
+      <div class="adp-header-left">
+        <div class="adp-title" id="adp-offer">—</div>
+        <div class="adp-subtitle" id="adp-source-chips">—</div>
+      </div>
+      <div class="adp-header-actions">
+        <button class="adp-edit-btn" id="adp-edit-toggle" onclick="adpToggleEdit()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
+          Edit
+        </button>
+        <button class="adp-close" onclick="closeAdDetail()">×</button>
+      </div>
+    </div>
+    <div class="adp-tabs" id="adp-tabs" style="display:none;">
+      <button class="adp-tab active" onclick="adpTab(this,'adp-panel-overview')">Overview</button>
+      <button class="adp-tab" onclick="adpTab(this,'adp-panel-links')">Links</button>
+      <button class="adp-tab" onclick="adpTab(this,'adp-panel-copy')">Copy</button>
+      <button class="adp-tab" onclick="adpTab(this,'adp-panel-details')">Details</button>
+    </div>
+  </div>
+  <div class="adp-body" id="adp-body-content">
+  </div>
+  <div class="adp-save-bar" id="adp-save-bar">
+    <button class="adp-cancel-btn" onclick="adpCancelEdit()">Cancel</button>
+    <button class="adp-save-btn" onclick="adpSaveEdit()">Save changes</button>
+  </div>
+</div>
 
 <div id="lightbox" onclick="closeLightbox()"><span id="lightbox-close" onclick="closeLightbox()">×</span><img id="lightbox-img" src="" alt=""></div>
 
@@ -876,7 +1170,7 @@ function buildTrafficGrid() {
     const qty = getText(tds[3]);
     const notes = getText(tds[5]);
 
-    return `<div class="grid-card" style="cursor:pointer;" >
+    return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.grid-drag-handle')){openTrafficDetail(${idx})}})(event)" style="cursor:default;" >
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
@@ -960,7 +1254,7 @@ function buildFunnelsGrid() {
       </span>
     </div>` : '';
 
-    return `<div class="grid-card" style="cursor:pointer;" >
+    return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.grid-drag-handle')){openFunnelDetail(${idx})}})(event)" style="cursor:default;" >
       <div class="grid-card-body">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
@@ -1128,7 +1422,7 @@ function buildAdsGrid() {
         <div style="display:flex;flex-direction:column;gap:2px;flex:1;align-items:flex-end;">${mkEditableLink(spyUrl,'Spy tool',8)}${mkEditableLink(fanUrl,'Fan page',9)}</div>
       </div>`;
 
-    return `<div class="grid-card" >
+    return `<div class="grid-card" onclick="(function(e){if(!e.target.closest('button,a,select,.gce,.card-expand-toggle,.grid-card-img,.grid-card-img-empty,.link-input-wrap,.grid-drag-handle')){openAdDetail(${idx})}})(event)" style="cursor:default;" >
       <div style="position:relative;overflow:hidden;border-radius:8px 8px 0 0;">${imgHtml}
         <div style="position:absolute;top:4px;left:4px;right:4px;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${num}</span>
@@ -1145,12 +1439,18 @@ function buildAdsGrid() {
         ${renderChip(tds[3], 'Format', idx, 'ads-body')}
         ${field('Geo', geo, 'td:nth-child(5)', idx)}
         ${field('Lifecycle', lifecycle, 'td:nth-child(6)', idx)}
+        <div class="card-expand-toggle" onclick="toggleCardExpand(this)" style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:4px 0;margin-bottom:4px;color:var(--text-secondary);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;user-select:none;">
+          <svg class="card-expand-icon" width="10" height="10" viewBox="0 0 10 10" fill="none" style="transition:transform 0.2s;"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="card-expand-label">Angle, Headline, Notes…</span>
+        </div>
+        <div class="card-expandable" style="display:none;">
         ${field('Angle / Hook', angle, 'td:nth-child(12)', idx, 70)}
         ${field('Headline', headline, 'td:nth-child(13)', idx, 80)}
         ${field('CTA', cta, 'td:nth-child(14)', idx)}
         ${field('Title', title, 'td:nth-child(15)', idx, 70)}
         ${field('Imp. Estimate', imp, 'td:nth-child(16)', idx)}
         ${field('Notes', notes, 'td:nth-child(17)', idx, 80)}
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -1316,6 +1616,25 @@ document.addEventListener('dblclick', (e) => {
     sel.addRange(range);
   }, 10);
 });
+
+function toggleCardExpand(toggle) {
+  const expandable = toggle.nextElementSibling;
+  const icon = toggle.querySelector('.card-expand-icon');
+  const label = toggle.querySelector('.card-expand-label');
+  const isOpen = expandable.style.display !== 'none';
+  expandable.style.display = isOpen ? 'none' : 'block';
+  icon.style.transform = isOpen ? '' : 'rotate(180deg)';
+  label.textContent = isOpen ? 'Angle, Headline, Notes…' : 'Angle, Headline, Notes…';
+}
+
+// Double-click any card-expand-toggle to expand all / collapse all
+function toggleAllCards(expand) {
+  document.querySelectorAll('.card-expandable').forEach(el => {
+    el.style.display = expand ? 'block' : 'none';
+    const icon = el.previousElementSibling?.querySelector('.card-expand-icon');
+    if (icon) icon.style.transform = expand ? 'rotate(180deg)' : '';
+  });
+}
 
 function gcExpand(el) {
   const wrapper = el.closest('[style*="max-height"]');
@@ -1508,6 +1827,436 @@ function closeLightbox() {
   document.removeEventListener('keydown', lbKey);
 }
 function lbKey(e) { if (e.key === 'Escape') closeLightbox(); }
+
+/* ── Ad Detail Panel shared helpers ── */
+function _adpGetText(td) { return td?.querySelector('textarea')?.value?.trim() || ''; }
+function _adpGetLink(td) {
+  const a = td?.querySelector('a.link-chip') || td?.querySelector('a[href^="http"]');
+  const h = a?.href || '';
+  return (h && h.startsWith('http')) ? h : '';
+}
+function _adpGetSelect(td) {
+  const sel = td?.querySelector('select');
+  if (!sel || !sel.value) return '';
+  const txt = sel.options[sel.selectedIndex]?.text || sel.value;
+  return txt.includes('select') ? '' : txt;
+}
+function _adpGetSelectVal(td) {
+  const sel = td?.querySelector('select');
+  if (!sel || !sel.value) return '';
+  return sel.value.includes('select') ? '' : sel.value;
+}
+function _adpGetBadgeText(td) {
+  const badge = td?.querySelector('.text-badge, .sel-badge');
+  if (badge && badge.textContent.trim() && !badge.textContent.includes('select')) return badge.textContent.trim();
+  return _adpGetSelect(td) || _adpGetText(td);
+}
+
+/* Chip color maps */
+const _ADP_SOURCE_COLORS = {
+  'meta':{'bg':'#DBEAFE','color':'#1D4ED8'},'tiktok':{'bg':'#F3F4F6','color':'#111827'},
+  'google':{'bg':'#FEF9C3','color':'#854D0E'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+  'youtube':{'bg':'#FEE2E2','color':'#B91C1C'},'pinterest':{'bg':'#FFE4E6','color':'#9F1239'},
+  'snapchat':{'bg':'#FEFCE8','color':'#854D0E'},'twitter':{'bg':'#E0F2FE','color':'#0369A1'},
+  'linkedin':{'bg':'#DBEAFE','color':'#1E40AF'},'reddit':{'bg':'#FEF3C7','color':'#92400E'},
+  'email':{'bg':'#FCE7F3','color':'#9D174D'},'sms':{'bg':'#D1FAE5','color':'#065F46'},
+  'push':{'bg':'#EDE9FE','color':'#6D28D9'},'outbrain':{'bg':'#FEF3C7','color':'#92400E'},
+  'mgid':{'bg':'#D1FAE5','color':'#065F46'},'taboola':{'bg':'#DBEAFE','color':'#1E40AF'},
+  'revcontent':{'bg':'#EDE9FE','color':'#6D28D9'},'native-dsp':{'bg':'#DCFCE7','color':'#166534'},
+  'in-app-dsp':{'bg':'#FDF4FF','color':'#7E22CE'},'programmatic':{'bg':'#F0F9FF','color':'#0C4A6E'},
+};
+const _ADP_FORMAT_COLORS = {
+  'static':{'bg':'#E0F2FE','color':'#0369A1'},'static-image':{'bg':'#E0F2FE','color':'#0369A1'},
+  'image':{'bg':'#E0F2FE','color':'#0369A1'},'video':{'bg':'#FEE2E2','color':'#B91C1C'},
+  'carousel':{'bg':'#EDE9FE','color':'#6D28D9'},'text':{'bg':'#F3F4F6','color':'#374151'},
+  'native-article':{'bg':'#D1FAE5','color':'#065F46'},'playable':{'bg':'#FEF3C7','color':'#92400E'},
+  'reel':{'bg':'#EDE9FE','color':'#6D28D9'},'story':{'bg':'#FCE7F3','color':'#9D174D'},
+  'ugc':{'bg':'#FEF3C7','color':'#92400E'},
+};
+const _ADP_TRAFFIC_COLORS = {
+  'paid-search':{'bg':'#DBEAFE','color':'#1E40AF'},'organic-search':{'bg':'#D1FAE5','color':'#065F46'},
+  'paid-social':{'bg':'#E0E7FF','color':'#3730A3'},'organic-social':{'bg':'#DCFCE7','color':'#166534'},
+  'direct':{'bg':'#F3F4F6','color':'#374151'},'referral':{'bg':'#FEF9C3','color':'#854D0E'},
+  'display':{'bg':'#FDF4FF','color':'#7E22CE'},'native':{'bg':'#D1FAE5','color':'#065F46'},
+  'video':{'bg':'#FEE2E2','color':'#B91C1C'},'email':{'bg':'#FCE7F3','color':'#9D174D'},
+  'push':{'bg':'#EDE9FE','color':'#6D28D9'},'sms':{'bg':'#D1FAE5','color':'#065F46'},
+};
+const _ADP_FUNNEL_COLORS = {
+  'quiz':{'bg':'#EDE9FE','color':'#6D28D9'},'landing-page':{'bg':'#DBEAFE','color':'#1D4ED8'},
+  'vsl':{'bg':'#FEE2E2','color':'#B91C1C'},'lead-gen':{'bg':'#D1FAE5','color':'#065F46'},
+  'multi-step':{'bg':'#FEF3C7','color':'#92400E'},'advertorial':{'bg':'#FCE7F3','color':'#9D174D'},
+  'comparison':{'bg':'#F0F9FF','color':'#0C4A6E'},
+};
+
+function _adpChip(val, colorMap) {
+  if (!val) return '';
+  const key = val.toLowerCase().replace(/\s+/g,'-');
+  const c = colorMap[key] || {bg:'#E5E7EB',color:'#374151'};
+  return `<span class="adp-badge-pill" style="background:${c.bg};color:${c.color};">${val}</span>`;
+}
+
+/* ── Tab navigation ── */
+function adpTab(btn, panelId) {
+  document.querySelectorAll('#adp-tabs .adp-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.adp-tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+/* ── Edit mode ── */
+let _adpEditMode = false;
+let _adpCurrentRowIdx = -1;
+let _adpCurrentTable = '';
+
+/* ── LP icons ── */
+const _lpIcons = {
+  lp: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#1D4ED8" stroke-width="1.5"><rect x="1" y="2" width="14" height="12" rx="2"/><path d="M1 6h14" stroke-linecap="round"/></svg>`,
+  spy: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#065F46" stroke-width="1.5"><circle cx="6" cy="7" r="4"/><path d="M10 11l4 4" stroke-linecap="round"/></svg>`,
+  fan: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#4C1D95" stroke-width="1.5"><path d="M8 2C5 2 2 5 2 8s3 6 6 6 6-3 6-6-3-6-6-6z"/><path d="M8 5v3l2 2" stroke-linecap="round"/></svg>`,
+  creative: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#92400E" stroke-width="1.5"><rect x="1" y="2" width="14" height="12" rx="2"/><circle cx="5.5" cy="6.5" r="1.5"/><path d="M1 11l4-3 3 3 2-2 4 3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  funnel: `<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#065F46" stroke-width="1.5"><path d="M2 3h12l-4.5 5v5l-3-1.5V8L2 3z" stroke-linejoin="round"/></svg>`,
+};
+
+/* ── Row/link builders ── */
+function _adpDetailRow(label, valHtml) {
+  if (!valHtml) return '';
+  return `<div class="adp-row"><div class="adp-row-label">${label}</div><div class="adp-row-val">${valHtml}</div></div>`;
+}
+function _adpEditRow(label, val, tdIdx) {
+  const display = val || '<span style="opacity:0.35;">—</span>';
+  return `<div class="adp-row">
+    <div class="adp-row-label">${label}</div>
+    <div class="adp-row-val adp-row-edit-wrap" style="flex:1;min-width:0;">
+      <span class="adp-row-display-val">${display}</span>
+      <input class="adp-row-input" type="text" data-td="${tdIdx}" value="${(val||'').replace(/"/g,'&quot;')}" disabled style="display:none;width:100%;">
+    </div>
+  </div>`;
+}
+function _adpSelectRow(label, currentVal, options, tdIdx) {
+  const opts = options.map(([v,t]) =>
+    `<option value="${v}"${currentVal===v?' selected':''}>${t}</option>`
+  ).join('');
+  const displayText = (options.find(([v]) => v === currentVal) || [])[1] || '';
+  const displayHtml = displayText && !displayText.includes('select')
+    ? displayText
+    : '<span style="opacity:0.35;">—</span>';
+  return `<div class="adp-row">
+    <div class="adp-row-label">${label}</div>
+    <div class="adp-row-val adp-row-edit-wrap" style="flex:1;min-width:0;">
+      <span class="adp-row-select-display">${displayHtml}</span>
+      <select class="adp-row-select" data-td="${tdIdx}" style="display:none;width:100%;">${opts}</select>
+    </div>
+  </div>`;
+}
+function _adpLpRow(url, label, icon, bg, _color, tdIdx) {
+  const short = url && url.length > 42 ? url.slice(0,39)+'…' : url;
+  return `<div class="adp-lp-row">
+    <div class="adp-lp-icon" style="background:${bg};">${icon}</div>
+    <div class="adp-lp-info">
+      <div class="adp-lp-type">${label}</div>
+      ${url
+        ? `<a class="adp-lp-url" href="${url}" target="_blank" rel="noopener">
+             <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="flex-shrink:0;"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+             <span class="adp-lp-url-text">${short}</span>
+           </a>`
+        : `<span class="adp-lp-empty">No URL added</span>`
+      }
+      <input class="adp-lp-edit-input" data-td="${tdIdx}" placeholder="Paste URL…" value="${url||''}" style="display:none;margin-top:4px;width:100%;">
+    </div>
+  </div>`;
+}
+
+function _adpOpen(titleText, subtitleChipsHtml, bodyHtml) {
+  document.getElementById('adp-offer').textContent = titleText || '(no data)';
+  document.getElementById('adp-source-chips').innerHTML = subtitleChipsHtml || '';
+  document.getElementById('adp-body-content').innerHTML = bodyHtml || '';
+  _adpEditMode = false;
+  const btn = document.getElementById('adp-edit-toggle');
+  btn.classList.remove('active');
+  btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
+  document.getElementById('adp-save-bar').classList.remove('visible');
+  document.getElementById('ad-detail-overlay').classList.add('open');
+  document.getElementById('ad-detail-panel').classList.add('open');
+  document.getElementById('ad-detail-panel').scrollTop = 0;
+  document.addEventListener('keydown', adpKey);
+}
+
+/* ── Top Ads detail ── */
+function openAdDetail(rowIdx) {
+  const tr = document.querySelectorAll('#ads-body tr')[rowIdx];
+  if (!tr) return;
+  _adpCurrentRowIdx = rowIdx; _adpCurrentTable = 'ads-body';
+  const tds = tr.querySelectorAll('td');
+  const offerVal   = tds[1]?.querySelector('.text-badge')?.textContent?.trim() || _adpGetText(tds[1]) || '(no offer)';
+  const source     = _adpGetSelect(tds[2]) || _adpGetBadgeText(tds[2]) || '';
+  const format     = _adpGetSelect(tds[3]) || _adpGetBadgeText(tds[3]) || '';
+  const geo        = _adpGetText(tds[4]);
+  const lifecycle  = _adpGetText(tds[5]);
+  const landingUrl = _adpGetLink(tds[6]);
+  const spyUrl     = _adpGetLink(tds[7]);
+  const fanUrl     = _adpGetLink(tds[8]);
+  const creativeUrl= _adpGetLink(tds[10]);
+  const thumbImg   = tr.querySelector('img.media-thumb');
+  const thumbSrc   = thumbImg?.src || '';
+  const angle      = _adpGetText(tds[11]);
+  const headline   = _adpGetText(tds[12]);
+  const cta        = _adpGetText(tds[13]);
+  const title      = _adpGetText(tds[14]);
+  const imp        = _adpGetText(tds[15]);
+  const notes      = _adpGetText(tds[16]);
+
+  const sourceVal  = _adpGetSelectVal(tds[2]) || '';
+  const formatVal  = _adpGetSelectVal(tds[3]) || '';
+
+  const SOURCE_OPTS = [['','— select —'],['meta','Meta'],['tiktok','TikTok'],['google','Google'],['native','Native'],['youtube','YouTube'],['pinterest','Pinterest'],['snapchat','Snapchat'],['twitter','Twitter/X'],['linkedin','LinkedIn'],['reddit','Reddit'],['email','Email'],['sms','SMS'],['push','Push Notifications'],['in-app-dsp','In-App DSP'],['programmatic','Programmatic/DSP'],['outbrain','Outbrain'],['mgid','MGID'],['taboola','Taboola'],['revcontent','RevContent']];
+  const FORMAT_OPTS = [['','— select —'],['static','Static Image'],['video','Video'],['carousel','Carousel'],['text','Text / Search'],['native-article','Native Teaser'],['email','Email'],['playable','Playable']];
+
+  const sourceChip = _adpChip(source, _ADP_SOURCE_COLORS);
+  const formatChip = _adpChip(format, _ADP_FORMAT_COLORS);
+  const subtitleChips = [sourceChip, formatChip, geo ? `<span style="font-size:12px;color:var(--text-secondary);">${geo}</span>` : ''].filter(Boolean).join('');
+
+  const imgBlock = thumbSrc
+    ? `<div class="adp-img-wrap"><img class="adp-img" src="${thumbSrc}" onclick="openLightbox('${thumbSrc}')" title="Enlarge"></div>`
+    : `<div class="adp-img-wrap" onclick="document.getElementById('adp-img-file-${rowIdx}').click()" style="cursor:pointer;"><div class="adp-img-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>Click to upload creative</span></div><input type="file" id="adp-img-file-${rowIdx}" accept="image/*,video/*" style="display:none;" onchange="gridUploadMedia(this,${rowIdx})"></div>`;
+
+  const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
+
+  const body = `
+    <div style="display:grid;grid-template-columns:220px 1fr 1fr;gap:16px;height:calc(100vh - 90px);">
+
+      <!-- COL 1: Image + Ad Details -->
+      <div style="display:flex;flex-direction:column;gap:12px;min-height:0;">
+        ${imgBlock}
+        <div class="adp-section" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
+          <div class="adp-section-header"><div class="adp-section-title">Ad Details</div></div>
+          <div class="adp-card" style="flex:1;">
+            ${_adpEditRow('Offer', offerVal, 1)}
+            ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2)}
+            ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3)}
+            ${_adpEditRow('Geo', geo, 4)}
+            ${_adpEditRow('Lifecycle', lifecycle, 5)}
+            ${_adpEditRow('Impressions', imp, 15)}
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 2: Links + Notes (notes grows to fill) -->
+      <div style="display:flex;flex-direction:column;gap:12px;min-height:0;">
+        <div class="adp-section" style="margin:0;flex-shrink:0;">
+          <div class="adp-section-header"><div class="adp-section-title">Links</div></div>
+          <div class="adp-lp-card">
+            ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
+            ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
+            ${_adpLpRow(fanUrl,'Fan Page',_lpIcons.fan,'var(--purple-bg)',null,8)}
+            ${_adpLpRow(creativeUrl,'Creative Link',_lpIcons.creative,'var(--amber-bg)',null,10)}
+          </div>
+        </div>
+        <div class="adp-section" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
+          <div class="adp-section-header"><div class="adp-section-title">Notes</div></div>
+          <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
+               style="flex:1;overflow-y:auto;min-height:0;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
+        </div>
+      </div>
+
+      <!-- COL 3: Ad Copy — each field grows equally -->
+      <div style="display:flex;flex-direction:column;gap:0;min-height:0;">
+        <div class="adp-section-header" style="margin-bottom:6px;"><div class="adp-section-title">Ad Copy</div></div>
+        <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;">
+          ${copyFields.map(([l,v,ti]) => `<div class="adp-copy-item" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
+            <div class="adp-copy-label">${l}</div>
+            <div class="adp-copy-block" data-field="${l}" data-td="${ti}" contenteditable="false"
+                 style="flex:1;overflow-y:auto;min-height:0;">${v || '<span class=\"adp-copy-placeholder\">—</span>'}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+    </div>
+  `;
+  _adpOpen(offerVal, '', body);
+}
+
+/* ── Top Traffic Sources detail ── */
+function openTrafficDetail(rowIdx) {
+  const tr = document.querySelectorAll('#traffic-body tr')[rowIdx];
+  if (!tr) return;
+  _adpCurrentRowIdx = rowIdx; _adpCurrentTable = 'traffic-body';
+  const tds    = tr.querySelectorAll('td');
+  const source = _adpGetSelect(tds[1]) || _adpGetBadgeText(tds[1]) || '(no source)';
+  const geo    = _adpGetText(tds[2]);
+  const qty    = _adpGetText(tds[3]);
+  const type   = _adpGetSelect(tds[4]) || _adpGetBadgeText(tds[4]) || '';
+  const notes  = _adpGetText(tds[5]);
+
+  const sourceChip = _adpChip(source, _ADP_SOURCE_COLORS);
+  const typeChip   = _adpChip(type, _ADP_TRAFFIC_COLORS);
+  const subtitleChips = [sourceChip, typeChip, geo ? `<span style="font-size:12px;color:var(--text-secondary);">${geo}</span>` : ''].filter(Boolean).join('');
+
+  const TRAFFIC_SOURCE_OPTS = [['','— select —'],['meta','Meta'],['tiktok','TikTok'],['google','Google'],['native','Native'],['youtube','YouTube'],['pinterest','Pinterest'],['snapchat','Snapchat'],['twitter','Twitter/X'],['linkedin','LinkedIn'],['reddit','Reddit'],['email','Email'],['sms','SMS'],['push','Push Notifications'],['in-app-dsp','In-App DSP'],['programmatic','Programmatic/DSP'],['outbrain','Outbrain'],['mgid','MGID'],['taboola','Taboola'],['revcontent','RevContent']];
+  const TRAFFIC_TYPE_OPTS  = [['','— select —'],['paid-search','Paid Search'],['organic-search','Organic Search'],['paid-social','Paid Social'],['organic-social','Organic Social'],['direct','Direct'],['referral','Referral'],['display','Display'],['native','Native'],['video','Video'],['email','Email'],['push','Push'],['sms','SMS']];
+  const sourceVal = _adpGetSelectVal(tds[1]) || '';
+  const typeVal   = _adpGetSelectVal(tds[4]) || '';
+
+  const body = `
+    <div class="adp-section">
+      <div class="adp-section-header"><div class="adp-section-title">Traffic Source Details</div></div>
+      <div class="adp-card">
+        ${_adpSelectRow('Traffic Source', sourceVal, TRAFFIC_SOURCE_OPTS, 1)}
+        ${_adpSelectRow('Traffic Type', typeVal, TRAFFIC_TYPE_OPTS, 4)}
+        ${_adpEditRow('Geo', geo, 2)}
+        ${_adpEditRow('Est. Ads Quantity', qty, 3)}
+      </div>
+    </div>
+    <div class="adp-section">
+      <div class="adp-section-header"><div class="adp-section-title">Notes</div></div>
+      <div class="adp-copy-block" data-field="notes" data-td="5" contenteditable="false" style="min-height:60px;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
+    </div>
+  `;
+  _adpOpen(source, '', body);
+}
+
+/* ── Top Funnels detail ── */
+function openFunnelDetail(rowIdx) {
+  const tr = document.querySelectorAll('#funnels-body tr')[rowIdx];
+  if (!tr) return;
+  _adpCurrentRowIdx = rowIdx; _adpCurrentTable = 'funnels-body';
+  const tds        = tr.querySelectorAll('td');
+  const linkUrl    = _adpGetLink(tds[1]);
+  const advertiser = _adpGetText(tds[2]) || '(no advertiser)';
+  const geo        = _adpGetText(tds[3]);
+  const funnelType = _adpGetSelect(tds[4]) || _adpGetBadgeText(tds[4]) || '';
+  const obs        = _adpGetText(tds[5]);
+
+  const funnelChip = _adpChip(funnelType, _ADP_FUNNEL_COLORS);
+  const subtitleChips = [funnelChip, geo ? `<span style="font-size:12px;color:var(--text-secondary);">${geo}</span>` : ''].filter(Boolean).join('');
+
+  const FUNNEL_TYPE_OPTS = [['','— select —'],['quiz','Quiz'],['landing-page','Landing Page'],['vsl','VSL'],['lead-gen','Lead Gen'],['multi-step','Multi-Step'],['advertorial','Advertorial'],['comparison','Comparison']];
+  const funnelTypeVal = _adpGetSelectVal(tds[4]) || '';
+
+  const body = `
+    <div class="adp-section">
+      <div class="adp-section-header"><div class="adp-section-title">Funnel Details</div></div>
+      <div class="adp-card">
+        ${_adpEditRow('Advertiser', advertiser, 2)}
+        ${_adpSelectRow('Funnel Type', funnelTypeVal, FUNNEL_TYPE_OPTS, 4)}
+        ${_adpEditRow('Geo', geo, 3)}
+      </div>
+    </div>
+    <div class="adp-section">
+      <div class="adp-section-header"><div class="adp-section-title">Links</div></div>
+      <div class="adp-lp-card">
+        ${_adpLpRow(linkUrl,'Funnel URL',_lpIcons.funnel,'var(--teal-bg)',null,1)}
+      </div>
+    </div>
+    <div class="adp-section">
+      <div class="adp-section-header"><div class="adp-section-title">Key Observations</div></div>
+      <div class="adp-copy-block" data-field="obs" data-td="5" contenteditable="false" style="min-height:60px;">${obs || '<span class=\"adp-copy-placeholder\">Add observations…</span>'}</div>
+    </div>
+  `;
+  _adpOpen(advertiser, '', body);
+}
+
+function adpToggleEdit() {
+  _adpEditMode = !_adpEditMode;
+  const btn = document.getElementById('adp-edit-toggle');
+  btn.classList.toggle('active', _adpEditMode);
+  btn.innerHTML = _adpEditMode
+    ? `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Editing`
+    : `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
+  document.getElementById('adp-save-bar').classList.toggle('visible', _adpEditMode);
+  document.querySelectorAll('.adp-copy-block[data-field]').forEach(el => {
+    el.contentEditable = _adpEditMode ? 'true' : 'false';
+    el.style.borderColor = _adpEditMode ? 'var(--border-mid)' : 'var(--border-light)';
+    el.style.cursor = _adpEditMode ? 'text' : 'default';
+    if (_adpEditMode && el.querySelector('.adp-copy-placeholder')) el.innerHTML = '';
+  });
+  // Toggle display spans vs inputs for editable rows
+  document.querySelectorAll('.adp-row-display-val').forEach(el => {
+    el.style.display = _adpEditMode ? 'none' : '';
+  });
+  document.querySelectorAll('.adp-row-input').forEach(el => {
+    el.style.display = _adpEditMode ? 'block' : 'none';
+    el.disabled = !_adpEditMode;
+  });
+  document.querySelectorAll('.adp-row-select').forEach(el => {
+    el.style.display = _adpEditMode ? 'block' : 'none';
+    el.disabled = !_adpEditMode;
+  });
+  document.querySelectorAll('.adp-row-select-display').forEach(el => {
+    el.style.display = _adpEditMode ? 'none' : '';
+  });
+  document.querySelectorAll('.adp-lp-edit-input').forEach(inp => {
+    inp.style.display = _adpEditMode ? 'block' : 'none';
+  });
+}
+
+function closeAdDetail() {
+  document.getElementById('ad-detail-overlay').classList.remove('open');
+  document.getElementById('ad-detail-panel').classList.remove('open');
+  document.removeEventListener('keydown', adpKey);
+  _adpEditMode = false;
+}
+function adpKey(e) { if (e.key === 'Escape') closeAdDetail(); }
+
+function adpCancelEdit() {
+  _adpEditMode = false;
+  document.getElementById('adp-edit-toggle').classList.remove('active');
+  document.getElementById('adp-edit-toggle').innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg> Edit`;
+  document.getElementById('adp-save-bar').classList.remove('visible');
+  if (_adpCurrentTable === 'ads-body') openAdDetail(_adpCurrentRowIdx);
+  else if (_adpCurrentTable === 'traffic-body') openTrafficDetail(_adpCurrentRowIdx);
+  else if (_adpCurrentTable === 'funnels-body') openFunnelDetail(_adpCurrentRowIdx);
+}
+
+function adpSaveEdit() {
+  const table = _adpCurrentTable;
+  const rowIdx = _adpCurrentRowIdx;
+  const tr = document.querySelectorAll(`#${table} tr`)[rowIdx];
+  if (!tr) return;
+  const tds = tr.querySelectorAll('td');
+  const setTa = (td, val) => {
+    const ta = td?.querySelector('textarea'); if (ta) { ta.value = val; ta.dispatchEvent(new Event('input')); }
+    // Also update .text-badge display (frozen offer col)
+    const badge = td?.querySelector('.text-badge');
+    if (badge) badge.textContent = val || '';
+  };
+  const setLink = (td, val) => {
+    const a = td?.querySelector('a.link-chip'); if (a) { a.href = val; const t = a.querySelector('.link-chip-text'); if(t) t.textContent = val; }
+  };
+  const setSelect = (td, val) => {
+    const sel = td?.querySelector('select'); if (!sel) return;
+    sel.value = val; sel.dispatchEvent(new Event('change'));
+    // Update visual badge in table cell
+    if (typeof updateBadge === 'function') updateBadge(sel);
+    const badge = td?.querySelector('.sel-badge');
+    if (badge) { const opt = sel.options[sel.selectedIndex]; if(opt) badge.textContent = opt.text; }
+  };
+  // Text inputs
+  document.querySelectorAll('.adp-row-input[data-td]').forEach(inp => {
+    const tdIdx = parseInt(inp.dataset.td); const val = inp.value.trim();
+    if (!isNaN(tdIdx) && tds[tdIdx]) setTa(tds[tdIdx], val);
+  });
+  // Select dropdowns
+  document.querySelectorAll('.adp-row-select[data-td]').forEach(sel => {
+    const tdIdx = parseInt(sel.dataset.td); const val = sel.value;
+    if (!isNaN(tdIdx) && tds[tdIdx]) setSelect(tds[tdIdx], val);
+  });
+  // LP link inputs
+  document.querySelectorAll('.adp-lp-edit-input[data-td]').forEach(inp => {
+    const tdIdx = parseInt(inp.dataset.td); const val = inp.value.trim();
+    if (!isNaN(tdIdx) && tds[tdIdx]) setLink(tds[tdIdx], val);
+  });
+  // Contenteditable copy blocks
+  document.querySelectorAll('.adp-copy-block[data-td]').forEach(el => {
+    const tdIdx = parseInt(el.dataset.td);
+    if (!isNaN(tdIdx) && tds[tdIdx]) setTa(tds[tdIdx], el.textContent.trim());
+  });
+  scheduleCloudSave();
+  // Rebuild the grid so changes show in the card immediately
+  if (_adpCurrentTable === 'ads-body' && document.getElementById('ads-grid').style.display !== 'none') buildAdsGrid();
+  if (_adpCurrentTable === 'traffic-body' && document.getElementById('traffic-grid').style.display !== 'none') buildTrafficGrid();
+  if (_adpCurrentTable === 'funnels-body' && document.getElementById('funnels-grid').style.display !== 'none') buildFunnelsGrid();
+  adpCancelEdit();
+}
 
 function gfExpand(clip) {
   document.querySelectorAll('.gf-full').forEach(f => {
@@ -2954,10 +3703,25 @@ function restoreTable(id, rows, fn, keys) {
   
 }
 
+async function fetchWithRetry(url, options, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 8000);
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timeout);
+      return res;
+    } catch(e) {
+      if (i === retries - 1) throw e;
+      await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+    }
+  }
+}
+
 async function cloudSave(data) {
   if (!BIN_ID || !API_KEY) return false;
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    const res = await fetchWithRetry(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Versioning': 'false' },
       body: JSON.stringify(data)
@@ -2968,21 +3732,28 @@ async function cloudSave(data) {
       showToast('Cloud error ' + res.status + ': ' + txt.slice(0,80), 'error');
     }
     return res.ok;
-  } catch(e) { console.error('Cloud save fetch error:', e); showToast('Network error: ' + e.message, 'error'); return false; }
+  } catch(e) { console.error('Cloud save fetch error:', e); showToast('Network error — saved locally', 'error'); return false; }
 }
 
 async function cloudLoad() {
   if (!BIN_ID || !API_KEY) return null;
   try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers: { 'X-Master-Key': API_KEY } });
+    const res = await fetchWithRetry(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': API_KEY }
+    });
     if (!res.ok) {
       const txt = await res.text();
       console.error('JSONBin load error:', res.status, txt);
+      setStatus('error', `⚠️ Cloud error ${res.status}: ${txt.slice(0,60)}`);
       return null;
     }
     const json = await res.json();
     return json.record || null;
-  } catch(e) { console.error('Cloud load fetch error:', e); return null; }
+  } catch(e) {
+    console.error('Cloud load fetch error:', e);
+    setStatus('error', `⚠️ Network error: ${e.message}`);
+    return null;
+  }
 }
 
 let saveTimer = null;
@@ -3300,41 +4071,276 @@ function runPostInit(cloudData) {
   const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || '';
   if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } }
   updateTitleLinkBtn(tu);
+  // Sync offer select with current title (local fallback when no Supabase)
+  if (!_currentOfferId) offerRebuildSelect();
   setTimeout(snapForUndo, 600);
 }
 
 (async function init() {
   loadSettings();
-  // Look up this page's BIN_ID from the cloud directory
+
+  // 1. Show local data immediately — no waiting
+  let loadedFromLocal = false;
+  try {
+    const raw = localStorage.getItem(LS_LOCAL);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      restoreData(parsed);
+      setTimeout(() => runPostInit(parsed), 0);
+      setStatus('saved', 'Restored locally');
+      loadedFromLocal = true;
+    }
+  } catch(e) {}
+
+  if (!loadedFromLocal) {
+    for (let i=1;i<=3;i++) {
+      document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(i));
+      document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(i));
+      document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
+    }
+    setTimeout(() => runPostInit(null), 0);
+  }
+
+  // 2. Load from cloud in background — update silently when ready
   if (!BIN_ID) {
-    setStatus('saving', '☁️ Loading…');
     const dir = await loadDirectory();
     const matched = dir[_hostPath] || dir[Object.keys(dir).find(k => _hostPath.startsWith(k))] || '';
     if (matched) BIN_ID = matched;
   }
   if (BIN_ID && API_KEY) {
-    setStatus('saving','☁️ Loading…');
+    setStatus('saving', '☁️ Syncing…');
     const cloudData = await cloudLoad();
     if (cloudData && cloudData.v) {
-      restoreData(cloudData);
+      // Only update if cloud data is newer than what we showed
+      const localTs = (() => { try { return new Date(JSON.parse(localStorage.getItem(LS_LOCAL)||'{}').savedAt||0); } catch { return new Date(0); } })();
+      const cloudTs = new Date(cloudData.savedAt||0);
+      if (cloudTs > localTs || !loadedFromLocal) {
+        restoreData(cloudData);
+        setTimeout(() => runPostInit(cloudData), 0);
+      }
       const ts = new Date(cloudData.savedAt||Date.now()).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
       setStatus('saved','☁️ Synced · '+ts);
-      setTimeout(() => runPostInit(cloudData), 0);
-      return;
+    } else {
+      setStatus('saved', loadedFromLocal ? 'Local data' : '');
     }
   }
-  try {
-    const raw = localStorage.getItem(LS_LOCAL);
-    if (raw) { const parsed = JSON.parse(raw); restoreData(parsed); setStatus('saved','Restored locally'); setTimeout(() => runPostInit(parsed), 0); return; }
-  } catch(e){}
-  for (let i=1;i<=3;i++) {
-    document.getElementById('traffic-body').insertAdjacentHTML('beforeend', trafficRow(i));
-    document.getElementById('ads-body').insertAdjacentHTML('beforeend', adsRow(i));
-    document.getElementById('funnels-body').insertAdjacentHTML('beforeend', funnelRow(i));
-  }
-  setStatus('', 'Auto-save on');
-  setTimeout(() => runPostInit(null), 0);
 })();
+
+/* ═══════════════════════════════════════════════
+   SUPABASE + OFFER MANAGEMENT
+═══════════════════════════════════════════════ */
+
+const SB_URL_KEY  = 'ecoverage_sb_url';
+const SB_KEY_KEY  = 'ecoverage_sb_key';
+const SB_OFFER_KEY = 'ecoverage_current_offer_id';
+
+let _sbClient      = null;
+let _currentOfferId = null;
+let _allOffers     = [];
+
+/* ── Client ── */
+function sbGetClient() {
+  if (_sbClient) return _sbClient;
+  const url = localStorage.getItem(SB_URL_KEY);
+  const key = localStorage.getItem(SB_KEY_KEY);
+  if (!url || !key) return null;
+  try { _sbClient = supabase.createClient(url, key); return _sbClient; }
+  catch(e) { console.error('Supabase init:', e); return null; }
+}
+
+/* ── Config save ── */
+async function sbSaveConfig() {
+  const url = document.getElementById('sb-url-input').value.trim();
+  const key = document.getElementById('sb-key-input').value.trim();
+  if (!url || !key) { showToast('Fill in both fields', 'error'); return; }
+  localStorage.setItem(SB_URL_KEY, url);
+  localStorage.setItem(SB_KEY_KEY, key);
+  _sbClient = null;
+  document.getElementById('sb-modal-overlay').classList.add('hidden');
+  showToast('Supabase connected!', 'success');
+  await offerLoadAll();
+}
+
+/* ── Rebuild native select ── */
+function offerRebuildSelect() {
+  const sel = document.getElementById('offer-select');
+  if (!sel) return;
+  if (!_allOffers.length) {
+    // No Supabase — show current title as the only "local" option
+    const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
+    sel.innerHTML = title
+      ? `<option value="__local__" selected>${title} (local)</option>`
+      : '<option value="">— select offer —</option>';
+    return;
+  }
+  sel.innerHTML = '<option value="">— select offer —</option>'
+    + _allOffers.map(o =>
+        `<option value="${o.id}"${o.id === _currentOfferId ? ' selected' : ''}>${o.name}</option>`
+      ).join('');
+}
+
+/* ── Load all offers ── */
+async function offerLoadAll() {
+  const sb = sbGetClient();
+  if (!sb) { offerRebuildSelect(); return; }
+  const { data, error } = await sb.from('offers').select('id,name,updated_at').order('updated_at', { ascending: false });
+  if (error) { console.error('offerLoadAll:', error); showToast('Failed to load offers: ' + error.message, 'error'); return; }
+  _allOffers = data || [];
+
+  // If table empty, auto-save current page as first offer
+  if (_allOffers.length === 0) {
+    const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
+    if (title && title !== '—') {
+      const pageData = collectData();
+      const { data: row, error: err } = await sb.from('offers').insert({ name: title, data: pageData }).select().single();
+      if (!err && row) {
+        _currentOfferId = row.id;
+        localStorage.setItem(SB_OFFER_KEY, row.id);
+        const { data: fresh } = await sb.from('offers').select('id,name,updated_at').order('updated_at', { ascending: false });
+        _allOffers = fresh || [];
+        showToast('✅ First offer created: "' + title + '"', 'success');
+      }
+    }
+    offerRebuildSelect();
+    return;
+  }
+
+  offerRebuildSelect();
+
+  // Restore last selected
+  const lastId = localStorage.getItem(SB_OFFER_KEY);
+  const match = lastId && _allOffers.find(o => o.id === lastId);
+  if (match) {
+    await offerLoad(lastId, false);
+  } else if (_allOffers.length > 0) {
+    await offerLoad(_allOffers[0].id, false);
+  }
+}
+
+/* ── Load one offer ── */
+async function offerLoad(id, showMsg) {
+  const sb = sbGetClient();
+  if (!sb) return;
+  const { data, error } = await sb.from('offers').select('*').eq('id', id).single();
+  if (error || !data) { showToast('Failed to load offer', 'error'); return; }
+  _currentOfferId = id;
+  localStorage.setItem(SB_OFFER_KEY, id);
+  // Sync select
+  const sel = document.getElementById('offer-select');
+  if (sel) sel.value = id;
+  // Restore page data
+  if (data.data) {
+    const prev = _restoring;
+    _restoring = true;
+    restoreData(data.data);
+    _restoring = prev;
+    setTimeout(() => runPostInit(data.data), 0);
+  }
+  if (showMsg) showToast('Loaded: ' + data.name, 'success');
+}
+
+/* ── Native select change ── */
+function offerLoadFromSelect(id) {
+  if (!id) return;
+  offerLoad(id, true);
+}
+
+/* ── Search ── */
+function offerSearchPrompt() {
+  if (!_allOffers.length) { showToast('No offers saved yet. Connect Supabase first.', 'error'); return; }
+  const q = prompt('Search offers (type part of name):');
+  if (q === null || q.trim() === '') return;
+  const matches = _allOffers.filter(o => o.name.toLowerCase().includes(q.toLowerCase()));
+  if (!matches.length) { showToast('No offers match "' + q + '"', 'error'); return; }
+  offerLoad(matches[0].id, true);
+}
+
+/* ── New offer ── */
+async function offerNew() {
+  const defaultName = (document.getElementById('main-title')?.dataset?.text || '').trim() || 'New Offer';
+  const name = prompt('New offer name:', defaultName);
+  if (!name) return;
+  const sb = sbGetClient();
+  if (!sb) {
+    // No Supabase — just update the title
+    const h1 = document.getElementById('main-title');
+    if (h1) { h1.dataset.text = name; h1.textContent = name; document.title = name; localStorage.setItem('ecoverage_title', name); }
+    offerRebuildSelect();
+    showToast('Title updated to "' + name + '" (connect Supabase to save offers)', 'success');
+    return;
+  }
+  const pageData = collectData();
+  const { data: row, error } = await sb.from('offers').insert({ name, data: pageData }).select().single();
+  if (error) { showToast('Create failed: ' + error.message, 'error'); return; }
+  _currentOfferId = row.id;
+  localStorage.setItem(SB_OFFER_KEY, row.id);
+  showToast('✅ Created: ' + name, 'success');
+  await offerLoadAll();
+  const sel = document.getElementById('offer-select');
+  if (sel) sel.value = row.id;
+}
+
+/* ── Save current ── */
+async function offerSaveCurrent() {
+  const sb = sbGetClient();
+  if (!sb) { manualSave(); return; }
+  if (!_currentOfferId) { offerNew(); return; }
+  const pageData = collectData();
+  const { error } = await sb.from('offers').update({ data: pageData, updated_at: new Date().toISOString() }).eq('id', _currentOfferId);
+  if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
+  const name = _allOffers.find(o => o.id === _currentOfferId)?.name || '';
+  showToast('💾 Saved: ' + name, 'success');
+}
+
+/* ── Rename ── */
+function offerRename() {
+  const current = _currentOfferId
+    ? (_allOffers.find(o => o.id === _currentOfferId)?.name || '')
+    : (document.getElementById('main-title')?.dataset?.text || '').trim();
+  const name = prompt('Rename offer:', current);
+  if (!name || name === current) return;
+  // Always update h1/title
+  const h1 = document.getElementById('main-title');
+  if (h1) { h1.dataset.text = name; h1.textContent = name; document.title = name; localStorage.setItem('ecoverage_title', name); }
+  offerRebuildSelect();
+  const sb = sbGetClient();
+  if (!sb || !_currentOfferId) { showToast('Renamed to "' + name + '"', 'success'); return; }
+  sb.from('offers').update({ name }).eq('id', _currentOfferId).then(({ error }) => {
+    if (error) { showToast('Rename failed in DB: ' + error.message, 'error'); return; }
+    _allOffers = _allOffers.map(o => o.id === _currentOfferId ? { ...o, name } : o);
+    offerRebuildSelect();
+    showToast('Renamed to "' + name + '"', 'success');
+  });
+}
+
+/* ── Auto-push handled by offerSaveCurrent and manual save button ── */
+
+/* ── Patch doSave to also push to Supabase ── */
+(function() {
+  const _orig = doSave;
+  window.doSave = async function() {
+    await _orig();
+    const sb = sbGetClient();
+    if (sb && _currentOfferId) {
+      try {
+        const pageData = collectData();
+        await sb.from('offers').update({ data: pageData, updated_at: new Date().toISOString() }).eq('id', _currentOfferId);
+      } catch(e) { console.warn('Supabase auto-push failed:', e); }
+    }
+  };
+})();
+
+/* ── Init ── */
+(async function sbInit() {
+  const url = localStorage.getItem(SB_URL_KEY);
+  const key = localStorage.getItem(SB_KEY_KEY);
+  if (!url || !key) return;
+  // Pre-fill modal
+  document.getElementById('sb-url-input').value = url;
+  document.getElementById('sb-key-input').value = key;
+  await offerLoadAll();
+})();
+
 </script>
 </body>
 </html>
