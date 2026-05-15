@@ -405,7 +405,7 @@
     #ad-detail-overlay.open { display:block; }
     #ad-detail-panel {
       position:fixed; top:0; right:0; bottom:0; width:min(1100px,92vw); max-width:100vw;
-      background:var(--bg-primary); z-index:8001; overflow:hidden;
+      background:var(--bg-primary); z-index:8001; overflow-y:auto; overflow-x:hidden;
       box-shadow:-12px 0 48px rgba(0,0,0,0.22); display:flex; flex-direction:column;
       transform:translateX(100%); transition:transform 0.28s cubic-bezier(.4,0,.2,1);
     }
@@ -454,7 +454,7 @@
     .adp-tab.active { color:var(--blue-text,#185FA5); border-bottom-color:var(--blue-text,#185FA5); background:var(--blue-bg); }
 
     /* Body */
-    .adp-body { padding:14px 16px; flex:1; overflow:hidden; min-height:0; }
+    .adp-body { padding:14px 16px; flex:1; overflow-y:auto; overflow-x:hidden; min-height:0; }
     .adp-tab-panel { display:none; }
     .adp-tab-panel.active { display:block; }
 
@@ -477,7 +477,7 @@
     /* Section */
     .adp-section { margin-bottom:12px; }
     .adp-section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-    .adp-section-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-secondary); }
+    .adp-section-title { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-primary); }
 
     /* Info card */
     .adp-card { background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:10px; overflow:hidden; }
@@ -485,7 +485,7 @@
     /* Detail rows */
     .adp-row { display:flex; align-items:center; gap:12px; padding:7px 12px; border-bottom:1px solid var(--border-light); }
     .adp-row:last-child { border-bottom:none; }
-    .adp-row-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-secondary); width:90px; flex-shrink:0; }
+    .adp-row-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-secondary); width:90px; flex-shrink:0; opacity:0.7; }
     .adp-row-val { flex:1; min-width:0; font-size:13px; color:var(--text-primary); }
     .adp-row-edit { display:flex; align-items:center; gap:8px; flex:1; min-width:0; }
     .adp-row-input {
@@ -512,7 +512,7 @@
     .adp-lp-row:last-child { border-bottom:none; }
     .adp-lp-icon { width:28px; height:28px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .adp-lp-info { flex:1; min-width:0; }
-    .adp-lp-type { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-secondary); margin-bottom:2px; }
+    .adp-lp-type { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-secondary); margin-bottom:2px; opacity:0.7; }
     .adp-lp-url { font-size:12px; color:var(--blue-text,#185FA5); text-decoration:none; display:flex; align-items:center; gap:4px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .adp-lp-url:hover { text-decoration:underline; }
     .adp-lp-url-text { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; min-width:0; }
@@ -527,7 +527,7 @@
     /* Copy fields */
     .adp-copy-item { margin-bottom:8px; }
     .adp-copy-item:last-child { margin-bottom:0; }
-    .adp-copy-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-secondary); margin-bottom:6px; }
+    .adp-copy-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-secondary); margin-bottom:6px; opacity:0.7; }
     .adp-copy-block {
       background:var(--bg-secondary); border:1px solid var(--border-light); border-radius:8px;
       padding:8px 12px; font-size:12px; color:var(--text-primary); line-height:1.5;
@@ -893,7 +893,7 @@
     <button onclick="hideHistory()" style="background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:20px;line-height:1;">×</button>
   </div>
   <div style="padding:10px 12px;border-bottom:1px solid var(--border-light);font-size:11px;color:var(--text-secondary);">
-    Showing last <strong id="history-count">0</strong> versions from this session
+    Showing last <strong id="history-count">0</strong> versions
   </div>
   <div id="history-list" style="flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;"></div>
 </div>
@@ -2037,7 +2037,7 @@ function openAdDetail(rowIdx) {
   const copyWeights = {'Angle / Hook':3,'Headline':3,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:14px;height:calc(100vh - 90px);">
+    <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:14px;min-height:calc(100vh - 90px);">
 
       <!-- COL 1: Image + Links + Ad Details + Notes -->
       <div style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;">
@@ -4284,13 +4284,25 @@ async function offerLoad(id, showMsg) {
   // Sync select
   const sel = document.getElementById('offer-select');
   if (sel) sel.value = id;
-  // Restore page data
-  if (data.data) {
+  // Update title immediately to offer name
+  const h1 = document.getElementById('main-title');
+  if (h1) {
+    h1.dataset.text = data.name;
+    h1.dataset.url = data.data?.header?.titleUrl || '';
+    h1.textContent = data.name;
+    document.title = data.name;
+    localStorage.setItem('ecoverage_title', data.name);
+  }
+  // Restore page data (or clear for new empty offers)
+  if (data.data && data.data.v) {
     const prev = _restoring;
     _restoring = true;
     restoreData(data.data);
     _restoring = prev;
     setTimeout(() => runPostInit(data.data), 0);
+  } else {
+    // New offer with no data — clear the page
+    clearPageData(data.name);
   }
   if (showMsg) showToast('Loaded: ' + data.name, 'success');
 }
