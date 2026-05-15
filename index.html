@@ -3779,7 +3779,7 @@ function setStatus(state, text) {
 }
 let cloudSaveTimer = null;
 function scheduleCloudSave() {
-  if (_restoring) return;
+  if (_restoring || _offerSwitching) return;
   setStatus('saving', 'Saving…');
   clearTimeout(cloudSaveTimer);
   cloudSaveTimer = setTimeout(doSave, 800);
@@ -4130,6 +4130,7 @@ const SB_OFFER_KEY = 'ecoverage_current_offer_id';
 
 let _sbClient      = null;
 let _currentOfferId = null;
+let _offerSwitching = false;
 let _allOffers     = [];
 
 /* ── Client ── */
@@ -4279,146 +4280,27 @@ async function offerLoad(id, showMsg) {
   if (!sb) return;
   const { data, error } = await sb.from('offers').select('*').eq('id', id).single();
   if (error || !data) { showToast('Failed to load offer', 'error'); return; }
+  _offerSwitching = true; // block autosave during switch
   _currentOfferId = id;
   localStorage.setItem(SB_OFFER_KEY, id);
   const sel = document.getElementById('offer-select');
   if (sel) sel.value = id;
-
   const offerName = data.name || '';
   const hasData = data.data && data.data.v;
-
   if (hasData) {
-    // Make sure the stored data has the correct offer name as title
-    if (offerName) {
-      data.data.header = data.data.header || {};
-      if (!data.data.header.title) data.data.header.title = offerName;
-    }
-    // Persist title to localStorage BEFORE restoreData/runPostInit
-    localStorage.setItem('ecoverage_title', data.data.header?.title || offerName);
-    localStorage.setItem('ecoverage_title_url', data.data.header?.titleUrl || '');
-    const prev = _restoring;
-    _restoring = true;
+    data.data.header = data.data.header || {};
+    if (!data.data.header.title) data.data.header.title = offerName;
+    localStorage.setItem('ecoverage_title', data.data.header.title || offerName);
+    localStorage.setItem('ecoverage_title_url', data.data.header.titleUrl || '');
+    const prev = _restoring; _restoring = true;
     restoreData(data.data);
     _restoring = prev;
-    setTimeout(() => runPostInit(data.data), 0);
+    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 150);
   } else {
-    // New/empty offer — clear page and set name
     clearPageData(offerName);
+    setTimeout(() => { _offerSwitching = false; }, 150);
   }
-
   if (showMsg) showToast('Loaded: ' + offerName, 'success');
-}
-
-/* ── Native select change ── */
-function offerLoadFromSelect(id) {
-  if (!id) return;
-  offerLoad(id, true);
-}
-
-/* ── Search dropdown ── */
-function _offerPanelPosition(panelId, triggerId) {
-  const panel = document.getElementById(panelId);
-  const btn = document.getElementById(triggerId);
-  if (!panel || !btn) return;
-  const r = btn.getBoundingClientRect();
-  panel.style.top = (r.bottom + 6) + 'px';
-  panel.style.left = r.left + 'px';
-  // Ensure doesn't go off right edge
-  const pw = 320;
-  const maxLeft = window.innerWidth - pw - 8;
-  if (r.left > maxLeft) panel.style.left = maxLeft + 'px';
-}
-
-function offerSearchToggle() {
-  const panel = document.getElementById('offer-search-panel');
-  const newPanel = document.getElementById('offer-new-panel');
-  const isOpen = panel.style.display === 'block';
-  newPanel.style.display = 'none';
-  if (isOpen) { panel.style.display = 'none'; return; }
-  _offerPanelPosition('offer-search-panel', 'offer-search-trigger');
-  panel.style.display = 'block';
-  const inp = document.getElementById('offer-search-input');
-  inp.value = '';
-  offerSearchFilter('');
-  setTimeout(() => inp.focus(), 50);
-}
-
-function offerSearchFilter(q) {
-  const results = document.getElementById('offer-search-results');
-  if (!results) return;
-  const filtered = q.trim()
-    ? _allOffers.filter(o => o.name.toLowerCase().includes(q.toLowerCase()))
-    : _allOffers;
-  if (!filtered.length) {
-    results.innerHTML = `<div style="padding:12px 14px;font-size:13px;color:var(--text-secondary);font-style:italic;">${q ? 'No matches for "' + q + '"' : 'No offers yet'}</div>`;
-    return;
-  }
-  results.innerHTML = filtered.map(o => {
-    const active = o.id === _currentOfferId;
-    const metaDate = o.data?.meta?.date;
-    const date = metaDate ? new Date(metaDate).toLocaleDateString(undefined, {month:'short', day:'numeric', year:'numeric'}) : new Date(o.updated_at).toLocaleDateString(undefined, {month:'short', day:'numeric'});
-    return `<div onclick="offerLoadFromSearch('${o.id}')"
-      style="display:flex;align-items:center;justify-content:space-between;gap:10px;
-             padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--border-light);
-             ${active ? 'background:var(--blue-bg,#dbeafe);' : ''}
-             transition:background 0.1s;"
-      onmouseover="if(!${active})this.style.background='var(--bg-secondary)'"
-      onmouseout="this.style.background='${active ? 'var(--blue-bg,#dbeafe)' : 'transparent'}'">
-      <span style="font-size:13px;font-weight:${active?'600':'400'};color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${o.name}</span>
-      <span style="font-size:11px;color:var(--text-secondary);flex-shrink:0;">${date}</span>
-    </div>`;
-  }).join('');
-}
-
-function offerLoadFromSearch(id) {
-  document.getElementById('offer-search-panel').style.display = 'none';
-  document.getElementById('offer-search-input').value = '';
-  offerLoad(id, true);
-}
-
-/* ── New offer dropdown ── */
-function offerNewToggle() {
-  const panel = document.getElementById('offer-new-panel');
-  const searchPanel = document.getElementById('offer-search-panel');
-  const isOpen = panel.style.display === 'block';
-  searchPanel.style.display = 'none';
-  if (isOpen) { panel.style.display = 'none'; return; }
-  _offerPanelPosition('offer-new-panel', 'offer-new-trigger');
-  panel.style.display = 'block';
-  const inp = document.getElementById('offer-new-name');
-  const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
-  inp.value = title || '';
-  setTimeout(() => { inp.focus(); inp.select(); }, 50);
-}
-
-function offerNewCancel() {
-  document.getElementById('offer-new-panel').style.display = 'none';
-  document.getElementById('offer-new-name').value = '';
-}
-
-async function offerNewConfirm() {
-  const name = document.getElementById('offer-new-name').value.trim();
-  if (!name) { document.getElementById('offer-new-name').focus(); return; }
-  offerNewCancel();
-  const sb = sbGetClient();
-  if (!sb) {
-    // No Supabase — just clear and rename
-    clearPageData(name);
-    showToast('New offer started: "' + name + '"', 'success');
-    return;
-  }
-  // Insert with empty data
-  const emptyData = { v: 2, header: { title: name, titleUrl: '' }, meta: {}, notes: {}, traffic: [], ads: [], funnels: [] };
-  const { data: row, error } = await sb.from('offers').insert({ name, data: emptyData }).select().single();
-  if (error) { showToast('Create failed: ' + error.message, 'error'); return; }
-  _currentOfferId = row.id;
-  localStorage.setItem(SB_OFFER_KEY, row.id);
-  // Clear the page and set new title
-  clearPageData(name);
-  showToast('✅ New offer: ' + name, 'success');
-  await offerLoadAll();
-  const sel = document.getElementById('offer-select');
-  if (sel) sel.value = row.id;
 }
 
 function clearPageData(title) {
@@ -4508,7 +4390,7 @@ function offerRename() {
   window.doSave = async function() {
     await _orig();
     const sb = sbGetClient();
-    if (sb && _currentOfferId) {
+    if (sb && _currentOfferId && !_offerSwitching) {
       try {
         const pageData = collectData();
         await sb.from('offers').update({ data: pageData, updated_at: new Date().toISOString() }).eq('id', _currentOfferId);
