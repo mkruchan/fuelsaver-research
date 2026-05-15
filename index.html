@@ -460,6 +460,7 @@
 
     /* Image */
     .adp-img-wrap { position:relative; border-radius:10px; overflow:hidden; border:1px solid var(--border-light); margin-bottom:16px; background:var(--bg-secondary); }
+    .adp-img-wrap::after { content:''; position:absolute; inset:0; border-radius:10px; pointer-events:none; box-shadow:inset 0 0 24px 10px var(--bg-primary); }
     .adp-img { width:100%; display:block; cursor:zoom-in; object-fit:contain; max-height:160px; background:var(--bg-secondary); }
     .adp-img-empty {
       width:100%; display:flex; align-items:center; justify-content:center;
@@ -572,7 +573,7 @@
     .title-icon-btn:hover { color:var(--text-primary); border-color:var(--border-mid); background:var(--bg-tertiary,var(--bg-secondary)); }
     /* offer picker */
     #offer-select option { font-size:14px; font-weight:500; }
-    .offer-pill-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; font-size:12px; font-weight:500; font-family:inherit; border-radius:20px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; white-space:nowrap; transition:all 0.13s; }
+    .offer-pill-btn { display:inline-flex; align-items:center; gap:5px; padding:5px 12px; font-size:12px; font-weight:500; font-family:inherit; border-radius:8px; border:1px solid var(--border-light); background:var(--bg-secondary); color:var(--text-secondary); cursor:pointer; white-space:nowrap; transition:all 0.13s; }
     .offer-pill-btn:hover { color:var(--text-primary); border-color:var(--border-mid); }
     .offer-pill-btn--accent { background:var(--blue-bg,#dbeafe); color:var(--blue-text,#1d4ed8); border-color:currentColor; }
     .offer-pill-btn--accent:hover { opacity:0.85; }
@@ -704,13 +705,17 @@
     <div class="header-top">
       <div class="header-left">
         <div style="flex:1;min-width:0;">
-          <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTc4IiBoZWlnaHQ9IjI2MiIgdmlld0JveD0iMCAwIDk3OCAyNjIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAuMDA4IDIxNi4yMkwxMTguODk5IDBWMTM3LjMzOEMxMTguODk5IDE4MC45MDMgMTU0LjYwMyAyMTYuMjIgMTk4LjY0NyAyMTYuMjJIMjIwLjAwOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTAgMjE2LjIyTDEwMS4xMDkgMFYxMzcuMzM4QzEwMS4xMDkgMTgwLjkwMyA2NS40MDQyIDIxNi4yMiAyMS4zNjEgMjE2LjIySDBaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0xMDguOTQgMTgxLjcxTDExNi4xNjYgMTk0LjM4MUMxMjEuMDE0IDIwMi44ODQgMTI4LjEyIDIwOS45MTIgMTM2LjcxNSAyMTQuNzA4TDE0OS41MjYgMjIxLjg1NUwxMzYuNzE1IDIyOS4wMDJDMTI4LjEyIDIzMy43OTggMTIxLjAxNCAyNDAuODI2IDExNi4xNjYgMjQ5LjMyOEwxMDguOTQgMjYyTDEwMS43MTUgMjQ5LjMyOEM5Ni44NjY0IDI0MC44MjYgODkuNzYwNyAyMzMuNzk4IDgxLjE2NTMgMjI5LjAwMkw2OC4zNTQyIDIyMS44NTVMODEuMTY1MyAyMTQuNzA4Qzg5Ljc2MDcgMjA5LjkxMiA5Ni44NjY0IDIwMi44ODQgMTAxLjcxNSAxOTQuMzgxTDEwOC45NCAxODEuNzFaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0zMDUuNDg0IDE5My4xNzRIMzcwLjkwMVYyMjQuNDAySDI2NS42NjVWMjguMDMyN0gzMDUuNDg0VjE5My4xNzRaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik00MTYuNDAyIDQ5Ljk3NjRDNDA5LjM4NSA0OS45NzY0IDQwMy41MDcgNDcuODE5MyAzOTguNzY2IDQzLjUwNTVDMzk0LjIxOCAzOS4wMDQ1IDM5MS45NDIgMzMuNDcxNiAzOTEuOTQyIDI2LjkwNzJDMzkxLjk0MiAyMC4zNDI4IDM5NC4yMTggMTQuOTAzNyAzOTguNzY2IDEwLjU5QzQwMy41MDcgNi4wODg2NyA0MDkuMzg1IDMuODM4MDQgNDE2LjQwMiAzLjgzODA0QzQyMy40MTggMy44MzgwNCA0MjkuMiA2LjA4ODY3IDQzMy43NTIgMTAuNTlDNDM4LjQ5MyAxNC45MDM3IDQ0MC44NjEgMjAuMzQyOCA0NDAuODYxIDI2LjkwNzJDNDQwLjg2MSAzMy40NzE2IDQzOC40OTMgMzkuMDA0NSA0MzMuNzUyIDQzLjUwNTVDNDI5LjIgNDcuODE5MyA0MjMuNDE4IDQ5Ljk3NjQgNDE2LjQwMiA0OS45NzY0Wk00MzYuMDI4IDY4LjU0NDRWMjI0LjQwMkgzOTYuMjA5VjY4LjU0NDRINDM2LjAyOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTU0Ny42MTMgMTAwLjg5OEg1MjAuMDI0VjIyNC40MDJINDc5LjYzNlYxMDAuODk4SDQ2MS43MTZWNjguNTQ0Nkg0NzkuNjM2VjYwLjY2NzNDNDc5LjYzNiA0MS41MzY2IDQ4NS4xMzcgMjcuNDcwMSA0OTYuMTMzIDE4LjQ2NzVDNTA3LjEyOSA5LjQ2NDkgNTIzLjcxOSA1LjI0NDkyIDU0NS45MDYgNS44MDc1OFYzOS4wMDQ3QzUzNi4yMzMgMzguODE3MSA1MjkuNTA0IDQwLjQxMTQgNTI1LjcxIDQzLjc4NzNDNTIxLjkxOSA0Ny4xNjM1IDUyMC4wMjQgNTMuMjU4OCA1MjAuMDI0IDYyLjA3NFY2OC41NDQ2SDU0Ny42MTNWMTAwLjg5OFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTYxOS43NzUgMTAwLjg5N1YxNzYuMjk0QzYxOS43NzUgMTgxLjU0NiA2MjEuMDA5IDE4NS4zOSA2MjMuNDczIDE4Ny44MjhDNjI2LjEyNiAxOTAuMDc5IDYzMC40OSAxOTEuMjA0IDYzNi41NTcgMTkxLjIwNEg2NTUuMDQ1VjIyNC40MDJINjMwLjAxM0M1OTYuNDU2IDIyNC40MDIgNTc5LjY3MSAyMDguMjcyIDU3OS42NzEgMTc2LjAxM1YxMDAuODk3SDU2MC45MDFWNjguNTQ0Mkg1NzkuNjcxVjMwLjAwMTdINjE5Ljc3NVY2OC41NDQySDY1NS4wNDVWMTAwLjg5N0g2MTkuNzc1WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNNzQxLjY3IDI2LjkwNzNWMjI0LjQwMkg2OTMuMDMyVjI2LjkwNzNINzQxLjY3WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNOTE5LjEyMyAyNTguMTYxTDg5My41MjYgMjI0LjEyQzg4NS45NDQgMjI1LjYyIDg3OC41NDcgMjI2LjM3MSA4NzEuMzQyIDIyNi4zNzFDODUyLjU3MiAyMjYuMzcxIDgzNS4zMTQgMjIyLjA1NyA4MTkuNTc3IDIxMy40M0M4MDQuMDMgMjA0LjgwMiA3OTEuNjA4IDE5Mi43OTkgNzgyLjMxOSAxNzcuNDJDNzczLjIxNSAxNjEuODUyIDc2OC42NjcgMTQ0LjQxIDc2OC42NjcgMTI1LjA5MkM3NjguNjY3IDEwNS43NzQgNzczLjIxNSA4OC40MjQ4IDc4Mi4zMTkgNzMuMDQ1OEM3OTEuNjA4IDU3LjY2NjEgODA0LjAzIDQ1LjY2MjcgODE5LjU3NyAzNy4wMzUxQzgzNS4zMTQgMjguNDA3NiA4NTIuNTcyIDI0LjA5MzkgODcxLjM0MiAyNC4wOTM5Qzg5MC4xMTIgMjQuMDkzOSA5MDcuMjc0IDI4LjQwNzYgOTIyLjgyNSAzNy4wMzUxQzkzOC41NTggNDUuNjYyNyA5NTAuODg3IDU3LjY2NjEgOTU5Ljc5NiA3My4wNDU4Qzk2OC44OTYgODguNDI0OCA5NzMuNDQ4IDEwNS43NzQgOTczLjQ0OCAxMjUuMDkyQzk3My40NDggMTQxLjk3MiA5NjkuOTM4IDE1Ny40NDUgOTYyLjkyNSAxNzEuNTEyQzk1Ni4xMDEgMTg1LjM5IDk0Ni41MjQgMTk2LjkyNSA5MzQuMTk4IDIwNi4xMTVMOTc4IDI1OC4xNjFIOTE5LjEyM1pNODE4LjQzOSAxMjUuMDkyQzgxOC40MzkgMTQyLjUzNCA4MjMuMTc3IDE1Ni41MDcgODMyLjY2MSAxNjcuMDFDODQyLjMzIDE3Ny4zMjYgODU1LjIyNSAxODIuNDgzIDg3MS4zNDIgMTgyLjQ4M0M4ODcuMjcgMTgyLjQ4MyA4OTkuOTczIDE3Ny4yMzIgOTA5LjQ1NCAxNjYuNzI5QzkxOS4xMjMgMTU2LjIyNiA5MjMuOTYgMTQyLjM0NyA5MjMuOTYgMTI1LjA5MkM5MjMuOTYgMTA3LjY0OSA5MTkuMTIzIDkzLjc3MDIgOTA5LjQ1NCA4My40NTQ3Qzg5OS45NzMgNzIuOTUxOSA4ODcuMjcgNjcuNzAwMSA4NzEuMzQyIDY3LjcwMDFDODU1LjIyNSA2Ny43MDAxIDg0Mi4zMyA3Mi44NTc5IDgzMi42NjEgODMuMTczNEM4MjMuMTc3IDkzLjQ4OSA4MTguNDM5IDEwNy40NjIgODE4LjQzOSAxMjUuMDkyWiIgZmlsbD0iIzAxNkFDOSIvPgo8L3N2Zz4K" style="height:32px;object-fit:contain;margin-bottom:6px;display:block;cursor:pointer;" id="liftiq-logo" onclick="logoTripleClick()">
-          <div style="font-size:24px;color:var(--text-primary);font-weight:600;margin-bottom:4px;">Multi-Platform Creative Research</div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOTc4IiBoZWlnaHQ9IjI2MiIgdmlld0JveD0iMCAwIDk3OCAyNjIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yMjAuMDA4IDIxNi4yMkwxMTguODk5IDBWMTM3LjMzOEMxMTguODk5IDE4MC45MDMgMTU0LjYwMyAyMTYuMjIgMTk4LjY0NyAyMTYuMjJIMjIwLjAwOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTAgMjE2LjIyTDEwMS4xMDkgMFYxMzcuMzM4QzEwMS4xMDkgMTgwLjkwMyA2NS40MDQyIDIxNi4yMiAyMS4zNjEgMjE2LjIySDBaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0xMDguOTQgMTgxLjcxTDExNi4xNjYgMTk0LjM4MUMxMjEuMDE0IDIwMi44ODQgMTI4LjEyIDIwOS45MTIgMTM2LjcxNSAyMTQuNzA4TDE0OS41MjYgMjIxLjg1NUwxMzYuNzE1IDIyOS4wMDJDMTI4LjEyIDIzMy43OTggMTIxLjAxNCAyNDAuODI2IDExNi4xNjYgMjQ5LjMyOEwxMDguOTQgMjYyTDEwMS43MTUgMjQ5LjMyOEM5Ni44NjY0IDI0MC44MjYgODkuNzYwNyAyMzMuNzk4IDgxLjE2NTMgMjI5LjAwMkw2OC4zNTQyIDIyMS44NTVMODEuMTY1MyAyMTQuNzA4Qzg5Ljc2MDcgMjA5LjkxMiA5Ni44NjY0IDIwMi44ODQgMTAxLjcxNSAxOTQuMzgxTDEwOC45NCAxODEuNzFaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik0zMDUuNDg0IDE5My4xNzRIMzcwLjkwMVYyMjQuNDAySDI2NS42NjVWMjguMDMyN0gzMDUuNDg0VjE5My4xNzRaIiBmaWxsPSIjMDE2QUM5Ii8+CjxwYXRoIGQ9Ik00MTYuNDAyIDQ5Ljk3NjRDNDA5LjM4NSA0OS45NzY0IDQwMy41MDcgNDcuODE5MyAzOTguNzY2IDQzLjUwNTVDMzk0LjIxOCAzOS4wMDQ1IDM5MS45NDIgMzMuNDcxNiAzOTEuOTQyIDI2LjkwNzJDMzkxLjk0MiAyMC4zNDI4IDM5NC4yMTggMTQuOTAzNyAzOTguNzY2IDEwLjU5QzQwMy41MDcgNi4wODg2NyA0MDkuMzg1IDMuODM4MDQgNDE2LjQwMiAzLjgzODA0QzQyMy40MTggMy44MzgwNCA0MjkuMiA2LjA4ODY3IDQzMy43NTIgMTAuNTlDNDM4LjQ5MyAxNC45MDM3IDQ0MC44NjEgMjAuMzQyOCA0NDAuODYxIDI2LjkwNzJDNDQwLjg2MSAzMy40NzE2IDQzOC40OTMgMzkuMDA0NSA0MzMuNzUyIDQzLjUwNTVDNDI5LjIgNDcuODE5MyA0MjMuNDE4IDQ5Ljk3NjQgNDE2LjQwMiA0OS45NzY0Wk00MzYuMDI4IDY4LjU0NDRWMjI0LjQwMkgzOTYuMjA5VjY4LjU0NDRINDM2LjAyOFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTU0Ny42MTMgMTAwLjg5OEg1MjAuMDI0VjIyNC40MDJINDc5LjYzNlYxMDAuODk4SDQ2MS43MTZWNjguNTQ0Nkg0NzkuNjM2VjYwLjY2NzNDNDc5LjYzNiA0MS41MzY2IDQ4NS4xMzcgMjcuNDcwMSA0OTYuMTMzIDE4LjQ2NzVDNTA3LjEyOSA5LjQ2NDkgNTIzLjcxOSA1LjI0NDkyIDU0NS45MDYgNS44MDc1OFYzOS4wMDQ3QzUzNi4yMzMgMzguODE3MSA1MjkuNTA0IDQwLjQxMTQgNTI1LjcxIDQzLjc4NzNDNTIxLjkxOSA0Ny4xNjM1IDUyMC4wMjQgNTMuMjU4OCA1MjAuMDI0IDYyLjA3NFY2OC41NDQ2SDU0Ny42MTNWMTAwLjg5OFoiIGZpbGw9IiMwMTZBQzkiLz4KPHBhdGggZD0iTTYxOS43NzUgMTAwLjg5N1YxNzYuMjk0QzYxOS43NzUgMTgxLjU0NiA2MjEuMDA5IDE4NS4zOSA2MjMuNDczIDE4Ny44MjhDNjI2LjEyNiAxOTAuMDc5IDYzMC40OSAxOTEuMjA0IDYzNi41NTcgMTkxLjIwNEg2NTUuMDQ1VjIyNC40MDJINjMwLjAxM0M1OTYuNDU2IDIyNC40MDIgNTc5LjY3MSAyMDguMjcyIDU3OS42NzEgMTc2LjAxM1YxMDAuODk3SDU2MC45MDFWNjguNTQ0Mkg1NzkuNjcxVjMwLjAwMTdINjE5Ljc3NVY2OC41NDQySDY1NS4wNDVWMTAwLjg5N0g2MTkuNzc1WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNNzQxLjY3IDI2LjkwNzNWMjI0LjQwMkg2OTMuMDMyVjI2LjkwNzNINzQxLjY3WiIgZmlsbD0iIzAxNkFDOSIvPgo8cGF0aCBkPSJNOTE5LjEyMyAyNTguMTYxTDg5My41MjYgMjI0LjEyQzg4NS45NDQgMjI1LjYyIDg3OC41NDcgMjI2LjM3MSA4NzEuMzQyIDIyNi4zNzFDODUyLjU3MiAyMjYuMzcxIDgzNS4zMTQgMjIyLjA1NyA4MTkuNTc3IDIxMy40M0M4MDQuMDMgMjA0LjgwMiA3OTEuNjA4IDE5Mi43OTkgNzgyLjMxOSAxNzcuNDJDNzczLjIxNSAxNjEuODUyIDc2OC42NjcgMTQ0LjQxIDc2OC42NjcgMTI1LjA5MkM3NjguNjY3IDEwNS43NzQgNzczLjIxNSA4OC40MjQ4IDc4Mi4zMTkgNzMuMDQ1OEM3OTEuNjA4IDU3LjY2NjEgODA0LjAzIDQ1LjY2MjcgODE5LjU3NyAzNy4wMzUxQzgzNS4zMTQgMjguNDA3NiA4NTIuNTcyIDI0LjA5MzkgODcxLjM0MiAyNC4wOTM5Qzg5MC4xMTIgMjQuMDkzOSA5MDcuMjc0IDI4LjQwNzYgOTIyLjgyNSAzNy4wMzUxQzkzOC41NTggNDUuNjYyNyA5NTAuODg3IDU3LjY2NjEgOTU5Ljc5NiA3My4wNDU4Qzk2OC44OTYgODguNDI0OCA5NzMuNDQ4IDEwNS43NzQgOTczLjQ0OCAxMjUuMDkyQzk3My40NDggMTQxLjk3MiA5NjkuOTM4IDE1Ny40NDUgOTYyLjkyNSAxNzEuNTEyQzk1Ni4xMDEgMTg1LjM5IDk0Ni41MjQgMTk2LjkyNSA5MzQuMTk4IDIwNi4xMTVMOTc4IDI1OC4xNjFIOTE5LjEyM1pNODE4LjQzOSAxMjUuMDkyQzgxOC40MzkgMTQyLjUzNCA4MjMuMTc3IDE1Ni41MDcgODMyLjY2MSAxNjcuMDFDODQyLjMzIDE3Ny4zMjYgODU1LjIyNSAxODIuNDgzIDg3MS4zNDIgMTgyLjQ4M0M4ODcuMjcgMTgyLjQ4MyA4OTkuOTczIDE3Ny4yMzIgOTA5LjQ1NCAxNjYuNzI5QzkxOS4xMjMgMTU2LjIyNiA5MjMuOTYgMTQyLjM0NyA5MjMuOTYgMTI1LjA5MkM5MjMuOTYgMTA3LjY0OSA5MTkuMTIzIDkzLjc3MDIgOTA5LjQ1NCA4My40NTQ3Qzg5OS45NzMgNzIuOTUxOSA4ODcuMjcgNjcuNzAwMSA4NzEuMzQyIDY3LjcwMDFDODU1LjIyNSA2Ny43MDAxIDg0Mi4zMyA3Mi44NTc5IDgzMi42NjEgODMuMTczNEM4MjMuMTc3IDkzLjQ4OSA4MTguNDM5IDEwNy40NjIgODE4LjQzOSAxMjUuMDkyWiIgZmlsbD0iIzAxNkFDOSIvPgo8L3N2Zz4K" style="height:32px;object-fit:contain;display:block;cursor:pointer;flex-shrink:0;" id="liftiq-logo" onclick="logoTripleClick()">
+            <div style="font-size:20px;color:var(--text-primary);font-weight:600;">Multi-Platform Creative Research</div>
+          </div>
           <!-- Title + Offer picker -->
           <div style="display:flex;flex-direction:column;gap:6px;margin-top:2px;">
             <!-- h1 shown normally -->
             <div style="display:flex;align-items:center;gap:5px;flex-wrap:nowrap;">
-              <h1 id="main-title" style="color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;" data-text="" data-url=""></h1>
+              <h1 id="main-title" style="color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;
+                background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;
+                padding:4px 14px;font-size:inherit;" data-text="" data-url=""></h1>
               <button onclick="editTitle()" title="Edit title & link" class="title-icon-btn">
                 <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M11 2l3 3-8 8H3v-3l8-8z" stroke-linejoin="round"/></svg>
               </button>
@@ -724,7 +729,7 @@
 
               <select id="offer-select" onchange="offerLoadFromSelect(this.value)" style="display:none;"></select>
 
-              <!-- Search -->
+              <!-- Select offer -->
               <button onclick="offerSearchToggle()" id="offer-search-trigger" class="offer-pill-btn">
                 <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
                 Select offer
@@ -1014,7 +1019,7 @@ function editTitle() {
     const newUrl = urlIn.value.trim();
     const newH1 = document.createElement('h1');
     newH1.id = 'main-title';
-    newH1.style.cssText = 'color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;';
+    newH1.style.cssText = 'color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;padding:4px 14px;font-size:inherit;';
     newH1.dataset.text = newText; newH1.dataset.url = newUrl;
     if (newUrl) {
       const a = document.createElement('a');
@@ -3636,6 +3641,7 @@ function restoreData(data) {
     const t = data.header.title || ''; const tu = data.header.titleUrl || '';
     if (h1 && t) {
       h1.dataset.text = t; h1.dataset.url = tu;
+      h1.style.cssText = 'color:var(--text-primary);margin:0;white-space:normal;word-break:break-word;background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:8px;padding:4px 14px;font-size:inherit;';
       if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h1.innerHTML = ''; h1.appendChild(a); } else { h1.textContent = t; }
       updateTitleLinkBtn(tu);
       // Persist to localStorage so runPostInit doesn't overwrite with stale value
@@ -4064,7 +4070,7 @@ function runPostInit(cloudData) {
   const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table');
   const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table');
   const t = localStorage.getItem('ecoverage_title'); const tu = localStorage.getItem('ecoverage_title_url') || '';
-  if (t) { document.title = t; const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } }
+  if (t) { document.title = t; _offerSyncNamePill(t); const h = document.getElementById('main-title'); if (h) { h.dataset.text = t; h.dataset.url = tu; if (tu) { const a = document.createElement('a'); a.href = tu; a.target = '_blank'; a.rel = 'noopener'; a.textContent = t; a.style.cssText = 'color:inherit;text-decoration:underline;text-underline-offset:3px;'; h.innerHTML = ''; h.appendChild(a); } else { h.textContent = t; } } }
   updateTitleLinkBtn(tu);
   // Sync offer select with current title (local fallback when no Supabase)
   if (!_currentOfferId) offerRebuildSelect();
@@ -4219,6 +4225,11 @@ function sbModalClose() {
   if (key) { key.disabled = true; key.type = 'password'; key.style.opacity = '0.5'; key.style.cursor = 'default'; }
   if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'default'; }
 }
+function _offerSyncNamePill(name) {
+  const el = document.getElementById('offer-current-name');
+  if (el) el.textContent = name || '—';
+}
+
 function offerRebuildSelect() {
   const sel = document.getElementById('offer-select');
   if (!sel) return;
@@ -4300,6 +4311,7 @@ async function offerLoad(id, showMsg) {
     clearPageData(offerName);
     setTimeout(() => { _offerSwitching = false; }, 150);
   }
+  _offerSyncNamePill(offerName);
   if (showMsg) showToast('Loaded: ' + offerName, 'success');
 }
 
@@ -4325,6 +4337,7 @@ function clearPageData(title) {
   localStorage.setItem('ecoverage_title_url', '');
   const h1 = document.getElementById('main-title');
   if (h1) { h1.dataset.text = title; h1.dataset.url = ''; h1.textContent = title; document.title = title; }
+  _offerSyncNamePill(title);
   // Rebuild grids and UI
   setTimeout(() => {
     resizeAllInputs(); updateAllBadges(); syncAllLinks(); updateFrozenOffsets(); centerTextareas();
