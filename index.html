@@ -722,60 +722,19 @@
             <!-- Offer picker row -->
             <div id="offer-picker" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;position:relative;">
 
-              <!-- Current offer select -->
-              <select id="offer-select" onchange="offerLoadFromSelect(this.value)"
-                style="font-size:13px;font-weight:500;font-family:inherit;color:var(--text-primary);
-                       background:var(--bg-secondary);border:1px solid var(--border-light);
-                       border-radius:8px;outline:none;cursor:pointer;padding:5px 10px;
-                       max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                <option value="">— select offer —</option>
-              </select>
+              <select id="offer-select" onchange="offerLoadFromSelect(this.value)" style="display:none;"></select>
 
-              <!-- Search dropdown -->
-              <div style="position:relative;">
-                <button onclick="offerSearchToggle()" id="offer-search-trigger" class="offer-pill-btn">
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
-                  Search
-                </button>
-                <div id="offer-search-panel" style="display:none;position:absolute;top:calc(100% + 6px);left:0;
-                     width:300px;background:var(--bg-primary);border:1px solid var(--border-light);
-                     border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.18);z-index:600;overflow:hidden;">
-                  <div style="padding:10px 10px 6px;">
-                    <input id="offer-search-input" type="text" placeholder="Type to search offers…"
-                      oninput="offerSearchFilter(this.value)"
-                      style="width:100%;padding:7px 10px;font-size:13px;font-family:inherit;
-                             border:1px solid var(--border-light);border-radius:7px;
-                             background:var(--bg-secondary);color:var(--text-primary);outline:none;box-sizing:border-box;">
-                  </div>
-                  <div id="offer-search-results" style="max-height:240px;overflow-y:auto;padding-bottom:4px;"></div>
-                </div>
-              </div>
+              <!-- Search -->
+              <button onclick="offerSearchToggle()" id="offer-search-trigger" class="offer-pill-btn">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M11 11l3 3" stroke-linecap="round"/></svg>
+                Select offer
+              </button>
 
-              <!-- New offer dropdown -->
-              <div style="position:relative;">
-                <button onclick="offerNewToggle()" id="offer-new-trigger" class="offer-pill-btn offer-pill-btn--accent">
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
-                  New offer
-                </button>
-                <div id="offer-new-panel" style="display:none;position:absolute;top:calc(100% + 6px);left:0;
-                     width:300px;background:var(--bg-primary);border:1px solid var(--border-light);
-                     border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.18);z-index:600;overflow:hidden;">
-                  <div style="padding:14px;">
-                    <div style="font-size:12px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">New offer</div>
-                    <input id="offer-new-name" type="text" placeholder="Offer name…"
-                      onkeydown="if(event.key==='Enter')offerNewConfirm()"
-                      style="width:100%;padding:8px 10px;font-size:13px;font-family:inherit;
-                             border:1px solid var(--border-light);border-radius:7px;
-                             background:var(--bg-secondary);color:var(--text-primary);outline:none;
-                             box-sizing:border-box;margin-bottom:10px;">
-                    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:10px;">Current page data will be saved as this offer.</div>
-                    <div style="display:flex;gap:6px;justify-content:flex-end;">
-                      <button onclick="offerNewCancel()" class="offer-pill-btn" style="font-size:12px;">Cancel</button>
-                      <button onclick="offerNewConfirm()" class="offer-pill-btn offer-pill-btn--accent" style="font-size:12px;">Create offer</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <!-- New offer -->
+              <button onclick="offerNewToggle()" id="offer-new-trigger" class="offer-pill-btn offer-pill-btn--accent">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M8 2v12M2 8h12" stroke-linecap="round"/></svg>
+                New offer
+              </button>
 
             </div>
           </div>
@@ -787,13 +746,6 @@
           <div class="autosave-dot" id="autosaveDot"></div>
           <span id="autosaveText">Loading…</span>
         </div>
-        <button class="toolbar-btn" onclick="manualSave()">
-          <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M13 13H3a1 1 0 0 1-1-1V4l3-3h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1z" stroke="currentColor" stroke-width="1.4"/><path d="M5 13V9h6v4M5 1v4h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          Save
-        </button>
-        <button class="toolbar-btn" id="autosaveToggle" onclick="toggleAutosave()" title="When ON, saves automatically as you type. When OFF, only saves when you click Save.">
-          Auto-save: <span id="autosaveLabel">Off</span>
-        </button>
         <div class="export-wrap" id="exportWrap">
           <button class="toolbar-btn" onclick="toggleExportMenu()" id="exportBtn">
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 2v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1986,14 +1938,20 @@ function _adpEditRow(label, val, tdIdx) {
     </div>
   </div>`;
 }
-function _adpSelectRow(label, currentVal, options, tdIdx) {
+function _adpSelectRow(label, currentVal, options, tdIdx, colorMap) {
   const opts = options.map(([v,t]) =>
     `<option value="${v}"${currentVal===v?' selected':''}>${t}</option>`
   ).join('');
   const displayText = (options.find(([v]) => v === currentVal) || [])[1] || '';
-  const displayHtml = displayText && !displayText.includes('select')
-    ? displayText
-    : '<span style="opacity:0.35;">—</span>';
+  const hasVal = displayText && !displayText.includes('select');
+  let displayHtml;
+  if (hasVal && colorMap) {
+    displayHtml = _adpChip(displayText, colorMap);
+  } else if (hasVal) {
+    displayHtml = displayText;
+  } else {
+    displayHtml = '<span style="opacity:0.35;">—</span>';
+  }
   return `<div class="adp-row">
     <div class="adp-row-label">${label}</div>
     <div class="adp-row-val adp-row-edit-wrap" style="flex:1;min-width:0;">
@@ -2075,28 +2033,16 @@ function openAdDetail(rowIdx) {
 
   const copyFields = [['Angle / Hook',angle,11],['Headline',headline,12],['CTA',cta,13],['Title',title,14]];
 
+  // Smart flex weights: Angle/Headline get more space, CTA/Title less
+  const copyWeights = {'Angle / Hook':3,'Headline':3,'CTA':1,'Title':1};
+
   const body = `
-    <div style="display:grid;grid-template-columns:220px 1fr 1fr;gap:16px;height:calc(100vh - 90px);">
+    <div style="display:grid;grid-template-columns:280px 1fr 1fr;gap:14px;height:calc(100vh - 90px);">
 
-      <!-- COL 1: Image + Ad Details -->
-      <div style="display:flex;flex-direction:column;gap:12px;min-height:0;">
+      <!-- COL 1: Image + Links + Ad Details + Notes -->
+      <div style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow-y:auto;">
         ${imgBlock}
-        <div class="adp-section" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
-          <div class="adp-section-header"><div class="adp-section-title">Ad Details</div></div>
-          <div class="adp-card" style="flex:1;">
-            ${_adpEditRow('Offer', offerVal, 1)}
-            ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2)}
-            ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3)}
-            ${_adpEditRow('Geo', geo, 4)}
-            ${_adpEditRow('Lifecycle', lifecycle, 5)}
-            ${_adpEditRow('Impressions', imp, 15)}
-          </div>
-        </div>
-      </div>
-
-      <!-- COL 2: Links + Notes (notes grows to fill) -->
-      <div style="display:flex;flex-direction:column;gap:12px;min-height:0;">
-        <div class="adp-section" style="margin:0;flex-shrink:0;">
+        <div class="adp-section" style="margin:0;">
           <div class="adp-section-header"><div class="adp-section-title">Links</div></div>
           <div class="adp-lp-card">
             ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
@@ -2105,23 +2051,35 @@ function openAdDetail(rowIdx) {
             ${_adpLpRow(creativeUrl,'Creative Link',_lpIcons.creative,'var(--amber-bg)',null,10)}
           </div>
         </div>
-        <div class="adp-section" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
+        <div class="adp-section" style="margin:0;">
+          <div class="adp-section-header"><div class="adp-section-title">Ad Details</div></div>
+          <div class="adp-card">
+            ${_adpEditRow('Offer', offerVal, 1)}
+            ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2, _ADP_SOURCE_COLORS)}
+            ${_adpSelectRow('Format', formatVal, FORMAT_OPTS, 3, _ADP_FORMAT_COLORS)}
+            ${_adpEditRow('Geo', geo, 4)}
+            ${_adpEditRow('Lifecycle', lifecycle, 5)}
+            ${_adpEditRow('Impressions', imp, 15)}
+          </div>
+        </div>
+        <div class="adp-section" style="margin:0;">
           <div class="adp-section-header"><div class="adp-section-title">Notes</div></div>
           <div class="adp-copy-block" data-field="notes" data-td="16" contenteditable="false"
-               style="flex:1;overflow-y:auto;min-height:0;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
+               style="min-height:60px;max-height:160px;overflow-y:auto;">${notes || '<span class=\"adp-copy-placeholder\">Add notes…</span>'}</div>
         </div>
       </div>
 
-      <!-- COL 3: Ad Copy — each field grows equally -->
-      <div style="display:flex;flex-direction:column;gap:0;min-height:0;">
-        <div class="adp-section-header" style="margin-bottom:6px;"><div class="adp-section-title">Ad Copy</div></div>
-        <div style="display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;">
-          ${copyFields.map(([l,v,ti]) => `<div class="adp-copy-item" style="margin:0;flex:1;display:flex;flex-direction:column;min-height:0;">
+      <!-- COL 2 + COL 3: Ad Copy spanning 2 cols, weighted heights -->
+      <div style="display:flex;flex-direction:column;gap:10px;min-height:0;height:100%;overflow-y:auto;grid-column:span 2;">
+        <div class="adp-section-header" style="margin-bottom:2px;flex-shrink:0;"><div class="adp-section-title">Ad Copy</div></div>
+        ${copyFields.map(([l,v,ti]) => {
+          const w = copyWeights[l] || 1;
+          return `<div class="adp-copy-item" style="margin:0;flex:${w};display:flex;flex-direction:column;min-height:${w>1?'80px':'44px'};">
             <div class="adp-copy-label">${l}</div>
             <div class="adp-copy-block" data-field="${l}" data-td="${ti}" contenteditable="false"
                  style="flex:1;overflow-y:auto;min-height:0;">${v || `<span class="adp-copy-placeholder">${l}…</span>`}</div>
-          </div>`).join('')}
-        </div>
+          </div>`;
+        }).join('')}
       </div>
 
     </div>
@@ -2154,8 +2112,8 @@ function openTrafficDetail(rowIdx) {
     <div class="adp-section">
       <div class="adp-section-header"><div class="adp-section-title">Traffic Source Details</div></div>
       <div class="adp-card">
-        ${_adpSelectRow('Traffic Source', sourceVal, TRAFFIC_SOURCE_OPTS, 1)}
-        ${_adpSelectRow('Traffic Type', typeVal, TRAFFIC_TYPE_OPTS, 4)}
+        ${_adpSelectRow('Traffic Source', sourceVal, TRAFFIC_SOURCE_OPTS, 1, _ADP_SOURCE_COLORS)}
+        ${_adpSelectRow('Traffic Type', typeVal, TRAFFIC_TYPE_OPTS, 4, _ADP_TRAFFIC_COLORS)}
         ${_adpEditRow('Geo', geo, 2)}
         ${_adpEditRow('Est. Ads Quantity', qty, 3)}
       </div>
@@ -2191,7 +2149,7 @@ function openFunnelDetail(rowIdx) {
       <div class="adp-section-header"><div class="adp-section-title">Funnel Details</div></div>
       <div class="adp-card">
         ${_adpEditRow('Advertiser', advertiser, 2)}
-        ${_adpSelectRow('Funnel Type', funnelTypeVal, FUNNEL_TYPE_OPTS, 4)}
+        ${_adpSelectRow('Funnel Type', funnelTypeVal, FUNNEL_TYPE_OPTS, 4, _ADP_FUNNEL_COLORS)}
         ${_adpEditRow('Geo', geo, 3)}
       </div>
     </div>
@@ -3811,28 +3769,9 @@ async function cloudLoad() {
 }
 
 let saveTimer = null;
-let autosaveEnabled = false;
-
-function toggleAutosave() {
-  autosaveEnabled = !autosaveEnabled;
-  document.getElementById('autosaveLabel').textContent = autosaveEnabled ? 'On' : 'Off';
-  document.getElementById('autosaveToggle').style.color = autosaveEnabled ? '#22a05a' : '';
-  document.getElementById('autosaveToggle').style.borderColor = autosaveEnabled ? '#22a05a' : '';
-  localStorage.setItem('ecoverage_autosave', autosaveEnabled ? '1' : '0');
-  showToast('Auto-save ' + (autosaveEnabled ? 'enabled' : 'disabled'), autosaveEnabled ? 'success' : '');
-}
-
-// Restore auto-save preference on load
-(function() {
-  const saved = localStorage.getItem('ecoverage_autosave');
-  if (saved === '1') {
-    autosaveEnabled = true;
-    const lbl = document.getElementById('autosaveLabel');
-    const btn = document.getElementById('autosaveToggle');
-    if (lbl) lbl.textContent = 'On';
-    if (btn) { btn.style.color = '#22a05a'; btn.style.borderColor = '#22a05a'; }
-  }
-})();
+// Auto-save always enabled (Supabase has plenty of storage)
+let autosaveEnabled = true;
+function toggleAutosave() { /* no-op — always on */ }
 
 function setStatus(state, text) {
   document.getElementById('autosaveDot').className = 'autosave-dot '+(state||'');
@@ -3840,10 +3779,10 @@ function setStatus(state, text) {
 }
 let cloudSaveTimer = null;
 function scheduleCloudSave() {
-  if (_restoring || !autosaveEnabled) return;
+  if (_restoring) return;
   setStatus('saving', 'Saving…');
   clearTimeout(cloudSaveTimer);
-  cloudSaveTimer = setTimeout(doSave, 1200);
+  cloudSaveTimer = setTimeout(doSave, 800);
 }
 
 // ── Undo/Redo ──
@@ -3857,7 +3796,7 @@ function snapForUndo() {
   const snap = JSON.stringify(data);
   if (snap === lastSnap) return;
   undoStack.push(snap);
-  if (undoStack.length > 30) undoStack.shift();
+  if (undoStack.length > 100) undoStack.shift();
   redoStack.length = 0;
   lastSnap = snap;
 }
@@ -3891,7 +3830,6 @@ let _restoring = false;
 function scheduleSave() {
   if (_restoring) return;
   scheduleSnap();
-  if (!autosaveEnabled) return;
   setStatus('saving','Saving…');
   clearTimeout(saveTimer);
   saveTimer = setTimeout(doSave, 1200);
@@ -3907,13 +3845,13 @@ async function doSave() {
   const entry = JSON.stringify({ ...data, _snapAt: new Date().toISOString(), _versionNum: versionNum });
   if (snap !== lastSnap) {
     undoStack.push(entry);
-    if (undoStack.length > 30) undoStack.shift();
+    if (undoStack.length > 100) undoStack.shift();
     lastSnap = snap;
     // Persist history to localStorage
     try {
       const hist = JSON.parse(localStorage.getItem(LS_HISTORY)||'[]');
       hist.push(entry);
-      if (hist.length > 30) hist.shift();
+      if (hist.length > 100) hist.shift();
       localStorage.setItem(LS_HISTORY, JSON.stringify(hist));
     } catch(e) {}
   }
@@ -4111,7 +4049,7 @@ function runPostInit(cloudData) {
       try { const d = JSON.parse(e); const k = d._snapAt||e.slice(0,50); if(seen.has(k)) return false; seen.add(k); return true; } catch { return false; }
     });
     merged.forEach(e => undoStack.push(e));
-    if (merged.length) localStorage.setItem(LS_HISTORY, JSON.stringify(merged.slice(-30)));
+    if (merged.length) localStorage.setItem(LS_HISTORY, JSON.stringify(merged.slice(-100)));
     const maxVer = merged.reduce((max, e) => {
       try { const d = JSON.parse(e); return Math.max(max, d._versionNum||0); } catch { return max; }
     }, parseInt(localStorage.getItem(LS_VER_CTR)||'0'));
@@ -4346,18 +4284,31 @@ function offerLoadFromSelect(id) {
 }
 
 /* ── Search dropdown ── */
+function _offerPanelPosition(panelId, triggerId) {
+  const panel = document.getElementById(panelId);
+  const btn = document.getElementById(triggerId);
+  if (!panel || !btn) return;
+  const r = btn.getBoundingClientRect();
+  panel.style.top = (r.bottom + 6) + 'px';
+  panel.style.left = r.left + 'px';
+  // Ensure doesn't go off right edge
+  const pw = 320;
+  const maxLeft = window.innerWidth - pw - 8;
+  if (r.left > maxLeft) panel.style.left = maxLeft + 'px';
+}
+
 function offerSearchToggle() {
   const panel = document.getElementById('offer-search-panel');
   const newPanel = document.getElementById('offer-new-panel');
   const isOpen = panel.style.display === 'block';
   newPanel.style.display = 'none';
-  panel.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) {
-    const inp = document.getElementById('offer-search-input');
-    inp.value = '';
-    offerSearchFilter('');
-    setTimeout(() => inp.focus(), 50);
-  }
+  if (isOpen) { panel.style.display = 'none'; return; }
+  _offerPanelPosition('offer-search-panel', 'offer-search-trigger');
+  panel.style.display = 'block';
+  const inp = document.getElementById('offer-search-input');
+  inp.value = '';
+  offerSearchFilter('');
+  setTimeout(() => inp.focus(), 50);
 }
 
 function offerSearchFilter(q) {
@@ -4398,13 +4349,13 @@ function offerNewToggle() {
   const searchPanel = document.getElementById('offer-search-panel');
   const isOpen = panel.style.display === 'block';
   searchPanel.style.display = 'none';
-  panel.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) {
-    const inp = document.getElementById('offer-new-name');
-    const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
-    inp.value = title || '';
-    setTimeout(() => { inp.focus(); inp.select(); }, 50);
-  }
+  if (isOpen) { panel.style.display = 'none'; return; }
+  _offerPanelPosition('offer-new-panel', 'offer-new-trigger');
+  panel.style.display = 'block';
+  const inp = document.getElementById('offer-new-name');
+  const title = (document.getElementById('main-title')?.dataset?.text || '').trim();
+  inp.value = title || '';
+  setTimeout(() => { inp.focus(); inp.select(); }, 50);
 }
 
 function offerNewCancel() {
@@ -4511,5 +4462,39 @@ function offerRename() {
 })();
 
 </script>
+<!-- Search panel portal (fixed position, no clipping) -->
+<div id="offer-search-panel" style="display:none;position:fixed;z-index:9000;
+     width:320px;background:var(--bg-primary);border:1px solid var(--border-light);
+     border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.22);overflow:hidden;">
+  <div style="padding:10px 10px 6px;">
+    <input id="offer-search-input" type="text" placeholder="Search offers…"
+      oninput="offerSearchFilter(this.value)"
+      style="width:100%;padding:7px 10px;font-size:13px;font-family:inherit;
+             border:1px solid var(--border-light);border-radius:7px;
+             background:var(--bg-secondary);color:var(--text-primary);outline:none;box-sizing:border-box;">
+  </div>
+  <div id="offer-search-results" style="max-height:260px;overflow-y:auto;padding-bottom:4px;"></div>
+</div>
+
+<!-- New offer panel portal (fixed position, no clipping) -->
+<div id="offer-new-panel" style="display:none;position:fixed;z-index:9000;
+     width:320px;background:var(--bg-primary);border:1px solid var(--border-light);
+     border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.22);overflow:hidden;">
+  <div style="padding:16px;">
+    <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:10px;">New offer</div>
+    <input id="offer-new-name" type="text" placeholder="Offer name…"
+      onkeydown="if(event.key==='Enter')offerNewConfirm();if(event.key==='Escape')offerNewCancel();"
+      style="width:100%;padding:8px 10px;font-size:13px;font-family:inherit;
+             border:1px solid var(--border-light);border-radius:7px;
+             background:var(--bg-secondary);color:var(--text-primary);outline:none;
+             box-sizing:border-box;margin-bottom:8px;">
+    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">Current page data will be saved as this offer.</div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;">
+      <button onclick="offerNewCancel()" class="offer-pill-btn" style="font-size:12px;">Cancel</button>
+      <button onclick="offerNewConfirm()" class="offer-pill-btn offer-pill-btn--accent" style="font-size:12px;">Create offer</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
