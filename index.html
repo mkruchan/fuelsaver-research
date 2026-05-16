@@ -3703,7 +3703,148 @@
       body:not(.force-light) .ds-sidebar-logo svg path { fill: #60a5fa !important; }
     }
 
-    /* ══ ALIGNMENT FIXES ══ */
+    /* ══ MEDIA CELL & HIDDEN INPUT FIX ══ */
+
+    /* Force hide native file inputs in table cells */
+    .hidden-input,
+    td input[type="file"],
+    .media-cell input[type="file"] {
+      display: none !important;
+      position: absolute !important;
+      width: 0 !important;
+      height: 0 !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      overflow: hidden !important;
+    }
+
+    /* Media cell — clean, properly sized */
+    .media-cell {
+      padding: 4px 6px !important;
+      vertical-align: middle !important;
+      overflow: hidden !important;
+      position: relative !important;
+      border-right: none !important;
+    }
+    .media-preview {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+    }
+    .media-thumb {
+      width: 100% !important;
+      max-height: 120px !important;
+      object-fit: cover !important;
+      border-radius: 6px !important;
+      border: 1px solid #e5e7eb !important;
+      cursor: pointer !important;
+      display: block !important;
+    }
+    .media-upload-btn {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 5px !important;
+      width: 100% !important;
+      padding: 6px 8px !important;
+      font-size: 11px !important;
+      font-family: inherit !important;
+      color: #9ca3af !important;
+      background: none !important;
+      border: 1px dashed #e5e7eb !important;
+      border-radius: 6px !important;
+      cursor: pointer !important;
+      transition: all .13s !important;
+      white-space: nowrap !important;
+    }
+    .media-upload-btn:hover { background: #f9fafb !important; color: #6b7280 !important; border-color: #d1d5db !important; }
+
+    /* ══ TEXT VERTICAL CENTERING IN ALL TABLE CELLS ══ */
+
+    /* Base: all cells vertically centered */
+    #ads-table tbody td,
+    #funnels-table tbody td {
+      vertical-align: middle !important;
+    }
+
+    /* Textarea cells that use position:absolute — ensure parent has proper height */
+    #ads-table td:nth-child(5),
+    #ads-table td:nth-child(6),
+    #ads-table td.frozen-offer,
+    #funnels-table td:nth-child(3),
+    #funnels-table td:nth-child(4),
+    #funnels-table td:nth-child(6) {
+      position: relative !important;
+      height: 52px !important;
+    }
+
+    /* Absolute textareas — vertically center text via padding */
+    #ads-table td:nth-child(5) textarea,
+    #ads-table td:nth-child(6) textarea,
+    #ads-table td.frozen-offer textarea,
+    #funnels-table td:nth-child(3) textarea,
+    #funnels-table td:nth-child(4) textarea,
+    #funnels-table td:nth-child(6) textarea {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 16px 10px !important;
+      line-height: 1.4 !important;
+      font-size: 12.5px !important;
+      display: flex !important;
+      align-items: center !important;
+      border-right: none !important;
+      background: transparent !important;
+    }
+
+    /* Regular inputs in ads/funnels cells — center via line-height */
+    #ads-table tbody td input:not([type="file"]),
+    #funnels-table tbody td input:not([type="file"]) {
+      height: 52px !important;
+      padding: 0 10px !important;
+      font-size: 12.5px !important;
+      line-height: 52px !important;
+      display: block !important;
+      width: 100% !important;
+      border: none !important;
+      background: transparent !important;
+    }
+
+    /* sel-wrap cells (badge selectors) */
+    #ads-table td:has(.sel-wrap),
+    #funnels-table td:has(.sel-wrap) {
+      vertical-align: middle !important;
+      padding: 0 !important;
+      height: 52px !important;
+    }
+    .sel-wrap { height: 52px !important; }
+
+    /* Link cells */
+    .link-cell {
+      vertical-align: middle !important;
+      padding: 4px 8px !important;
+    }
+
+    /* offer-col / source-col */
+    #ads-table td.offer-col,
+    #ads-table td.source-col,
+    #funnels-table td.offer-col,
+    #funnels-table td.advertiser-col {
+      vertical-align: middle !important;
+      padding: 4px 8px !important;
+    }
+    .text-badge-wrap { height: 100% !important; align-items: center !important; }
+
+    /* remove-col */
+    #ads-table td.remove-col,
+    #funnels-table td.remove-col {
+      vertical-align: middle !important;
+      height: 52px !important;
+    }
+
+
 
     /* Sidebar logo — vertically centered, proper height */
     .ds-sidebar-logo {
@@ -4887,20 +5028,25 @@ function setViewMode(tableId, gridId, tableBtnId, gridBtnId, buildFn, storageKey
   const btnGrid = document.getElementById(gridBtnId);
   // Find the add-row button in the same section
   const addBtn = grid.nextElementSibling?.querySelector('.add-btn');
+  // Helper to update button label without removing SVG icon
+  const setAddLabel = (btn, label) => {
+    if (!btn) return;
+    const textNode = [...btn.childNodes].find(n => n.nodeType === 3 && n.textContent.trim());
+    if (textNode) textNode.textContent = ' ' + label;
+    else btn.appendChild(document.createTextNode(' ' + label));
+  };
   if (mode === 'grid') {
     tableWrap.style.display = 'none'; grid.style.display = 'block'; buildFn();
     btnGrid.classList.add('tc-toggle--active');
     btnTable.classList.remove('tc-toggle--active');
-    // Clear any inline styles from previous JS
     btnGrid.style.cssText = ''; btnTable.style.cssText = '';
-    if (addBtn) addBtn.textContent = '+ Add card';
+    setAddLabel(addBtn, 'Add card');
   } else {
     tableWrap.style.display = ''; grid.style.display = 'none';
     btnTable.classList.add('tc-toggle--active');
     btnGrid.classList.remove('tc-toggle--active');
-    // Clear any inline styles from previous JS
     btnTable.style.cssText = ''; btnGrid.style.cssText = '';
-    if (addBtn) addBtn.textContent = '+ Add row';
+    setAddLabel(addBtn, 'Add row');
   }
   localStorage.setItem(storageKey, mode);
   try { localStorage.setItem(storageKey, mode); } catch(e) {}
