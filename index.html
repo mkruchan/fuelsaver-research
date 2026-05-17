@@ -908,7 +908,7 @@
     #ad-detail-overlay.open { display: block; }
     #ad-detail-panel {
       position: fixed; top: 0; right: 0; bottom: 0;
-      width: min(1100px, 92vw); max-width: 100vw;
+      width: min(1300px, 96vw); max-width: 100vw;
       background: var(--bg-primary); z-index: 8001;
       overflow: hidden;
       box-shadow: -16px 0 64px rgba(0,0,0,0.14);
@@ -962,8 +962,8 @@
     .adp-tab-panel.active { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
     /* Image */
-    .adp-img-wrap { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-light); margin-bottom: 16px; background: var(--bg-secondary); }
-    .adp-img { width: 100%; display: block; cursor: zoom-in; object-fit: cover; max-height: 180px; background: var(--bg-secondary); }
+    .adp-img-wrap { position: relative; border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border-light); margin-bottom: 8px; background: var(--bg-secondary); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; min-height: calc(300px * 3/4 + 1px); }
+    .adp-img { width: 100%; height: 100%; display: block; cursor: zoom-in; object-fit: cover; position: absolute; inset: 0; }
     .adp-img-empty { width: 100%; display: flex; align-items: center; justify-content: center; height: 110px; color: #9ca3af; font-size: 12px; flex-direction: column; gap: 8px; }
     .adp-img-upload-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-lg); }
     .adp-img-wrap:hover .adp-img-upload-overlay { display: flex; }
@@ -3982,8 +3982,8 @@
     .adp-body { padding: 14px 20px !important; overflow: hidden !important; display: flex !important; flex-direction: column !important; }
 
     /* Image */
-    .adp-img-wrap { border-radius: 10px !important; margin-bottom: 20px !important; border-color: #e5e7eb !important; }
-    .adp-img { max-height: 200px !important; border-radius: 10px !important; }
+    .adp-img-wrap { border-radius: 10px !important; margin-bottom: 8px !important; border-color: #e5e7eb !important; aspect-ratio: 4/3 !important; }
+    .adp-img { width: 100% !important; height: 100% !important; object-fit: cover !important; position: absolute !important; inset: 0 !important; }
 
     /* Section spacing */
     .adp-section { margin-bottom: 24px !important; }
@@ -7424,13 +7424,13 @@ function openAdDetail(rowIdx) {
   const copyWeights = {'Angle / Hook':1,'Headline':1,'CTA':1,'Title':1};
 
   const body = `
-    <div style="display:grid;grid-template-columns:260px 1fr;grid-template-rows:1fr auto;gap:14px;flex:1;min-height:0;height:100%;">
+    <div style="display:grid;grid-template-columns:300px 1fr;grid-template-rows:auto auto;gap:16px;flex:1;min-height:0;overflow-y:auto;">
 
       <!-- COL 1: Image + Links + Ad Details -->
-      <div style="display:flex;flex-direction:column;gap:8px;min-height:0;overflow-y:auto;">
+      <div style="display:flex;flex-direction:column;gap:6px;min-height:0;overflow-y:auto;padding-top:1px;">
         ${imgBlock}
         <div class="adp-section" style="margin:0;">
-          <div class="adp-section-header" style="padding:6px 0 4px;"><div class="adp-section-title">Links</div></div>
+          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Links</div></div>
           <div class="adp-lp-card">
             ${_adpLpRow(landingUrl,'Landing Page',_lpIcons.lp,'var(--blue-bg)',null,6)}
             ${_adpLpRow(spyUrl,'Spy Tool',_lpIcons.spy,'var(--teal-bg)',null,7)}
@@ -7439,7 +7439,7 @@ function openAdDetail(rowIdx) {
           </div>
         </div>
         <div class="adp-section" style="margin:0;">
-          <div class="adp-section-header" style="padding:6px 0 4px;"><div class="adp-section-title">Ad Details</div></div>
+          <div class="adp-section-header" style="padding:4px 0 3px;"><div class="adp-section-title">Ad Details</div></div>
           <div class="adp-card">
             ${_adpEditRow('Offer', offerVal, 1)}
             ${_adpSelectRow('Traffic Source', sourceVal, SOURCE_OPTS, 2, _ADP_SOURCE_COLORS)}
@@ -7890,9 +7890,10 @@ function offerSlugFromTitle(title) {
 }
 function updateOfferSlugPath(title) {
   const slug = offerSlugFromTitle(title);
-  const newHash = slug ? '#' + slug : '';
-  if (location.hash !== newHash) {
-    history.replaceState(null, '', location.pathname + location.search + newHash);
+  const base = '/offer-research/';
+  const newPath = slug ? base + slug : base;
+  if (location.pathname !== newPath) {
+    history.replaceState(null, '', newPath);
   }
 }
 
@@ -10024,7 +10025,9 @@ async function offerLoadAll() {
   offerRebuildSelect();
 
   // Restore last selected — prefer URL hash slug match first
-  const _urlSlug = location.hash.replace('#', '') || '';
+  // Read slug from path OR ?offer= query param (set by 404.html redirect)
+  const _urlParams = new URLSearchParams(location.search);
+  const _urlSlug = _urlParams.get('offer') || location.pathname.replace('/offer-research/', '').replace(/\/$/, '').replace(/\.html$/, '') || '';
   const slugMatch = _urlSlug && _allOffers.find(o => offerSlugFromTitle(o.name) === _urlSlug);
   const lastId = localStorage.getItem(SB_OFFER_KEY);
   const lastMatch = lastId && _allOffers.find(o => o.id === lastId);
