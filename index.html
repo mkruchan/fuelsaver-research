@@ -5654,6 +5654,10 @@
     .ds-sidebar-footer { padding: 10px 8px !important; }
     .offers-panel-footer { padding: 10px 8px !important; }
     .ds-nav-item#themeToggle { font-size: 14px !important; font-weight: 500 !important; color: #475569 !important; font-family: inherit !important; }
+    body.force-dark .ds-nav-item#themeToggle { color: #a1a1aa !important; }
+    body.force-dark .ds-sidebar-footer { border-top-color: rgba(255,255,255,.08) !important; }
+    body.force-dark .offers-panel .ds-sidebar-footer,
+    body.force-dark [style*="border-top:1px solid #e5e7eb"] { border-top-color: rgba(255,255,255,.08) !important; }
 
     /* ══ FOOTER LINE ALIGNMENT ══ */
     /* Both sidebar and panel: same padding, same bottom */
@@ -5790,7 +5794,7 @@
   <div class="offers-panel-list" id="offers-panel-list">
     <div class="offers-panel-empty">Loading offers…</div>
   </div>
-  <div style="padding:10px 8px;border-top:1px solid #e5e7eb;flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
+  <div style="padding:10px 8px;border-top:1px solid var(--border-light, #e5e7eb);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
     <button onclick="closeOffersPanel();offerNewToggle()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;background:#2563eb;color:#fff;border:none;cursor:pointer;box-sizing:border-box;">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
       New offer
