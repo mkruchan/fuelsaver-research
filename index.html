@@ -5319,10 +5319,9 @@
     body.force-dark .ds-top-header { border-bottom-color: rgba(255,255,255,.08) !important; box-shadow: none !important; }
 
     /* Fix offer card overflow so custom calendar can show */
-    .ds-offer-card { overflow: visible !important; }
-    .oc-top { overflow: visible !important; }
-    .oc-meta { overflow: visible !important; }
-    .oc-meta-field { overflow: visible !important; position: relative !important; }
+    /* Offer card: clip corners properly, calendar uses fixed positioning */
+    .ds-offer-card { overflow: hidden !important; border-radius: 16px !important; }
+    .oc-meta-field { position: relative !important; }
 
     /* ── Lighter card borders and subtle shadows ── */
     .ds-offer-card,
@@ -5676,8 +5675,8 @@
           <span id="meta-date-display" class="oc-meta-input" style="cursor:pointer;user-select:none;min-width:90px;">dd.mm.yyyy</span>
           <input type="hidden" id="meta-date">
         </div>
-        <!-- Custom calendar popup -->
-        <div id="custom-cal" style="display:none;position:absolute;top:calc(100% + 6px);left:0;z-index:9999;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:14px;min-width:240px;font-family:'Inter',sans-serif;">
+        <!-- Custom calendar popup — fixed position to escape card overflow -->
+        <div id="custom-cal" style="display:none;position:fixed;z-index:9999;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:14px;min-width:240px;font-family:'Inter',sans-serif;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <button onclick="calNav(-1)" style="background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:6px;font-size:16px;color:#475569;">‹</button>
             <span id="cal-month-label" style="font-size:13px;font-weight:600;color:#0f172a;"></span>
@@ -7146,6 +7145,13 @@ function toggleCustomCal(e) {
     _calSelected = null;
   }
   renderCal();
+  // Position fixed calendar below the date field
+  const field = document.getElementById('meta-date-display');
+  if (field) {
+    const rect = field.closest('.oc-meta-field').getBoundingClientRect();
+    cal.style.top = (rect.bottom + 6) + 'px';
+    cal.style.left = rect.left + 'px';
+  }
   cal.style.display = 'block';
   // Dark mode
   if (document.body.classList.contains('force-dark')) {
