@@ -1965,7 +1965,7 @@
       margin: 0 auto !important;
       padding: 24px 28px 56px !important;
       box-sizing: border-box !important;
-      overflow-x: hidden !important;
+      overflow-x: clip !important;
     }
 
     /* ── Offer summary card ── */
@@ -2058,7 +2058,7 @@
     .notes-resize-handle:hover::after { background: #2563eb; }
 
     /* ── Table section cards ── */
-    .tc-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.05); overflow: hidden; margin-bottom: 20px; }
+    .tc-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.05); overflow: visible; margin-bottom: 20px; }
     .tc-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 20px; background: #ffffff; border-bottom: 1px solid #e5e7eb; border-radius: 12px 12px 0 0; flex-wrap: wrap; }
     .tc-header-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .tc-title { font-size: 15px; font-weight: 700; color: #111827; white-space: nowrap; }
@@ -2323,7 +2323,7 @@
       margin: 0 !important;
       padding: 24px 28px 56px !important;
       box-sizing: border-box !important;
-      overflow-x: hidden !important;
+      overflow-x: clip !important;
     }
 
     /* ── 6. Offer card: right-panel metadata layout ── */
@@ -2625,13 +2625,14 @@
     .oc-label { font-size: 10px !important; font-weight: 700 !important; letter-spacing: .09em !important; text-transform: uppercase !important; color: #9ca3af !important; margin-bottom: 8px !important; }
     /* Main title — kill link underline */
     h1#main-title {
-      font-size: 22px !important; font-weight: 700 !important;
-      color: #111827 !important; letter-spacing: -0.4px !important;
-      line-height: 1.2 !important; margin: 0 !important;
+      font-size: 20px !important; font-weight: 700 !important;
+      color: #111827 !important; letter-spacing: -0.3px !important;
+      line-height: 1.25 !important; margin: 0 !important;
       text-decoration: none !important;
-      border-bottom: none !important; border: none !important;
+      border: none !important;
       background: none !important; padding: 0 !important;
       word-break: break-word !important;
+      flex: 1 !important; min-width: 0 !important;
     }
     h1#main-title a, h1#main-title * { text-decoration: none !important; color: inherit !important; }
     /* Buttons row on the right of title */
@@ -2717,15 +2718,15 @@
     .ic-textarea::placeholder, .notes-body textarea::placeholder { color: #9ca3af !important; font-size: 12.5px !important; }
 
     /* ── TABLE SECTION ── */
-    .tc-card { background: #fff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; box-shadow: 0 1px 4px rgba(0,0,0,.05) !important; overflow: hidden !important; margin-bottom: 20px !important; }
+    .tc-card { background: #fff !important; border: 1px solid #e5e7eb !important; border-radius: 12px !important; box-shadow: 0 1px 4px rgba(0,0,0,.05) !important; overflow: visible !important; margin-bottom: 20px !important; }
     .tc-header { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 12px !important; padding: 15px 20px !important; background: #fff !important; border-bottom: 1px solid #e5e7eb !important; flex-wrap: wrap !important; }
     .tc-title { font-size: 15px !important; font-weight: 700 !important; color: #111827 !important; }
     .tc-toggle-group { display: flex !important; align-items: center !important; background: #f3f4f6 !important; border: 1px solid #e5e7eb !important; border-radius: 8px !important; padding: 3px !important; gap: 2px !important; }
     .tc-toggle { display: inline-flex !important; align-items: center !important; gap: 5px !important; padding: 5px 12px !important; font-size: 12px !important; font-weight: 500 !important; font-family: inherit !important; border: none !important; border-radius: 6px !important; cursor: pointer !important; color: #6b7280 !important; background: transparent !important; transition: all .15s !important; }
     .tc-toggle:hover { background: #e9eaec !important; }
     .tc-toggle--active { background: #ffffff !important; color: #2563eb !important; box-shadow: 0 1px 3px rgba(0,0,0,.10) !important; font-weight: 600 !important; }
-    /* Table chrome */
-    table { width: 100%; border-collapse: collapse; }
+    /* Table chrome — keep separate+spacing for sticky to work */
+    table { width: max-content; border-collapse: separate; border-spacing: 0; }
     thead th {
       background: #f9fafb !important;
       font-size: 11px !important; font-weight: 600 !important;
@@ -3246,6 +3247,13 @@
     body.force-dark .tc-toggle:hover { background: rgba(255,255,255,.06) !important; color: #d4d4d8 !important; }
     body.force-dark .tc-toggle--active { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .tc-toggle--active svg { stroke: #93c5fd !important; }
+
+    /* tc-card must NOT have overflow:hidden — breaks sticky columns */
+    .tc-card { overflow: visible !important; }
+    .tc-header { border-radius: 12px 12px 0 0 !important; overflow: hidden !important; }
+    .tc-footer { border-radius: 0 0 12px 12px !important; overflow: hidden !important; }
+    .tc-body { overflow: visible !important; }
+    .table-scroll { overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
 
     /* ══ UNIFIED TABLE DESIGN — all three tables identical ══ */
 
@@ -3906,6 +3914,12 @@
     }
 
     /* Frozen num — sticky for ads and funnels */
+    #ads-table,
+    #funnels-table { border-collapse: separate !important; border-spacing: 0 !important; width: max-content !important; }
+    #ads-table thead tr th,
+    #funnels-table thead tr th { position: sticky !important; top: 0 !important; z-index: 6 !important; }
+
+    /* Frozen num — sticky for ads and funnels */
     #ads-table td.frozen-num,
     #funnels-table td.frozen-num {
       position: sticky !important;
@@ -4113,7 +4127,7 @@
 
     /* Offer card */
     .oc-title-group { display: flex !important; flex-direction: column !important; gap: 4px !important; }
-    .oc-title-row { display: flex !important; align-items: center !important; gap: 8px !important; width: fit-content !important; max-width: 100% !important; flex-wrap: nowrap !important; }
+    .oc-title-row { display: flex !important; align-items: center !important; gap: 8px !important; width: 100% !important; max-width: 100% !important; flex-wrap: nowrap !important; min-width: 0 !important; }
     .title-icon-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex-shrink: 0 !important; }
     .oc-actions { display: flex !important; align-items: center !important; gap: 8px !important; padding-top: 0 !important; }
     .oc-meta { display: flex !important; align-items: stretch !important; }
@@ -4589,7 +4603,133 @@
       body:not(.force-light) .oc-meta-icon { color: #52525b !important; }
     }
 
-    /* ── LiftIQ logo — dark mode: white, light mode: original blue ── */
+    /* Native date picker icon visible */
+    #meta-date { cursor: pointer !important; }
+
+    /* ── Offer, Geo, Lifecycle: same rendering as Headline/CTA/Title ── */
+    /* Override the position:absolute that was expanding these cells */
+    #ads-table td.frozen-offer,
+    #ads-table td:nth-child(5),
+    #ads-table td:nth-child(6) {
+      position: sticky !important;
+      overflow: hidden !important;
+      height: 52px !important;
+      vertical-align: middle !important;
+    }
+    #ads-table td:nth-child(5),
+    #ads-table td:nth-child(6) {
+      position: relative !important;
+    }
+    #ads-table td.frozen-offer textarea,
+    #ads-table td:nth-child(5) textarea,
+    #ads-table td:nth-child(6) textarea {
+      position: static !important;
+      inset: unset !important;
+      width: 100% !important;
+      height: 52px !important;
+      min-height: 52px !important;
+      max-height: 52px !important;
+      padding: 0 10px !important;
+      line-height: 52px !important;
+      font-size: 12.5px !important;
+      color: #374151 !important;
+      border: none !important;
+      border-right: none !important;
+      background: transparent !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
+      display: block !important;
+    }
+    /* Funnels same fix */
+    #funnels-table td:nth-child(3),
+    #funnels-table td:nth-child(4),
+    #funnels-table td:nth-child(6) {
+      height: 52px !important;
+      overflow: hidden !important;
+    }
+    #funnels-table td:nth-child(3) textarea,
+    #funnels-table td:nth-child(4) textarea,
+    #funnels-table td:nth-child(6) textarea {
+      position: static !important;
+      inset: unset !important;
+      width: 100% !important;
+      height: 52px !important;
+      min-height: 52px !important;
+      max-height: 52px !important;
+      padding: 0 10px !important;
+      line-height: 52px !important;
+      font-size: 12.5px !important;
+      color: #374151 !important;
+      border: none !important;
+      border-right: none !important;
+      background: transparent !important;
+      resize: none !important;
+      overflow: hidden !important;
+      white-space: nowrap !important;
+      box-sizing: border-box !important;
+      display: block !important;
+    }
+    body.force-dark #ads-table td.frozen-offer textarea,
+    body.force-dark #ads-table td:nth-child(5) textarea,
+    body.force-dark #ads-table td:nth-child(6) textarea,
+    body.force-dark #funnels-table td:nth-child(3) textarea,
+    body.force-dark #funnels-table td:nth-child(4) textarea,
+    body.force-dark #funnels-table td:nth-child(6) textarea { color: #d4d4d8 !important; }
+    /* overflow:hidden on any ancestor kills position:sticky — use clip instead */
+    .ds-main,
+    .container { overflow-x: clip !important; }
+
+    /* ── DEFINITIVE FROZEN COLUMN STICKY — must be last to win ── */
+    #ads-table td.frozen-num,
+    #funnels-table td.frozen-num {
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 20 !important;
+      background: #ffffff !important;
+    }
+    #ads-table td.frozen-offer,
+    #funnels-table td.frozen-offer {
+      position: sticky !important;
+      left: 40px !important;
+      z-index: 19 !important;
+      background: #ffffff !important;
+      border-right: 1px solid #e5e7eb !important;
+    }
+    #ads-table th.frozen-num,
+    #funnels-table th.frozen-num {
+      position: sticky !important;
+      left: 0 !important;
+      z-index: 22 !important;
+      background: #f9fafb !important;
+    }
+    #ads-table th.frozen-offer,
+    #funnels-table th.frozen-offer {
+      position: sticky !important;
+      left: 40px !important;
+      z-index: 21 !important;
+      background: #f9fafb !important;
+      border-right: 1px solid #e5e7eb !important;
+    }
+    /* Hover state */
+    #ads-table tbody tr:hover td.frozen-num,
+    #ads-table tbody tr:hover td.frozen-offer,
+    #funnels-table tbody tr:hover td.frozen-num,
+    #funnels-table tbody tr:hover td.frozen-offer { background: #f9fafb !important; }
+    /* Dark mode */
+    body.force-dark #ads-table td.frozen-num,
+    body.force-dark #funnels-table td.frozen-num { background: #18181b !important; }
+    body.force-dark #ads-table td.frozen-offer,
+    body.force-dark #funnels-table td.frozen-offer { background: #18181b !important; border-right-color: rgba(255,255,255,.1) !important; }
+    body.force-dark #ads-table th.frozen-num,
+    body.force-dark #funnels-table th.frozen-num { background: #1f1f23 !important; }
+    body.force-dark #ads-table th.frozen-offer,
+    body.force-dark #funnels-table th.frozen-offer { background: #1f1f23 !important; }
+    body.force-dark #ads-table tbody tr:hover td.frozen-num,
+    body.force-dark #ads-table tbody tr:hover td.frozen-offer,
+    body.force-dark #funnels-table tbody tr:hover td.frozen-num,
+    body.force-dark #funnels-table tbody tr:hover td.frozen-offer { background: #27272a !important; }
     body.force-dark .ds-sidebar-logo svg path,
     body.force-dark .ds-sidebar-logo svg rect,
     body.force-dark .ds-sidebar-logo svg polygon { fill: #ffffff !important; }
@@ -4601,6 +4741,99 @@
       body:not(.force-light) .ds-sidebar-logo svg rect,
       body:not(.force-light) .ds-sidebar-logo svg polygon { fill: #ffffff !important; }
     }
+
+    /* ── HIGH CONTRAST TEXT ── */
+    /* Light mode: near-black for all primary text */
+    body { color: #0f172a !important; }
+    .ds-nav-item { color: #1e293b !important; }
+    .ds-nav-item.active { color: #1d4ed8 !important; }
+    .ds-darkmode-btn { color: #334155 !important; }
+    .ds-top-header-title { color: #0f172a !important; }
+    .ds-top-header-subtitle { color: #475569 !important; }
+    .ds-top-status-label { color: #475569 !important; }
+    .ds-hdr-btn { color: #1e293b !important; }
+    h1#main-title { color: #0f172a !important; }
+    .oc-meta-label { color: #475569 !important; }
+    .oc-meta-input { color: #0f172a !important; }
+    .ic-title { color: #0f172a !important; }
+    .ic-textarea, .notes-body textarea { color: #1e293b !important; }
+    .tc-title { color: #0f172a !important; }
+    .tc-add-btn { color: #1d4ed8 !important; }
+
+    /* Ad panel labels — visible but secondary */
+    .adp-section-title { color: #0f172a !important; }
+    .adp-row-label { color: #475569 !important; }
+    .adp-row-val { color: #0f172a !important; }
+    .adp-copy-label { color: #475569 !important; }
+    .adp-lp-type { color: #475569 !important; }
+
+    /* Table header labels */
+    thead th { color: #475569 !important; }
+
+    /* Dark mode: pure white for all primary text */
+    body.force-dark { color: #f8fafc !important; }
+    body.force-dark .ds-nav-item { color: #94a3b8 !important; }
+    body.force-dark .ds-nav-item:hover { color: #f1f5f9 !important; }
+    body.force-dark .ds-nav-item.active { color: #93c5fd !important; }
+    body.force-dark .ds-darkmode-btn { color: #94a3b8 !important; }
+    body.force-dark .ds-top-header-title { color: #f8fafc !important; }
+    body.force-dark .ds-top-header-subtitle { color: #94a3b8 !important; }
+    body.force-dark .ds-top-status-label { color: #94a3b8 !important; }
+    body.force-dark .ds-hdr-btn { color: #e2e8f0 !important; }
+    body.force-dark h1#main-title { color: #f8fafc !important; }
+    body.force-dark .oc-meta-label { color: #64748b !important; }
+    body.force-dark .oc-meta-input { color: #f1f5f9 !important; }
+    body.force-dark .ic-title { color: #f1f5f9 !important; }
+    body.force-dark .ic-textarea,
+    body.force-dark .notes-body textarea { color: #e2e8f0 !important; }
+    body.force-dark .tc-title { color: #f1f5f9 !important; }
+    body.force-dark .adp-section-title { color: #f1f5f9 !important; }
+    body.force-dark .adp-row-label { color: #64748b !important; }
+    body.force-dark .adp-row-val { color: #f1f5f9 !important; }
+    body.force-dark .adp-copy-label { color: #64748b !important; }
+    body.force-dark #traffic-table tbody td,
+    body.force-dark #ads-table tbody td,
+    body.force-dark #funnels-table tbody td { color: #e2e8f0 !important; }
+    body.force-dark #traffic-table tbody td input,
+    body.force-dark #traffic-table tbody td textarea,
+    body.force-dark #ads-table tbody td input,
+    body.force-dark #ads-table tbody td textarea,
+    body.force-dark #funnels-table tbody td input,
+    body.force-dark #funnels-table tbody td textarea { color: #e2e8f0 !important; }
+
+    /* ── UNIFIED ROW NUMBER COLOR ── */
+    td.frozen-num,
+    td.frozen-num input,
+    .row-num,
+    .row-num input,
+    #traffic-table td.frozen-num,
+    #traffic-table td.frozen-num input,
+    #ads-table td.frozen-num,
+    #ads-table td.frozen-num input,
+    #funnels-table td.frozen-num,
+    #funnels-table td.frozen-num input { color: #64748b !important; }
+    body.force-dark td.frozen-num,
+    body.force-dark td.frozen-num input,
+    body.force-dark .row-num,
+    body.force-dark .row-num input { color: #64748b !important; }
+    .oc-title-row {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      width: auto !important;
+      max-width: 100% !important;
+      flex-wrap: nowrap !important;
+      min-width: 0 !important;
+    }
+    h1#main-title {
+      flex: 0 1 auto !important;
+      min-width: 0 !important;
+    }
+    .title-icon-btn {
+      flex-shrink: 0 !important;
+      opacity: 0.4 !important;
+    }
+    .title-icon-btn:hover { opacity: 0.9 !important; }
   </style>
 </head>
 <body>
@@ -4929,7 +5162,6 @@
       <div class="oc-meta-field">
         <label class="oc-meta-label" for="meta-date">Date</label>
         <div class="oc-meta-value-row">
-          <svg class="oc-meta-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1.5" y="2.5" width="13" height="12" rx="2"/><path d="M1.5 6.5h13M5 1v3M11 1v3"/></svg>
           <input type="date" id="meta-date" class="oc-meta-input">
         </div>
       </div>
@@ -5252,18 +5484,25 @@ function editTitle() {
   const current = h1.dataset.text || h1.textContent.trim();
   const currentUrl = h1.dataset.url || '';
 
-  // Build a clean modal-style inline editor
+  const isDarkMode = document.body.classList.contains('force-dark') ||
+    (!document.body.classList.contains('force-light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const textColor = isDarkMode ? '#f4f4f5' : '#111827';
+  const urlColor  = isDarkMode ? '#71717a'  : '#6b7280';
+  const borderColor = '#2563eb';
+  const urlBorder = isDarkMode ? 'rgba(255,255,255,.15)' : '#e5e7eb';
+
+  // Build a clean inline editor — full width
   const wrap = document.createElement('div');
   wrap.id = 'main-title';
-  wrap.style.cssText = 'display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;max-width:600px;';
+  wrap.style.cssText = 'display:flex;flex-direction:column;gap:6px;width:100%;min-width:0;';
 
   const textIn = document.createElement('input');
   textIn.type = 'text'; textIn.value = current; textIn.placeholder = 'Offer title';
-  textIn.style.cssText = 'font-size:20px;font-weight:700;border:none;border-bottom:2px solid #2563eb;background:transparent;color:#111827;outline:none;width:100%;font-family:inherit;line-height:1.3;padding:2px 0;margin:0;letter-spacing:-0.3px;';
+  textIn.style.cssText = `font-size:20px;font-weight:700;border:none;border-bottom:2px solid ${borderColor};background:transparent;color:${textColor};outline:none;width:100%;font-family:inherit;line-height:1.3;padding:2px 0;margin:0;letter-spacing:-0.3px;`;
 
   const urlIn = document.createElement('input');
   urlIn.type = 'url'; urlIn.value = currentUrl; urlIn.placeholder = 'Link URL (optional)';
-  urlIn.style.cssText = 'font-size:12px;border:none;border-bottom:1px solid #e5e7eb;background:transparent;color:#6b7280;outline:none;width:100%;font-family:inherit;padding:2px 0;margin:0;';
+  urlIn.style.cssText = `font-size:12px;border:none;border-bottom:1px solid ${urlBorder};background:transparent;color:${urlColor};outline:none;width:100%;font-family:inherit;padding:2px 0;margin:0;`;
 
   wrap.appendChild(textIn); wrap.appendChild(urlIn);
   h1.replaceWith(wrap); textIn.focus(); textIn.select();
@@ -5403,7 +5642,7 @@ function buildTrafficGrid() {
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
     return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
+      <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -5416,7 +5655,7 @@ function buildTrafficGrid() {
 
   const getText = td => td?.querySelector('textarea')?.value || '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
+    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -5425,7 +5664,7 @@ function buildTrafficGrid() {
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
+    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -5478,7 +5717,7 @@ function buildFunnelsGrid() {
   const getLinkHref = td => { const a = td?.querySelector('a.link-chip'); const h = a?.href||''; return (h && h.startsWith('http')) ? h : ''; };
   const mkLink = (url, label) => url ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const gfField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
+    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -5487,7 +5726,7 @@ function buildFunnelsGrid() {
     >${val||''}</div>
   </div>`;
   const simpleField = (label, val, selector, rowIdx, tableId) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
+    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${selector}" data-row="${rowIdx}" data-table="${tableId}"
       style="color:${val?'var(--text-primary)':' var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -5515,7 +5754,7 @@ function buildFunnelsGrid() {
     const fc = FUNNEL_CHIP_COLORS[fv] || {bg:'#E5E7EB',color:'#374151'};
     const funnelChipHtml = fv ? `<span style="background:${fc.bg};color:${fc.color};border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:0.02em;white-space:nowrap;">${ft}</span>` : '<span style="opacity:0.4;font-size:10px;">— none —</span>';
     const typeChip = funnelSel ? `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">Funnel type</div>
+      <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Funnel type</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${funnelChipHtml}
         <select data-row="${idx}" data-table="funnels-body" data-tdidx="5"
@@ -5564,7 +5803,7 @@ function buildAdsGrid() {
   const mkLink = (url, label) => url && url !== '#' && !url.endsWith('#')
     ? `<a href="${url}" target="_blank" rel="noopener" style="color:var(--accent,#4A90D9);text-decoration:none;font-size:10px;display:flex;align-items:center;gap:3px;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 3H3a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1V9"/><path d="M10 2h4v4M14 2 8 8" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</a>` : '';
   const field = (label, val, taSelector, rowIdx, h=52) => `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:${h}px;min-height:${h}px;max-height:${h}px;overflow:hidden;flex-shrink:0;">
-    <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
+    <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
     <div class="gce" contenteditable="true" spellcheck="false" data-ta="${taSelector}" data-row="${rowIdx}" data-table="ads-body"
       style="color:${val?'var(--text-primary)':'var(--text-secondary)'};outline:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer;min-width:20px;white-space:pre-wrap;word-break:break-word;opacity:${val?'1':'0.4'};"
       onclick="gcExpand(this)"
@@ -5630,7 +5869,7 @@ function buildAdsGrid() {
       `<option value="${o.value}"${o.selected?' selected':''}>${o.text}</option>`
     ).join('');
     return `<div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:0;height:52px;min-height:52px;max-height:52px;overflow:hidden;flex-shrink:0;">
-      <div style="opacity:0.55;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:2px;">${label}</div>
+      <div style="color:#475569;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">${label}</div>
       <span style="position:relative;display:inline-flex;align-items:center;cursor:pointer;">
         ${chipHtml}
         <select data-row="${rowIdx}" data-table="${tableId}" data-tdidx="${tdIdx}"
@@ -8450,6 +8689,7 @@ function runPostInit(cloudData) {
   } catch(e) {}
   resizeAllInputs(); updateAllBadges(); syncAllLinks(); initAllColResize(); updateFrozenOffsets(); applyTextColors(); initNotesResize(); restoreColWidths(); restoreRowHeights(); centerTextareas(); initAllDragReorder();
   setTimeout(centerTextareas, 300);
+  // Defaults: traffic=table, ads=grid, funnels=table
   const vm = localStorage.getItem('ads_view_mode'); setAdsView(vm === 'table' ? 'table' : 'grid');
   const tvm = localStorage.getItem('traffic_view_mode'); setTrafficView(tvm === 'grid' ? 'grid' : 'table');
   const fvm = localStorage.getItem('funnels_view_mode'); setFunnelsView(fvm === 'grid' ? 'grid' : 'table');
@@ -9007,6 +9247,22 @@ function offerRename() {
   // Run after app init
   setTimeout(syncSidebarUser, 800);
   setTimeout(syncSidebarUser, 2000);
+
+  // Guarantee correct default view modes (traffic=table, ads=grid, funnels=table)
+  setTimeout(() => {
+    if (typeof setTrafficView === 'function') {
+      const tvm = localStorage.getItem('traffic_view_mode');
+      setTrafficView(tvm === 'grid' ? 'grid' : 'table');
+    }
+    if (typeof setAdsView === 'function') {
+      const vm = localStorage.getItem('ads_view_mode');
+      setAdsView(vm === 'table' ? 'table' : 'grid');
+    }
+    if (typeof setFunnelsView === 'function') {
+      const fvm = localStorage.getItem('funnels_view_mode');
+      setFunnelsView(fvm === 'grid' ? 'grid' : 'table');
+    }
+  }, 100);
 })();
 </script>
 
