@@ -114,7 +114,7 @@
     ═══════════════════════════════════════════════ */
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      background: #f5f7fa;
+      background: #ffffff;
       color: var(--text-primary);
       min-height: 100vh;
       padding: 0;
@@ -389,7 +389,7 @@
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .ic-badge--blue { background: #dbeafe; }
+    .ic-badge--blue { background: #dbeafe; color: #2563eb; }
     .ic-badge--green { background: #bbf7d0; }
 
     /* Card title — 15px matching reference */
@@ -1072,7 +1072,90 @@
     .adp-empty-state svg { margin-bottom: 8px; opacity: 0.25; }
 
 
-  </style>
+  
+    /* ── Custom confirm dialog ── */
+    #confirm-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.45);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .18s;
+    }
+    #confirm-overlay.open { opacity: 1; pointer-events: all; }
+    #confirm-dialog {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      box-shadow: 0 16px 48px rgba(0,0,0,.14), 0 4px 12px rgba(0,0,0,.07);
+      padding: 24px 24px 20px;
+      width: 320px;
+      max-width: calc(100vw - 40px);
+      transform: translateY(6px) scale(.98);
+      transition: transform .18s, opacity .18s;
+      opacity: 0;
+    }
+    #confirm-overlay.open #confirm-dialog { transform: translateY(0) scale(1); opacity: 1; }
+    #confirm-dialog-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: #fee2e2; color: #dc2626;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    #confirm-dialog-title {
+      font-size: 15px; font-weight: 700; color: #111827;
+      margin-bottom: 6px; line-height: 1.3;
+    }
+    #confirm-dialog-body {
+      font-size: 13px; color: #6b7280; line-height: 1.5; margin-bottom: 20px;
+    }
+    #confirm-dialog-actions {
+      display: flex; gap: 8px; justify-content: flex-end;
+    }
+    #confirm-cancel-btn {
+      height: 36px; padding: 0 16px; border-radius: 8px;
+      border: 1px solid #d1d5db; background: #fff;
+      font-size: 13px; font-weight: 500; color: #374151;
+      cursor: pointer; font-family: inherit; transition: all .13s;
+    }
+    #confirm-cancel-btn:hover { background: #f9fafb; border-color: #9ca3af; }
+    #confirm-delete-btn {
+      height: 36px; padding: 0 16px; border-radius: 8px;
+      border: none; background: #dc2626;
+      font-size: 13px; font-weight: 600; color: #fff;
+      cursor: pointer; font-family: inherit; transition: background .13s;
+    }
+    #confirm-delete-btn:hover { background: #b91c1c; }
+    body.force-dark #confirm-dialog {
+      background: #1f1f23; border-color: rgba(255,255,255,.1);
+      box-shadow: 0 16px 48px rgba(0,0,0,.5);
+    }
+    body.force-dark #confirm-dialog-title { color: #f4f4f5; }
+    body.force-dark #confirm-dialog-body { color: #a1a1aa; }
+    body.force-dark #confirm-dialog-icon { background: rgba(220,38,38,.18); color: #fca5a5; }
+    body.force-dark #confirm-cancel-btn {
+      background: #27272a; border-color: rgba(255,255,255,.12); color: #d4d4d8;
+    }
+    body.force-dark #confirm-cancel-btn:hover { background: #3f3f46; }
+
+
+    /* ── Export panel buttons ── */
+    .export-panel-btn {
+      display: flex; align-items: center; gap: 14px;
+      width: 100%; padding: 14px 16px;
+      background: var(--bg-secondary, #f9fafb);
+      border: 1px solid var(--border-light, #e5e7eb);
+      border-radius: 10px; cursor: pointer;
+      font-family: inherit; text-align: left;
+      transition: all .13s;
+    }
+    .export-panel-btn:hover { background: var(--bg-tertiary, #f3f4f6); border-color: var(--border-mid, #d1d5db); }
+    .export-panel-btn-icon { font-size: 22px; flex-shrink: 0; }
+    .export-panel-btn-label { font-size: 14px; font-weight: 600; color: var(--text-primary, #111827); margin-bottom: 2px; }
+    .export-panel-btn-sub { font-size: 11px; color: var(--text-secondary, #6b7280); }
+    body.force-dark .export-panel-btn { background: var(--bg-secondary); border-color: var(--border-light); }
+    body.force-dark .export-panel-btn:hover { background: var(--bg-tertiary); border-color: var(--border-mid); }
+
+</style>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
@@ -2106,6 +2189,8 @@
     body.force-dark .ds-sidebar-logo { border-bottom-color: rgba(255,255,255,.06); }
     body.force-dark .ds-sidebar-logo-text { color: #f4f4f5; }
     body.force-dark .ds-sidebar-footer { border-top-color: rgba(255,255,255,.06); }
+    body.force-dark .ds-footer-util-btn { color: #a1a1aa !important; }
+    body.force-dark .ds-footer-util-btn:hover { background: rgba(255,255,255,.06) !important; color: #f4f4f5 !important; }
     body.force-dark .ds-nav-item:hover { background: rgba(255,255,255,.06); color: #f4f4f5; }
     body.force-dark .ds-nav-item.active { background: rgba(59,130,246,.18); color: #93c5fd; }
     body.force-dark .ds-user-name { color: #f4f4f5; }
@@ -2121,9 +2206,9 @@
     body.force-dark h1#main-title { color: #f4f4f5 !important; }
     body.force-dark .oc-select-btn { background: #1f1f23 !important; border-color: rgba(255,255,255,.12) !important; color: #a1a1aa !important; }
     body.force-dark .ic-card { background: #18181b; border-color: rgba(255,255,255,.08); }
-    body.force-dark .ic-card--blue .ic-header { background: rgba(59,130,246,.1); border-bottom-color: rgba(59,130,246,.2); }
+    body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.18); border-bottom-color: rgba(37,99,235,.25); }
     body.force-dark .ic-card--green .ic-header { background: rgba(34,197,94,.08); border-bottom-color: rgba(34,197,94,.2); }
-    body.force-dark .ic-badge--blue { background: rgba(59,130,246,.2); }
+    body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18); color: #93c5fd; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,.15); }
     body.force-dark .ic-title { color: #f4f4f5; }
     body.force-dark .ic-textarea, body.force-dark .notes-body textarea { color: var(--text-primary); }
@@ -2283,7 +2368,7 @@
     }
 
     /* ── 3. Page & app background ── */
-    body    { background: #f5f7fa !important; }
+    body    { background: #ffffff !important; }
     .ds-app { background: #f5f7fa !important; }
 
     /* ── 4. Top header: auto-height, consistent padding ── */
@@ -3275,8 +3360,10 @@
     body.force-dark .offers-panel-search { border-bottom-color: rgba(255,255,255,.06); }
     body.force-dark .offers-panel-search input { color: #f4f4f5; }
     body.force-dark .offers-panel-item:hover { background: rgba(255,255,255,.05); }
-    body.force-dark .offers-panel-item.active { background: rgba(37,99,235,.15); border-color: rgba(37,99,235,.3); }
-    body.force-dark .offers-panel-item-icon { background: #27272a; }
+    body.force-dark .offers-panel-item.active { background: rgba(37,99,235,.18); border-color: rgba(37,99,235,.3); }
+    body.force-dark .offers-panel-item.active .offers-panel-item-icon { background: rgba(37,99,235,.25); color: #93c5fd; }
+    body.force-dark .offers-panel-item.active .offers-panel-item-name { color: #93c5fd; }
+    body.force-dark .offers-panel-item-icon { background: #27272a; color: #71717a; }
     body.force-dark .offers-panel-item-name { color: #f4f4f5; }
     body.force-dark .offers-panel-footer { border-top-color: rgba(255,255,255,.06); }
 
@@ -3505,7 +3592,7 @@
       color: #d1d5db !important;
       font-size: 14px !important;
       flex-shrink: 0 !important;
-      opacity: 0 !important;
+      opacity: 0.4 !important;
       transition: opacity .15s !important;
     }
     #traffic-table tr:hover .drag-handle,
@@ -3516,10 +3603,10 @@
     #traffic-table .dup-row-btn,
     #ads-table .dup-row-btn,
     #funnels-table .dup-row-btn {
+      background: none !important;
+      border: none !important;
       width: 26px !important; height: 26px !important;
       border-radius: 6px !important;
-      border: 1px solid #e5e7eb !important;
-      background: #fff !important;
       color: #9ca3af !important;
       display: inline-flex !important;
       align-items: center !important;
@@ -3527,7 +3614,7 @@
     }
     #traffic-table .dup-row-btn:hover,
     #ads-table .dup-row-btn:hover,
-    #funnels-table .dup-row-btn:hover { background: #f3f4f6 !important; color: #374151 !important; border-color: #d1d5db !important; }
+    #funnels-table .dup-row-btn:hover { background: #eff6ff !important; color: #2563eb !important; border-radius: 6px !important; }
 
     /* Remove button */
     #traffic-table .remove-row-btn,
@@ -3546,6 +3633,12 @@
     #traffic-table .remove-row-btn:hover,
     #ads-table .remove-row-btn:hover,
     #funnels-table .remove-row-btn:hover { background: #fee2e2 !important; color: #991b1b !important; }
+    body.force-dark #traffic-table .remove-row-btn:hover,
+    body.force-dark #ads-table .remove-row-btn:hover,
+    body.force-dark #funnels-table .remove-row-btn:hover { background: rgba(239,68,68,.18) !important; color: #fca5a5 !important; }
+    body.force-dark #traffic-table .dup-row-btn:hover,
+    body.force-dark #ads-table .dup-row-btn:hover,
+    body.force-dark #funnels-table .dup-row-btn:hover { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
 
     /* ACTIONS header label */
     #traffic-table thead th.remove-col::after,
@@ -3588,7 +3681,7 @@
     body.force-dark #funnels-table tbody td { color: #d4d4d8 !important; }
     body.force-dark #traffic-table .dup-row-btn,
     body.force-dark #ads-table .dup-row-btn,
-    body.force-dark #funnels-table .dup-row-btn { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #71717a !important; }
+    body.force-dark #funnels-table .dup-row-btn { background: none !important; border-color: transparent !important; color: #71717a !important; }
 
 
 
@@ -3691,9 +3784,9 @@
 
     /* Insight cards */
     body.force-dark .ic-card { background: #18181b !important; border-color: rgba(255,255,255,.08) !important; }
-    body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.12) !important; border-bottom-color: rgba(37,99,235,.2) !important; }
+    body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.18) !important; border-bottom-color: rgba(37,99,235,.25) !important; }
     body.force-dark .ic-card--green .ic-header { background: rgba(22,163,74,.08) !important; border-bottom-color: rgba(22,163,74,.18) !important; }
-    body.force-dark .ic-badge--blue { background: rgba(59,130,246,.2) !important; }
+    body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,.15) !important; }
     body.force-dark .ic-title { color: #f4f4f5 !important; }
     body.force-dark .ic-textarea,
@@ -3757,7 +3850,7 @@
     body.force-dark .ds-collapse-btn:hover { background: rgba(255,255,255,.06) !important; color: #71717a !important; }
 
     /* Section icon backgrounds in dark */
-    body.force-dark .icon-blue   { background: rgba(37,99,235,.15) !important; }
+    body.force-dark .icon-blue   { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .icon-teal   { background: rgba(22,163,74,.12) !important; }
 
     /* Mirror for prefers-color-scheme */
@@ -4258,7 +4351,7 @@
     }
 
     /* 2. Page background & container rhythm */
-    body { background: #f5f7fa !important; }
+    body { background: #ffffff !important; }
     .container {
       padding: 24px 28px 64px !important;
       display: flex;
@@ -4568,9 +4661,9 @@
     body.force-dark .title-icon-btn { background: #27272a !important; border-color: rgba(255,255,255,.12) !important; color: #a1a1aa !important; }
 
     /* Insight cards headers */
-    body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.12) !important; border-bottom-color: rgba(37,99,235,.2) !important; }
+    body.force-dark .ic-card--blue .ic-header { background: rgba(37,99,235,.18) !important; border-bottom-color: rgba(37,99,235,.25) !important; }
     body.force-dark .ic-card--green .ic-header { background: rgba(22,163,74,.08) !important; border-bottom-color: rgba(22,163,74,.18) !important; }
-    body.force-dark .ic-badge--blue { background: rgba(59,130,246,.2) !important; }
+    body.force-dark .ic-badge--blue { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .ic-badge--green { background: rgba(34,197,94,.15) !important; }
     body.force-dark .ic-title { color: #f4f4f5 !important; }
     body.force-dark .ic-textarea,
@@ -4620,7 +4713,7 @@
     body.force-dark th.frozen-num { background: #1f1f23 !important; }
     body.force-dark td.frozen-offer { background: #18181b !important; }
     body.force-dark th.frozen-offer { background: #1f1f23 !important; }
-    body.force-dark #traffic-table .dup-row-btn { background: #27272a !important; border-color: rgba(255,255,255,.1) !important; color: #71717a !important; }
+    body.force-dark #traffic-table .dup-row-btn { background: none !important; border-color: transparent !important; color: #71717a !important; }
     body.force-dark #traffic-table .remove-row-btn { color: #71717a !important; }
 
     /* Top header */
@@ -4648,7 +4741,7 @@
     body.force-dark .ds-collapse-btn:hover { background: rgba(255,255,255,.06) !important; color: #f4f4f5 !important; }
 
     /* Section icons */
-    body.force-dark .icon-blue { background: rgba(37,99,235,.15) !important; }
+    body.force-dark .icon-blue { background: rgba(37,99,235,.18) !important; color: #93c5fd !important; }
     body.force-dark .icon-teal { background: rgba(22,163,74,.12) !important; }
     body.force-dark .icon-amber { background: rgba(133,79,11,.15) !important; }
 
@@ -4663,7 +4756,9 @@
     body.force-dark .offers-panel-search { border-bottom-color: rgba(255,255,255,.06) !important; }
     body.force-dark .offers-panel-search input { color: #f4f4f5 !important; }
     body.force-dark .offers-panel-item:hover { background: rgba(255,255,255,.05) !important; }
-    body.force-dark .offers-panel-item.active { background: rgba(37,99,235,.15) !important; border-color: rgba(37,99,235,.3) !important; }
+    body.force-dark .offers-panel-item.active { background: rgba(37,99,235,.18) !important; border-color: rgba(37,99,235,.3) !important; }
+    body.force-dark .offers-panel-item.active .offers-panel-item-icon { background: rgba(37,99,235,.25) !important; color: #93c5fd !important; }
+    body.force-dark .offers-panel-item.active .offers-panel-item-name { color: #93c5fd !important; }
     body.force-dark .offers-panel-item-name { color: #f4f4f5 !important; }
     body.force-dark .offers-panel-footer { border-top-color: rgba(255,255,255,.06) !important; }
     body.force-dark .offers-panel-close { border-color: rgba(255,255,255,.1) !important; color: #71717a !important; }
@@ -5486,24 +5581,19 @@
       Offers
     </button>
 
+
+
     <!-- History -->
-    <button class="ds-nav-item" onclick="showHistory()">
+    <button class="ds-nav-item" id="nav-history" onclick="openHistoryPanel()">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
       History
     </button>
 
     <!-- Export -->
-    <div style="position:relative;">
-      <button class="ds-nav-item" onclick="toggleExportMenu()" id="exportBtn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
-        Export
-      </button>
-      <div class="export-menu hidden" id="exportMenu" style="left:0;top:100%;width:100%;min-width:180px;">
-        <button onclick="exportPDF();closeExportMenu()">🖨️ PDF</button>
-        <button onclick="exportCSV();closeExportMenu()">📊 CSV (Excel/Sheets)</button>
-        <button onclick="exportJSON();closeExportMenu()">📄 JSON (backup)</button>
-      </div>
-    </div>
+    <button class="ds-nav-item" id="nav-export" onclick="openExportPanel()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Export
+    </button>
 
     <button class="ds-nav-item" id="nav-db" onclick="sbModalOpen()" style="display:none;">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
@@ -5517,7 +5607,7 @@
     <div style="display:none"><div id="ds-user-avatar">M</div><div id="ds-user-name">Analyst</div></div>
 
     <!-- Status indicator -->
-    <div id="sidebar-status" style="display:flex;align-items:center;gap:8px;padding:8px 14px 4px;font-size:12px;color:#9ca3af;">
+    <div id="sidebar-status" style="display:flex;align-items:center;gap:8px;padding:4px 14px;font-size:12px;color:#9ca3af;">
       <div class="autosave-dot saved" id="autosaveDot"></div>
       <span id="autosaveText" class="ds-top-status-label" style="font-size:12px;">Cloud synced</span>
     </div>
@@ -5847,7 +5937,7 @@
     <div class="ic-card ic-card--blue notes-card" id="notes-card-takeaways">
       <div class="ic-header">
         <div class="ic-badge ic-badge--blue">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#2563EB" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="8" cy="8" r="6.5"/>
             <path d="M8 5.5v2.8l1.8 1.1"/>
           </svg>
@@ -5891,7 +5981,7 @@
     <div class="tc-header section-header">
       <div class="tc-header-left">
         <div class="section-icon icon-blue">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
         </div>
         <span class="section-title tc-title">Top traffic sources</span>
         <div class="tc-toggle-group">
@@ -6011,22 +6101,62 @@
 </div><!-- /.ds-app -->
 
 <!-- History Panel -->
-<div id="history-panel" class="hp-panel">
-  <div class="hp-header">
-    <div class="hp-header-left">
-      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v3.5l2.5 1.5" stroke-linecap="round"/></svg>
-      <span class="hp-title">Version history</span>
+<!-- History side panel (offers-panel style) -->
+<div class="offers-panel-overlay" id="history-panel-overlay" onclick="closeHistoryPanel()"></div>
+<div class="offers-panel" id="history-panel">
+  <div class="offers-panel-header">
+    <div class="offers-panel-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      Version History
     </div>
-    <button class="md-close" onclick="hideHistory()" title="Close">
+    <button class="offers-panel-close" onclick="closeHistoryPanel()">
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
     </button>
   </div>
-  <div class="hp-meta">
-    Showing last <strong id="history-count">0</strong> versions
+  <div style="padding:10px 16px 6px;font-size:11px;color:var(--text-muted);border-bottom:1px solid var(--border-light);flex-shrink:0;">
+    Last <strong id="history-count">0</strong> versions saved
   </div>
-  <div id="history-list" class="hp-list"></div>
+  <div id="history-list" class="offers-panel-list" style="padding:10px;gap:6px;display:flex;flex-direction:column;"></div>
 </div>
-<div id="history-overlay" onclick="hideHistory()" style="display:none;position:fixed;inset:0;z-index:1000;"></div>
+<!-- Keep legacy overlay ID for JS compatibility -->
+<div id="history-overlay" style="display:none;"></div>
+
+<!-- Export side panel (offers-panel style) -->
+<div class="offers-panel-overlay" id="export-panel-overlay" onclick="closeExportPanel()"></div>
+<div class="offers-panel" id="export-panel">
+  <div class="offers-panel-header">
+    <div class="offers-panel-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+      Export
+    </div>
+    <button class="offers-panel-close" onclick="closeExportPanel()">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
+    </button>
+  </div>
+  <div class="offers-panel-list" style="padding:12px;gap:8px;display:flex;flex-direction:column;">
+    <button class="export-panel-btn" onclick="exportPDF();closeExportPanel()">
+      <span class="export-panel-btn-icon">🖨️</span>
+      <div>
+        <div class="export-panel-btn-label">PDF</div>
+        <div class="export-panel-btn-sub">Print-ready report</div>
+      </div>
+    </button>
+    <button class="export-panel-btn" onclick="exportCSV();closeExportPanel()">
+      <span class="export-panel-btn-icon">📊</span>
+      <div>
+        <div class="export-panel-btn-label">CSV</div>
+        <div class="export-panel-btn-sub">Excel / Google Sheets</div>
+      </div>
+    </button>
+    <button class="export-panel-btn" onclick="exportJSON();closeExportPanel()">
+      <span class="export-panel-btn-icon">📄</span>
+      <div>
+        <div class="export-panel-btn-label">JSON</div>
+        <div class="export-panel-btn-sub">Full backup</div>
+      </div>
+    </button>
+  </div>
+</div>
 
 <!-- Ad Detail Panel -->
 <div id="ad-detail-overlay" onclick="closeAdDetail()"></div>
@@ -6350,8 +6480,8 @@ function buildTrafficGrid() {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
           <div style="display:flex;align-items:center;gap:4px;background:rgba(0,0,0,0.55);border-radius:6px;padding:3px 5px;backdrop-filter:blur(4px);" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
-          <button title="Delete" onclick="gridRemoveRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">×</button>
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:3px 5px;font-size:13px;line-height:1;border-radius:5px;transition:all .13s;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
+          <button title="Delete" onclick="gridRemoveRow(${idx},'traffic-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:3px 5px;font-size:13px;line-height:1;border-radius:5px;transition:all .13s;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
         </div>
         </div>
         ${renderChip(tds[1], 'Traffic source', idx, 'traffic-body')}
@@ -6434,8 +6564,8 @@ function buildFunnelsGrid() {
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${idx+1}</span>
           <div style="display:flex;align-items:center;gap:4px;background:rgba(0,0,0,0.55);border-radius:6px;padding:3px 5px;backdrop-filter:blur(4px);" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
-          <button title="Delete" onclick="gridRemoveRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">×</button>
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:3px 5px;font-size:13px;line-height:1;border-radius:5px;transition:all .13s;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
+          <button title="Delete" onclick="gridRemoveRow(${idx},'funnels-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:3px 5px;font-size:13px;line-height:1;border-radius:5px;transition:all .13s;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
         </div>
         </div>
         <div class="grid-card-offer">${advertiser || '<span style="opacity:0.4">No advertiser</span>'}</div>
@@ -6602,8 +6732,8 @@ function buildAdsGrid() {
         <div style="position:absolute;top:4px;left:4px;right:4px;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:10px;color:#fff;background:rgba(0,0,0,0.55);border-radius:6px;padding:2px 5px;font-weight:500;">#${num}</span>
           <div style="display:flex;align-items:center;gap:4px;background:rgba(0,0,0,0.55);border-radius:6px;padding:3px 5px;backdrop-filter:blur(4px);" onclick="event.stopPropagation()">
-          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:13px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
-          <button title="Delete" onclick="gridRemoveRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">×</button>
+          <span class="grid-drag-handle" title="Drag to reorder" style="cursor:grab;color:#fff;opacity:0.8;padding:2px;font-size:14px;line-height:1;display:flex;align-items:center;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="2" r="1.2"/><circle cx="7" cy="2" r="1.2"/><circle cx="3" cy="6" r="1.2"/><circle cx="7" cy="6" r="1.2"/><circle cx="3" cy="10" r="1.2"/><circle cx="7" cy="10" r="1.2"/></svg></span><button title="Duplicate" onclick="gridDupRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:3px 5px;font-size:13px;line-height:1;border-radius:5px;transition:all .13s;" onmouseover="this.style.background='rgba(255,255,255,.2)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="9" height="9" rx="2"/><path d="M11 5V3a2 2 0 0 0-2-2H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button>
+          <button title="Delete" onclick="gridRemoveRow(${idx},'ads-body')" style="background:none;border:none;cursor:pointer;color:#fff;opacity:0.8;padding:3px 5px;font-size:13px;line-height:1;border-radius:5px;transition:all .13s;" onmouseover="this.style.background='rgba(239,68,68,.75)';this.style.opacity='1'" onmouseout="this.style.background='none';this.style.opacity='0.8'">×</button>
         </div>
         </div>
       </div>
@@ -6957,12 +7087,18 @@ function syncLinkCell(td, url) {
 }
 
 function gridRemoveRow(idx, tableId) {
-  const tbody = document.getElementById(tableId);
-  const rows = tbody.querySelectorAll('tr');
-  if (rows[idx]) rows[idx].remove();
-  renumberTable(tableId);
-  scheduleSave();
-  rebuildGridForTable(tableId);
+  showConfirmDialog(
+    'Delete row?',
+    'This row will be permanently removed from the table.',
+    function() {
+      const tbody = document.getElementById(tableId);
+      const rows = tbody.querySelectorAll('tr');
+      if (rows[idx]) rows[idx].remove();
+      renumberTable(tableId);
+      scheduleSave();
+      rebuildGridForTable(tableId);
+    }
+  );
 }
 
 function gridDupRow(idx, tableId) {
@@ -7681,9 +7817,10 @@ function openReport() {
 
 /* ── Offers Panel ── */
 function openOffersPanel() {
+  if (document.getElementById('offers-panel').classList.contains('open')) { closeOffersPanel(); return; }
+  closeHistoryPanel(); closeExportPanel();
   document.getElementById('offers-panel').classList.add('open');
   document.getElementById('offers-panel-overlay').classList.add('open');
-  // Set Offers nav item active
   document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById('nav-offers').classList.add('active');
   renderOffersList();
@@ -7727,7 +7864,9 @@ function renderOffersList(filter) {
       return 'Local';
     })();
     return `<div class="offers-panel-item${isActive ? ' active' : ''}" onclick="selectOfferFromPanel('${o.id}')">
-      <div class="offers-panel-item-icon">${initials}</div>
+      <div class="offers-panel-item-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </div>
       <div class="offers-panel-item-info">
         <div class="offers-panel-item-name">${o.name}</div>
         <div class="offers-panel-item-meta">${date}</div>
@@ -8874,14 +9013,18 @@ function renumberTable(id) {
 
 function removeRow(btn, id) {
   const tr = btn.closest('tr');
-  const html = tr.outerHTML;
-  const idx = Array.from(tr.parentElement.children).indexOf(tr);
-  tr.remove();
-  renumberTable(id);
-  scheduleSave();
-  snapForUndo();
-  redoStack.length = 0; // clear redo on new action
-  showUndoToast('Row deleted — Ctrl+Z to undo', () => undoLast());
+  showConfirmDialog(
+    'Delete row?',
+    'This row will be permanently removed from the table.',
+    function() {
+      snapForUndo();
+      tr.remove();
+      renumberTable(id);
+      scheduleSave();
+      redoStack.length = 0;
+      showUndoToast('Row deleted — Ctrl+Z to undo', () => undoLast());
+    }
+  );
 }
 
 function dupRow(btn, id) {
@@ -9441,18 +9584,15 @@ function importJSON(input) {
   reader.readAsText(file);
 }
 
-function showHistory() {
-  const panel = document.getElementById('history-panel');
-  const overlay = document.getElementById('history-overlay');
+function openHistoryPanel() {
+  if (document.getElementById('history-panel').classList.contains('open')) { closeHistoryPanel(); return; }
+  closeOffersPanel(); closeExportPanel();
   const list = document.getElementById('history-list');
   const count = document.getElementById('history-count');
-
-  // Build list from undoStack (most recent first)
   const allSnaps = [...undoStack].reverse();
   count.textContent = allSnaps.length;
-
   if (!allSnaps.length) {
-    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);font-size:12px;">No history yet — make some edits first.</div>';
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);font-size:13px;">No history yet — make some edits first.</div>';
   } else {
     list.innerHTML = allSnaps.map((snap, i) => {
       const data = JSON.parse(snap);
@@ -9460,23 +9600,46 @@ function showHistory() {
       const time = data._snapAt ? new Date(data._snapAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'}) : 'Unknown time';
       const date = data._snapAt ? new Date(data._snapAt).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
       const rowCount = (data.ads?.length||0) + (data.traffic?.length||0) + (data.funnels?.length||0);
-      return `<div style="background:var(--bg-primary);border:1px solid var(--border-light);border-radius:8px;padding:10px 12px;cursor:pointer;" onmouseover="this.style.borderColor='var(--accent,#4A90D9)'" onmouseout="this.style.borderColor='var(--border-light)'" onclick="restoreVersion(${undoStack.length - 1 - i})">
+      return `<div style="background:var(--bg-secondary);border:1px solid var(--border-light);border-radius:10px;padding:12px 14px;cursor:pointer;transition:border-color .13s;" onmouseover="this.style.borderColor='var(--accent,#2563eb)'" onmouseout="this.style.borderColor='var(--border-light)'" onclick="restoreVersion(${undoStack.length - 1 - i})">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-          <span style="font-size:12px;font-weight:500;color:var(--text-primary);">${i === 0 ? '⭐ Latest' : `Version ${data._versionNum || (allSnaps.length - i)}`}</span>
-          <span style="font-size:10px;color:var(--text-secondary);">${date} ${time}</span>
+          <span style="font-size:13px;font-weight:600;color:var(--text-primary);">${i === 0 ? '⭐ Latest' : 'Version ' + (data._versionNum || (allSnaps.length - i))}</span>
+          <span style="font-size:11px;color:var(--text-muted);">${date} ${time}</span>
         </div>
-        <div style="font-size:11px;color:var(--text-secondary);">${rowCount} rows · ${title}</div>
+        <div style="font-size:12px;color:var(--text-secondary);">${rowCount} rows · ${title}</div>
       </div>`;
     }).join('');
   }
-
-  panel.style.display = 'flex';
-  overlay.style.display = 'block';
+  document.getElementById('history-panel').classList.add('open');
+  document.getElementById('history-panel-overlay').classList.add('open');
+  document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('nav-history').classList.add('active');
 }
 
-function hideHistory() {
-  document.getElementById('history-panel').style.display = 'none';
-  document.getElementById('history-overlay').style.display = 'none';
+function closeHistoryPanel() {
+  document.getElementById('history-panel').classList.remove('open');
+  document.getElementById('history-panel-overlay').classList.remove('open');
+  document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('nav-report').classList.add('active');
+}
+
+// Legacy aliases for any remaining calls
+function showHistory() { openHistoryPanel(); }
+function hideHistory() { closeHistoryPanel(); }
+
+function openExportPanel() {
+  if (document.getElementById('export-panel').classList.contains('open')) { closeExportPanel(); return; }
+  closeOffersPanel(); closeHistoryPanel();
+  document.getElementById('export-panel').classList.add('open');
+  document.getElementById('export-panel-overlay').classList.add('open');
+  document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('nav-export').classList.add('active');
+}
+
+function closeExportPanel() {
+  document.getElementById('export-panel').classList.remove('open');
+  document.getElementById('export-panel-overlay').classList.remove('open');
+  document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('nav-report').classList.add('active');
 }
 
 function restoreVersion(stackIdx) {
@@ -10114,6 +10277,59 @@ function offerRename() {
       setFunnelsView(fvm === 'grid' ? 'grid' : 'table');
     }
   }, 100);
+})();
+</script>
+
+
+<!-- ── Custom confirm dialog ── -->
+<div id="confirm-overlay">
+  <div id="confirm-dialog" role="dialog" aria-modal="true">
+    <div id="confirm-dialog-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+      </svg>
+    </div>
+    <div id="confirm-dialog-title">Delete row?</div>
+    <div id="confirm-dialog-body">This action cannot be undone. The row will be permanently removed.</div>
+    <div id="confirm-dialog-actions">
+      <button id="confirm-cancel-btn" onclick="closeConfirmDialog()">Cancel</button>
+      <button id="confirm-delete-btn" onclick="confirmDeleteExecute()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  let _confirmCallback = null;
+
+  window.showConfirmDialog = function(title, body, onConfirm) {
+    _confirmCallback = onConfirm;
+    document.getElementById('confirm-dialog-title').textContent = title || 'Delete row?';
+    document.getElementById('confirm-dialog-body').textContent = body || 'This action cannot be undone.';
+    const overlay = document.getElementById('confirm-overlay');
+    overlay.classList.add('open');
+    setTimeout(() => document.getElementById('confirm-delete-btn').focus(), 50);
+  };
+
+  window.closeConfirmDialog = function() {
+    document.getElementById('confirm-overlay').classList.remove('open');
+    _confirmCallback = null;
+  };
+
+  window.confirmDeleteExecute = function() {
+    if (_confirmCallback) _confirmCallback();
+    closeConfirmDialog();
+  };
+
+  // Close on overlay click
+  document.getElementById('confirm-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeConfirmDialog();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeConfirmDialog();
+  });
 })();
 </script>
 
