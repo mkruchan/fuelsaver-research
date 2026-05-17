@@ -1155,6 +1155,21 @@
     body.force-dark .export-panel-btn { background: var(--bg-secondary); border-color: var(--border-light); }
     body.force-dark .export-panel-btn:hover { background: var(--bg-tertiary); border-color: var(--border-mid); }
 
+
+    /* ── Drag & drop media ── */
+    .media-cell.drag-over .media-upload-btn,
+    .media-cell.drag-over { border-color: var(--accent) !important; background: var(--accent-muted) !important; }
+    .media-cell.drag-over .media-upload-btn { color: var(--accent) !important; }
+    .adp-img-wrap.drag-over { outline: 2px dashed var(--accent) !important; outline-offset: 2px !important; }
+    .adp-img-wrap.drag-over::after {
+      content: 'Drop to upload';
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(37,99,235,.15);
+      color: var(--accent); font-size: 13px; font-weight: 600;
+      border-radius: inherit;
+    }
+
 </style>
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -6846,6 +6861,7 @@ function buildAdsGrid() {
   }).join('');
   grid.innerHTML = `<div class="ads-grid-inner">${cards}</div>`;
   initGridDrag('ads-grid', 'ads-body');
+  setTimeout(initMediaDragDrop, 100);
   }, 0);
 }
 
@@ -7504,6 +7520,7 @@ function openAdDetail(rowIdx) {
     </div>
   `;
   _adpOpen(offerVal, '', body);
+  setTimeout(initMediaDragDrop, 100);
 }
 
 /* ── Custom Calendar for Date field ── */
@@ -10500,6 +10517,57 @@ function offerRename() {
   });
 })();
 </script>
+
+
+// ── Drag & drop for media cells ──────────────────────────────
+function initMediaDragDrop() {
+  // Table media cells
+  document.querySelectorAll('td.media-cell').forEach(cell => {
+    if (cell.dataset.dndInit) return;
+    cell.dataset.dndInit = '1';
+    cell.addEventListener('dragover', e => { e.preventDefault(); cell.classList.add('drag-over'); });
+    cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
+    cell.addEventListener('drop', e => {
+      e.preventDefault(); cell.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      const input = cell.querySelector('input[type="file"]');
+      const previewId = input?.id + '-preview';
+      if (input && previewId) {
+        // Simulate file input change
+        const dt = new DataTransfer(); dt.items.add(file);
+        input.files = dt.files;
+        handleMediaUpload(input, previewId);
+      }
+    });
+  });
+
+  // Ad detail panel image wrap
+  document.querySelectorAll('.adp-img-wrap').forEach(wrap => {
+    if (wrap.dataset.dndInit) return;
+    wrap.dataset.dndInit = '1';
+    wrap.addEventListener('dragover', e => { e.preventDefault(); wrap.classList.add('drag-over'); });
+    wrap.addEventListener('dragleave', () => wrap.classList.remove('drag-over'));
+    wrap.addEventListener('drop', e => {
+      e.preventDefault(); wrap.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (!file) return;
+      // Find the file input for the current ad detail row
+      const rowIdx = _adpCurrentRowIdx;
+      const fileInput = document.getElementById('adp-img-file-' + rowIdx);
+      if (fileInput) {
+        const dt = new DataTransfer(); dt.items.add(file);
+        fileInput.files = dt.files;
+        gridUploadMedia(fileInput, rowIdx);
+      }
+    });
+  });
+}
+
+// Re-init on grid rebuild
+const _origBuildAdsGrid = buildAdsGrid;
+// Call initMediaDragDrop after any grid/panel open
+document.addEventListener('DOMContentLoaded', () => setTimeout(initMediaDragDrop, 500));
 
 </body>
 </html>
