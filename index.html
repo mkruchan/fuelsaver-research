@@ -1973,8 +1973,7 @@
     .ds-sidebar {
       width: var(--sidebar-w);
       flex-shrink: 0;
-      background: #ffffff;
-      border-right: 1px solid #e9ebee;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%);
       display: flex;
       isolation: isolate;
       flex-direction: column;
@@ -2359,7 +2358,7 @@
 
     .ds-sidebar {
       width: 240px !important;
-      background: #ffffff !important;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important;
       border-right: none !important;
       box-shadow: none !important;
     }
@@ -3272,8 +3271,8 @@
       bottom: 0;
       width: 340px;
       background: #fff;
-      border-right: 1px solid #e5e7eb;
-      box-shadow: none;
+      border-right: none;
+      box-shadow: 4px 0 16px rgba(0,0,0,0.06);
       z-index: 400;
       display: flex;
       flex-direction: column;
@@ -3290,7 +3289,8 @@
     .offers-panel-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 18px; height: 72px; min-height: 72px;
-      border-bottom: 1px solid #f0f0f0; flex-shrink: 0; box-sizing: border-box;
+      border-bottom: none; flex-shrink: 0; box-sizing: border-box;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
     .offers-panel-title {
       display: flex; align-items: center; gap: 8px;
@@ -3307,7 +3307,8 @@
 
     .offers-panel-search {
       display: flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-bottom: 1px solid #f3f4f6; flex-shrink: 0;
+      padding: 10px 14px; border-bottom: none; flex-shrink: 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
     }
     .offers-panel-search svg { color: #9ca3af; flex-shrink: 0; }
     .offers-panel-search input {
@@ -5542,7 +5543,7 @@
 
     /* Database settings hidden by default */
     /* Ensure header background matches sidebar exactly */
-    .ds-top-header { background: #ffffff !important; }
+    .ds-top-header { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
     body.force-dark .ds-sidebar { border-right: none !important; }
     /* Sidebar subtle separation - must be last */
     body:not(.force-dark) .ds-sidebar { border-right: 1px solid #e5e7eb !important; }
@@ -5650,7 +5651,7 @@
 
     /* ══ FINAL FIXES ══ */
     /* Sidebar always on top */
-    .ds-sidebar { z-index: 600 !important; background: #ffffff !important; }
+    .ds-sidebar { z-index: 600 !important; background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
     body.force-dark .ds-sidebar { background: #18181b; }
     /* Footer lines aligned */
     .ds-sidebar-footer { padding: 10px 8px !important; }
@@ -5694,8 +5695,15 @@
     .oc-divider { display: none !important; }
     .oc-meta { background: transparent !important; border-top: none !important; border-left: none !important; }
     .oc-meta-sep { width: 1px !important; background: #e9ebee !important; flex-shrink: 0 !important; margin: 0 !important; display: block !important; }
-    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 4px 0 16px rgba(0,0,0,0.06) !important; background: #ffffff !important; }
-    body:not(.force-dark) .ds-sidebar-logo { border-bottom: none !important; box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important; background: #ffffff !important; }
+    body.force-dark .ds-sidebar { border-right: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
+    body.force-dark .ds-sidebar-logo { border-bottom: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
+    body.force-dark .ds-sidebar-footer { border-top: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
+    body.force-dark .offers-panel { border-right: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
+    body.force-dark .offers-panel-header { border-bottom: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
+    body.force-dark .offers-panel-search { border-bottom: 1px solid rgba(255,255,255,.06) !important; box-shadow: none !important; }
+    body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 4px 0 16px rgba(0,0,0,0.06) !important; }
+    body:not(.force-dark) .ds-sidebar-logo { border-bottom: none !important; box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important; background: #ffffff !important; }
+    body:not(.force-dark) .ds-sidebar-footer { border-top: none !important; box-shadow: 0 -4px 12px rgba(0,0,0,0.05) !important; }
     body:not(.force-dark) .ds-top-header { border-bottom: none !important; box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important; background: transparent !important; }
     body:not(.force-dark) .ds-main { background: #ffffff !important; }
     body:not(.force-dark) .ds-app { background: #ffffff !important; }
@@ -5807,7 +5815,7 @@
   <div class="offers-panel-list" id="offers-panel-list">
     <div class="offers-panel-empty">Loading offers…</div>
   </div>
-  <div style="padding:10px 8px;border-top:1px solid var(--border-light, #e5e7eb);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
+  <div style="padding:10px 8px;border-top:none;box-shadow:0 -4px 12px rgba(0,0,0,0.05);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
     <button onclick="closeOffersPanel();offerNewToggle()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;background:#2563eb;color:#fff;border:none;cursor:pointer;box-sizing:border-box;">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
       New offer
