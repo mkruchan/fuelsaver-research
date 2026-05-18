@@ -8047,6 +8047,7 @@ function offerSlugFromTitle(title) {
     .filter(Boolean).join('-');
 }
 function updateOfferSlugPath(title) {
+  if (window._offerSwitching) return;
   const slug = offerSlugFromTitle(title);
   const base = '/offer-research/';
   const newPath = slug ? base + slug : base;
