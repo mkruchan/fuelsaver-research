@@ -2128,7 +2128,7 @@
     .oc-meta-field { flex: 1; min-width: 140px; padding: 16px 24px; display: flex; flex-direction: column; gap: 5px; }
     .oc-meta-sep { width: 1px; background: #e5e7eb; flex-shrink: 0; margin: 10px 0; }
     .oc-meta-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #9ca3af; }
-    .oc-meta-input { background: transparent !important; border: none !important; border-bottom: 1.5px solid transparent !important; border-radius: 0 !important; padding: 2px 0 !important; font-size: 14px !important; font-weight: 500 !important; color: #111827 !important; outline: none !important; width: 100% !important; font-family: inherit !important; transition: border-color .15s !important; white-space: nowrap !important; }
+    .oc-meta-input { background: transparent !important; border: none !important; border-bottom: 1.5px solid transparent !important; border-radius: 0 !important; padding: 2px 0 !important; font-size: 14px !important; font-weight: 500 !important; color: #111827 !important; outline: none !important; width: 100% !important; font-family: inherit !important; transition: border-color .15s !important; }
     .oc-meta-input:hover { border-bottom-color: #d1d5db !important; }
     .oc-meta-input:focus { border-bottom-color: #2563eb !important; }
     .oc-meta-input::placeholder { color: #9ca3af !important; font-weight: 400 !important; }
@@ -4785,20 +4785,15 @@
     body.force-dark .offers-panel-close:hover { background: #27272a !important; color: #f4f4f5 !important; }
 
     /* Meta field icon+input row */
-    .oc-meta-icon {
-      flex-shrink: 0 !important;
-      color: #9ca3af !important;
-      opacity: 0.7 !important;
-      display: block !important;
-      position: relative !important;
-      top: 0 !important;
-      vertical-align: middle !important;
-    }
     .oc-meta-value-row {
       display: flex !important;
       align-items: center !important;
       gap: 7px !important;
-      line-height: 1 !important;
+    }
+    .oc-meta-icon {
+      flex-shrink: 0 !important;
+      color: #9ca3af !important;
+      opacity: 0.7 !important;
     }
     .oc-meta-input { flex: 1 !important; min-width: 0 !important; }
 
@@ -5225,7 +5220,7 @@
     .offers-panel-title { gap: 10px !important; }
     .offers-panel-new-btn { gap: 8px !important; }
     .ic-header { gap: 12px !important; }
-    .oc-meta-value-row { gap: 10px !important; align-items: center !important; display: flex !important; }
+    .oc-meta-value-row { gap: 10px !important; }
     .ds-top-status { gap: 8px !important; }
     .md-link-btn { gap: 8px !important; }
     .title-icon-btn { gap: 6px !important; }
@@ -6293,7 +6288,7 @@
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 2l12 12M14 2L2 14"/></svg>
     </button>
   </div>
-  <div style="padding:10px 18px 6px;font-size:11px;color:var(--text-muted);border-bottom:1px solid #f0f0f0;flex-shrink:0;">
+  <div style="padding:10px 18px 6px;font-size:11px;color:var(--text-muted);border-bottom:1px solid #f0f0f0;flex-shrink:0);">
     Last <strong id="history-count">0</strong> versions saved
   </div>
   <div id="history-list" class="offers-panel-list" style="padding:10px;gap:6px;display:flex;flex-direction:column;"></div>
@@ -8070,6 +8065,7 @@ function updateTitleLinkBtn(url) {
 
 function openReport() {
   closeBoardView();
+  closeHistoryPanel(); closeExportPanel();
   document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
   document.getElementById('nav-report').classList.add('active');
   closeOffersPanel();
@@ -10263,7 +10259,7 @@ function offerRebuildSelect() {
 async function offerLoadAll() {
   const sb = sbGetClient();
   if (!sb) { offerRebuildSelect(); return; }
-  const { data, error } = await sb.from('offers').select('*').order('updated_at', { ascending: false });
+  const { data, error } = await sb.from('offers').select('id,name,data,updated_at').order('updated_at', { ascending: false });
   if (error) { console.error('offerLoadAll:', error); showToast('Failed to load offers: ' + error.message, 'error'); return; }
   _allOffers = data || [];
 
@@ -10298,26 +10294,20 @@ async function offerLoadAll() {
   const lastId = localStorage.getItem(SB_OFFER_KEY);
   const lastMatch = lastId && _allOffers.find(o => o.id === lastId);
   if (slugMatch) {
-    await offerLoad(slugMatch.id, false, slugMatch);
+    await offerLoad(slugMatch.id, false);
   } else if (lastMatch) {
-    await offerLoad(lastId, false, lastMatch);
+    await offerLoad(lastId, false);
   } else if (_allOffers.length > 0) {
-    await offerLoad(_allOffers[0].id, false, _allOffers[0]);
+    await offerLoad(_allOffers[0].id, false);
   }
 }
 
 /* ── Load one offer ── */
-async function offerLoad(id, showMsg, prefetchedData) {
+async function offerLoad(id, showMsg) {
   const sb = sbGetClient();
   if (!sb) return;
-  let data;
-  if (prefetchedData) {
-    data = prefetchedData;
-  } else {
-    const { data: fetched, error } = await sb.from('offers').select('*').eq('id', id).single();
-    if (error || !fetched) { showToast('Failed to load offer', 'error'); return; }
-    data = fetched;
-  }
+  const { data, error } = await sb.from('offers').select('*').eq('id', id).single();
+  if (error || !data) { showToast('Failed to load offer', 'error'); return; }
   _offerSwitching = true; // block autosave during switch
   _currentOfferId = id;
   localStorage.setItem(SB_OFFER_KEY, id);
@@ -10336,10 +10326,10 @@ async function offerLoad(id, showMsg, prefetchedData) {
     const prev = _restoring; _restoring = true;
     restoreData(data.data);
     _restoring = prev;
-    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 0);
+    setTimeout(() => { runPostInit(data.data); _offerSwitching = false; }, 150);
   } else {
     clearPageData(offerName);
-    setTimeout(() => { _offerSwitching = false; }, 0);
+    setTimeout(() => { _offerSwitching = false; }, 150);
   }
   _offerSyncNamePill(offerName);
   if (showMsg) showToast('Loaded: ' + offerName, 'success');
