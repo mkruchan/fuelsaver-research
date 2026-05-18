@@ -1974,6 +1974,7 @@
       width: var(--sidebar-w);
       flex-shrink: 0;
       background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%);
+      border-right: 1px solid #e9ebee;
       display: flex;
       isolation: isolate;
       flex-direction: column;
@@ -2023,7 +2024,7 @@
       min-width: 0;
       width: 0;               /* forces flex child to shrink properly */
       margin-left: var(--sidebar-w);
-      background: #ffffff;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%);
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
@@ -2398,7 +2399,8 @@
     }
 
     /* ── 3. Page & app background ── */
-    body    { background: #ffffff !important; background-attachment: fixed !important; }
+    body    { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; background-attachment: fixed !important; }
+    .ds-app { background: transparent !important; }
 
     /* ── 4. Top header: auto-height, consistent padding ── */
     .ds-top-header {
@@ -3271,8 +3273,8 @@
       bottom: 0;
       width: 340px;
       background: #fff;
-      border-right: none;
-      box-shadow: 4px 0 16px rgba(0,0,0,0.06);
+      border-right: 1px solid #e5e7eb;
+      box-shadow: none;
       z-index: 400;
       display: flex;
       flex-direction: column;
@@ -3289,8 +3291,7 @@
     .offers-panel-header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 18px; height: 72px; min-height: 72px;
-      border-bottom: none; flex-shrink: 0; box-sizing: border-box;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #f0f0f0; flex-shrink: 0; box-sizing: border-box;
     }
     .offers-panel-title {
       display: flex; align-items: center; gap: 8px;
@@ -3307,8 +3308,7 @@
 
     .offers-panel-search {
       display: flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-bottom: none; flex-shrink: 0;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+      padding: 10px 14px; border-bottom: 1px solid #f3f4f6; flex-shrink: 0;
     }
     .offers-panel-search svg { color: #9ca3af; flex-shrink: 0; }
     .offers-panel-search input {
@@ -5543,7 +5543,7 @@
 
     /* Database settings hidden by default */
     /* Ensure header background matches sidebar exactly */
-    .ds-top-header { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
+    .ds-top-header { background: #ffffff !important; }
     body.force-dark .ds-sidebar { border-right: none !important; }
     /* Sidebar subtle separation - must be last */
     body:not(.force-dark) .ds-sidebar { border-right: 1px solid #e5e7eb !important; }
@@ -5676,7 +5676,7 @@
     /* ══ SIDEBAR ALWAYS COVERS CONTENT ══ */
     .ds-sidebar {
       z-index: 600 !important;
-      background: #ffffff !important;
+      background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important;
     }
     body.force-dark .ds-sidebar {
       background: #18181b !important;
@@ -5695,18 +5695,10 @@
     .oc-divider { display: none !important; }
     .oc-meta { background: transparent !important; border-top: none !important; border-left: none !important; }
     .oc-meta-sep { width: 1px !important; background: #e9ebee !important; flex-shrink: 0 !important; margin: 0 !important; display: block !important; }
-    body.force-dark .ds-sidebar { border-right: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
-    body.force-dark .ds-sidebar-logo { border-bottom: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
-    body.force-dark .ds-sidebar-footer { border-top: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
-    body.force-dark .offers-panel { border-right: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
-    body.force-dark .offers-panel-header { border-bottom: 1px solid rgba(255,255,255,.08) !important; box-shadow: none !important; }
-    body.force-dark .offers-panel-search { border-bottom: 1px solid rgba(255,255,255,.06) !important; box-shadow: none !important; }
     body:not(.force-dark) .ds-sidebar { border-right: none !important; box-shadow: 4px 0 16px rgba(0,0,0,0.06) !important; }
-    body:not(.force-dark) .ds-sidebar-logo { border-bottom: none !important; box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important; background: #ffffff !important; }
-    body:not(.force-dark) .ds-sidebar-footer { border-top: none !important; box-shadow: 0 -4px 12px rgba(0,0,0,0.05) !important; }
+    body:not(.force-dark) .ds-sidebar-logo { border-bottom: none !important; box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important; }
     body:not(.force-dark) .ds-top-header { border-bottom: none !important; box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important; background: transparent !important; }
-    body:not(.force-dark) .ds-main { background: #ffffff !important; }
-    body:not(.force-dark) .ds-app { background: #ffffff !important; }
+    body:not(.force-dark) .ds-main { background: linear-gradient(180deg, #ffffff 0%, #f5f7f9 100%) !important; }
 </style>
 <body>
 
@@ -5815,7 +5807,7 @@
   <div class="offers-panel-list" id="offers-panel-list">
     <div class="offers-panel-empty">Loading offers…</div>
   </div>
-  <div style="padding:10px 8px;border-top:none;box-shadow:0 -4px 12px rgba(0,0,0,0.05);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
+  <div style="padding:10px 8px;border-top:1px solid var(--border-light, #e5e7eb);flex-shrink:0;box-sizing:border-box;height:56px;display:flex;align-items:center;">
     <button onclick="closeOffersPanel();offerNewToggle()" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px 10px;font-size:13px;font-weight:500;font-family:inherit;border-radius:8px;background:#2563eb;color:#fff;border:none;cursor:pointer;box-sizing:border-box;">
       <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
       New offer
