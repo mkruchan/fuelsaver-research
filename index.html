@@ -2082,7 +2082,7 @@
     .ds-user-info { flex: 1; min-width: 0; }
     .ds-user-name { font-size: 13px; font-weight: 600; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .ds-user-role { font-size: 11px; color: #9ca3af; }
-    .ds-sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 199; }
+    .ds-sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 599; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); transition: opacity 0.25s ease; }
     .ds-sidebar-overlay.open { display: block; }
 
     /* ── Main area ── */
@@ -2137,7 +2137,10 @@
     }
     .ds-hdr-btn:hover { background: #f9fafb; border-color: #9ca3af; color: #111827; }
     .ds-hdr-btn svg { flex-shrink: 0; }
-    .ds-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; cursor: pointer; color: #374151; flex-shrink: 0; }
+    .ds-hamburger { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; cursor: pointer; color: #374151; flex-shrink: 0; transition: all 0.18s cubic-bezier(0.4,0,0.2,1); }
+    .ds-hamburger:hover { background: #f3f4f6; }
+    body.force-dark .ds-hamburger { background: #27272a; border-color: rgba(255,255,255,0.12); color: #f4f4f5; }
+    body.force-dark .ds-hamburger:hover { background: #3f3f46; }
 
     /* ── Content container ── */
     .header { display: none !important; }
@@ -8004,6 +8007,9 @@ function initTableCellExpand() {
       ta.addEventListener('click', function(e) {
         const val = this.value.trim();
         if (!val || val === this.placeholder) return;
+        // Only show popover if text is actually overflowing
+        const isOverflowing = this.scrollWidth > this.clientWidth + 4 || this.scrollHeight > this.clientHeight + 8;
+        if (!isOverflowing) return;
         e.stopPropagation();
         const pop = document.getElementById('tc-expand-popover');
         const rect = this.getBoundingClientRect();
@@ -8279,6 +8285,11 @@ function updateTitleLinkBtn(url) {
 }
 
 function openReport() {
+  // Close sidebar on mobile
+  if (window.innerWidth <= 860) {
+    document.getElementById('ds-sidebar')?.classList.remove('open');
+    document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+  }
   closeBoardView();
   closeHistoryPanel(); closeExportPanel();
   document.querySelectorAll('.ds-nav-item').forEach(el => el.classList.remove('active'));
@@ -8300,6 +8311,11 @@ const _boardSections = {
 let _currentBoard = null;
 
 function openBoardView(board) {
+  // Close sidebar on mobile
+  if (window.innerWidth <= 860) {
+    document.getElementById('ds-sidebar')?.classList.remove('open');
+    document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+  }
   if (_currentBoard === board) { closeBoardView(); return; }
   closeOffersPanel(); closeHistoryPanel(); closeExportPanel();
   _currentBoard = board;
@@ -8374,6 +8390,11 @@ function closeBoardView() {
 
 /* ── Offers Panel ── */
 function openOffersPanel() {
+  // Close sidebar on mobile
+  if (window.innerWidth <= 860) {
+    document.getElementById('ds-sidebar')?.classList.remove('open');
+    document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+  }
   if (document.getElementById('offers-panel').classList.contains('open')) { closeOffersPanel(); return; }
   closeHistoryPanel(); closeExportPanel();
   document.getElementById('offers-panel').classList.add('open');
@@ -10163,6 +10184,11 @@ function importJSON(input) {
 }
 
 function openHistoryPanel() {
+  // Close sidebar on mobile
+  if (window.innerWidth <= 860) {
+    document.getElementById('ds-sidebar')?.classList.remove('open');
+    document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+  }
   if (document.getElementById('history-panel').classList.contains('open')) { closeHistoryPanel(); return; }
   closeOffersPanel(); closeExportPanel();
   const list = document.getElementById('history-list');
@@ -10205,6 +10231,11 @@ function showHistory() { openHistoryPanel(); }
 function hideHistory() { closeHistoryPanel(); }
 
 function openExportPanel() {
+  // Close sidebar on mobile
+  if (window.innerWidth <= 860) {
+    document.getElementById('ds-sidebar')?.classList.remove('open');
+    document.getElementById('ds-sidebar-overlay')?.classList.remove('open');
+  }
   if (document.getElementById('export-panel').classList.contains('open')) { closeExportPanel(); return; }
   closeOffersPanel(); closeHistoryPanel();
   document.getElementById('export-panel').classList.add('open');
@@ -10801,6 +10832,8 @@ function offerRename() {
         await sb.from('offers').update({ data: pageData, updated_at: new Date().toISOString() }).eq('id', _currentOfferId);
         const t = new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});
         setStatus('saved', '☁️ Saved · ' + t);
+        // Invalidate cache so next page load fetches fresh data from Supabase
+        try { localStorage.removeItem('ecoverage_offer_cache_' + _currentOfferId); } catch(e) {}
       } catch(e) {
         console.warn('Supabase save failed, trying JSONBin backup:', e);
         // Fallback to JSONBin
